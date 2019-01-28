@@ -1,0 +1,5 @@
+1. aktivitas tidak perlu semua ditulis, hanya yang saat ini saja. 
+2. tiket tidak boleh dihapus
+3. Nomor tiket diganti menjadi nomor order
+4. default row 10
+5. tambah status saat ini di order
