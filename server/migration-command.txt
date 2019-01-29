@@ -1,0 +1,11 @@
+owldimir@owldimir-Inspiron-3442:~/projects/dev/sim-jt/server$ node node_modules/db-migrate/bin/db-migrate create usermigration --config config/database.json --sql-file
+owldimir@owldimir-Inspiron-3442:~/projects/dev/sim-jt/server$ node node_modules/db-migrate/bin/db-migrate down --config config/database.json -e dev
+[INFO] Defaulting to running 1 down migration.
+received data: DROP TABLE IF EXISTS `users`;
+[INFO] Processed migration 20190129075208-usermigration
+[INFO] Done
+owldimir@owldimir-Inspiron-3442:~/projects/dev/sim-jt/server$ node node_modules/db-migrate/bin/db-migrate down --config config/database.json -e dev
+[INFO] Defaulting to running 1 down migration.
+received data: DROP TABLE IF EXISTS `roles`;
+[INFO] Processed migration 20190129064817-testmigration
+[INFO] Done
