@@ -8,4 +8,4 @@ CREATE TABLE `users` (
   UNIQUE KEY `Users_UN` (`username`),
   KEY `Users_roles_FK` (`role_id`),
   CONSTRAINT `Users_roles_FK` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
