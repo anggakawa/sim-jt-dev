@@ -3,7 +3,7 @@ const crypto = require('crypto');
 const algorithm = 'aes-256-ctr';
 const password = 'dFeCCasdwww'; 
 
-
+// need to update the logic using chiperIV
 module.exports = {
   encrypt: function (text) {
     let cipher = crypto.createCipher(algorithm, password);

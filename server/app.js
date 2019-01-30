@@ -16,6 +16,6 @@ app.use(cors());
 const router = express.Router();
 
 routes(router);
-app.use('/', router);
+app.use('/api', router);
 
 app.listen(port, () => console.log('running on ' + port));
