@@ -16,12 +16,13 @@ exports.setup = function(options, seedLink) {
 
 exports.up = function(db) {
   const arrayofdata = [
-    [1, 'admin'], 
-    [2, 'user'], 
-    [3, 'vendor']
+    [1, 'next'], 
+    [2, 'alternate'], 
+    [3, 'go back']
   ]
   arrayofdata.forEach(array => {
-    db.insert('roles', ['role_id', 'role_name'], array);
+    db.insert('option_value', ['option_value_id', 'value_description'], 
+      array);
   });
   return null;
 };
