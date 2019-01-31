@@ -1,1 +1,1 @@
-DROP TABLE IF EXISTS `activity_options`;
+DROP TABLE IF EXISTS `option_value`;

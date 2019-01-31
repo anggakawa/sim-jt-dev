@@ -10,6 +10,7 @@ CREATE TABLE `order` (
   `pic_name` varchar(100) NOT NULL,
   `pic_contact` varchar(100) NOT NULL,
   `vendor_id` int(11) DEFAULT NULL,
+  `open_status` boolean DEFAULT true,
   PRIMARY KEY (`order_id`),
   KEY `order_users_FK` (`vendor_id`),
   KEY `order_sto_office_FK` (`sto_office_id`),
