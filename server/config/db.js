@@ -6,7 +6,7 @@ const option = {
   port: 3306, 
   user: 'root', 
   password: '', 
-  database: 'sim-jt'
+  database: 'testDB'
 };
 
 const pool = mysqsl.createPool(option);
