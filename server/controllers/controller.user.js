@@ -64,14 +64,17 @@ module.exports = {
 
   async authenticateUser(req, res) {
     try {
+      // console.log(req.body);
       const result = await pool.query(`SELECT * FROM users WHERE username = '${req.body.username}'`);
       if (result.length < 1) {
+        // console.log('here');
         res.json({
           success: false, 
           result: 'auth failed'
         });
       } else {
         if (encryption.decrypt(result[0].password) !== req.body.password) {
+          // console.log('here');
           res.json({
             success: false, 
             result: 'auth failed'
@@ -82,18 +85,18 @@ module.exports = {
           const token = jwt.sign({payload}, 'koderahasia', { expiresIn: '1d' });
           res.json({
             success: true, 
-            result: token, 
+            token: token, 
             message: 'auth success', 
             user_role: result[0].role_id
           });
         }
       }
     } catch (error) {
-      console.log(error);
-      res.json({
+      // console.log(error);
+      res.status(401).json({
         success: false, 
         result: 'something gone wrong'
-      })
+      });
     }
   }
 
