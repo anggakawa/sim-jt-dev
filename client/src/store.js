@@ -28,11 +28,12 @@ export default new Vuex.Store({
       commit('authRequest');
       const result = await axios.post('http://localhost:3000/api/token', user)
         .then((res) => {
-          console.log(res);
+          // console.log(res);
           if (res.data.success === true) {
             const token_data = res.data.token;
             localStorage.setItem('user-token', token_data);
             commit('authSuccess', token_data);
+            // dispatch()
           } else {
             commit('authError');
           }
@@ -44,6 +45,12 @@ export default new Vuex.Store({
           // we need to test and handle if server is error and see how front end handle it
         });
       return result;
+    },
+    async logout({ commit }, user) {
+      return new Promise((resolve, reject) => {
+        localStorage.removeItem('user-token');
+        resolve();
+      });
     },
   },
   getters: {
