@@ -12,7 +12,7 @@ Vue.config.productionTip = false;
 
 const token = localStorage.getItem('user-token');
 if (token) {
-  Axios.defaults.headers.common['Authorization'] = token;
+  Axios.defaults.headers.common['Authorization'] = "Bearer " + token;
 }
 
 new Vue({
