@@ -5,9 +5,7 @@ module.exports = {
   async selectAllRoles(req, res) {
     try {
       const result = await pool.query(`SELECT * FROM roles`);
-      return res.json({
-        result
-      });
+      return res.json(result);
     } catch (error) {
       console.log(error);
       res.json({

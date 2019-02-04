@@ -48,9 +48,10 @@ module.exports = (router) => {
   router.get('/roles', RoleController.selectAllRoles);
 
   // user routes
-  router.get('/users/:userId', UserController.selectUser);
-  router.post('/users/add', checkIfAdmin, UserController.addnewUser);
-  router.delete('/users/:userId', checkIfAdmin, UserController.deleteUser);
+  router.get('/users', UserController.getAllUsers);
+  router.get('/user/:userId', UserController.selectUser);
+  router.post('/user/add', checkIfAdmin, UserController.addnewUser);
+  router.delete('/user/:userId', checkIfAdmin, UserController.deleteUser);
   
   // activity routes
   router.get('/activities', ActivitiyController.getAllActivity);

@@ -4,6 +4,20 @@ const jwt = require('jsonwebtoken');
 
 module.exports = {
 
+  async getAllUsers(req, res) {
+    try {
+      const result = await pool.query(`SELECT u.user_id, u.username, r.role_name, 
+        u.user_description FROM users u INNER JOIN roles r ON u.role_id = r.role_id`);
+      res.json(result);  
+    } catch (error) {
+      console.log(error);
+      return res.json({
+        success: false, 
+        result: 'something gone wrong'
+      });
+    }
+  },
+
   // create forgot password function
   async addnewUser(req, res) {
     try {
