@@ -1,6 +1,7 @@
 const UserController = require('../controllers/controller.user.js');
 const ActivitiyController = require('../controllers/controller.activity');
 const ActivConnController = require('../controllers/controller.activity_connections');
+const RoleController = require('../controllers/controller.role.js');
 
 const jwt = require('jsonwebtoken');
 
@@ -41,7 +42,10 @@ module.exports = (router) => {
         message: 'No token provided'
       });
     }
-  })
+  });
+
+  // role route
+  router.get('/roles', RoleController.selectAllRoles);
 
   // user routes
   router.get('/users/:userId', UserController.selectUser);
