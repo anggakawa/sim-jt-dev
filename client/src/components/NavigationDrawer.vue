@@ -24,6 +24,8 @@
             <v-list-tile-title>{{ item.title }}</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
+        <AdminNav/>
+        <v-divider></v-divider>
         <v-list-tile @click="logout" >
           <v-list-tile-action>
             <v-icon>exit_to_app</v-icon>
@@ -51,7 +53,12 @@
 </template>
 
 <script>
+import AdminNav from './AdminNavigation.vue';
+
 export default {
+  components: {
+    AdminNav,
+  },
   data() {
     return {
       drawer: false,

@@ -16,11 +16,12 @@ export default new Vuex.Store({
     authRequest: (state) => {
       state.status = 'loading';
     },
-    authSuccess: (state, token) => {
+    authSuccess: (state, { token_data, role }) => {
       state.status = 'success';
-      state.token = token;
+      state.token = token_data;
+      state.user_role = role.toString();
       // set authorization header
-      axios.defaults.headers.common['Authorization'] = "Bearer " + token;
+      axios.defaults.headers.common['Authorization'] = "Bearer " + token_data;
     },
     authError: (state) => {
       state.status = 'error';
@@ -37,7 +38,7 @@ export default new Vuex.Store({
             const role = res.data.user_role;
             sessionStorage.setItem('user-role', role);
             localStorage.setItem('user-token', token_data);
-            commit('authSuccess', token_data);
+            commit('authSuccess', { token_data, role });
             // dispatch()
           } else {
             commit('authError');
