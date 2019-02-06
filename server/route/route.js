@@ -60,6 +60,7 @@ module.exports = (router) => {
   router.delete('/activity/:activityId', checkIfAdmin, ActivitiyController.deleteActivity);
 
   // activity relations routes
+  router.get('/activity-step/all', ActivConnController.getAllConnection);
   router.get('/activity-step/:activityId/:optionValue', ActivConnController.getNextStep);
   router.post('/activity-step', checkIfAdmin, ActivConnController.createConnection);
   router.delete('/activity-step/:activityConnId', checkIfAdmin, ActivConnController.deleteConnection);

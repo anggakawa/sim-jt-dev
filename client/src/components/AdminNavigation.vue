@@ -22,6 +22,11 @@ export default {
           title: 'Users', 
           path: '/users',
         },
+        {
+          action: 'timeline', 
+          title: 'Activities', 
+          path: '/activities',
+        },
       ]
     }
   }

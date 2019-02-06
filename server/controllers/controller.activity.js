@@ -39,10 +39,8 @@ module.exports = {
 
   async getAllActivity(req, res) {
     try {
-      const result = await pool.query(`SELECT * FROM activity`);
-      res.json({
-        result
-      });
+      const result = await pool.query(`SELECT * FROM activity INNER JOIN roles ON activity.role_id = roles.role_id`);
+      res.json(result);
     } catch (error) {
       console.log(error);
       res.json({

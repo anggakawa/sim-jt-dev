@@ -2,6 +2,20 @@ const pool = require('../config/db.js');
 
 module.exports = {
 
+  async getAllConnection(req, res) {
+    try {
+      const result = await pool.query(`SELECT * FROM activity_connections 
+        INNER JOIN activity ON activity.activity_id = activity_connections.activity_id`);
+      res.json(result);
+    } catch (error) {
+      console.log(error);
+      res.json({
+        success: false, 
+        result: 'something gone wrong'
+      });
+    }
+  },
+
   async createConnection(req, res) {
     try {
       const result = await pool.query(`INSERT INTO activity_connections (activity_id, activity_next_id, activity_alternate_id, activity_back_id)
