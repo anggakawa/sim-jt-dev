@@ -96,7 +96,7 @@ module.exports = {
         } else {
           // save secret-code on environment variable
           const payload = result[0] ;
-          const token = jwt.sign({payload}, 'koderahasia', { expiresIn: '1d' });
+          const token = jwt.sign({payload}, 'koderahasia', { expiresIn: "1d" });
           res.json({
             success: true, 
             token: token, 

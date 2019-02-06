@@ -9,6 +9,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     token: localStorage.getItem('user-token') || '',
+    user_role: sessionStorage.getItem('user-role') || 0,
     status: '',
   },
   mutations: {
@@ -18,6 +19,8 @@ export default new Vuex.Store({
     authSuccess: (state, token) => {
       state.status = 'success';
       state.token = token;
+      // set authorization header
+      axios.defaults.headers.common['Authorization'] = "Bearer " + token;
     },
     authError: (state) => {
       state.status = 'error';
@@ -31,6 +34,8 @@ export default new Vuex.Store({
           // console.log(res);
           if (res.data.success === true) {
             const token_data = res.data.token;
+            const role = res.data.user_role;
+            sessionStorage.setItem('user-role', role);
             localStorage.setItem('user-token', token_data);
             commit('authSuccess', token_data);
             // dispatch()
@@ -49,6 +54,7 @@ export default new Vuex.Store({
     logout({ commit }, user) {
       return new Promise((resolve, reject) => {
         localStorage.removeItem('user-token');
+        sessionStorage.removeItem('user-role');
         resolve();
       });
     },
@@ -56,5 +62,6 @@ export default new Vuex.Store({
   getters: {
     isAuthenticated: state => !!state.token,
     authStatus: state => state.status,
+    roleStatus: state => state.user_role,
   },
 });

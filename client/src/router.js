@@ -55,7 +55,7 @@ const router = new Router({
       name: 'users',
       component: UserControl,
       meta: {
-        requiresAuth: true,
+        requiresAdmin: true,
       },
     },
     {
@@ -81,6 +81,14 @@ router.beforeEach((to, from, next) => {
       });
     } else {
       next();
+    }
+  } else if (to.matched.some(address => address.meta.requiresAdmin)) {
+    if (store.getters.roleStatus === '1') {
+      next();
+    } else {
+      next({
+        path: '/',
+      });
     }
   } else {
     next();

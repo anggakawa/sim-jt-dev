@@ -84,17 +84,19 @@
       }
     }, 
     methods: {
+      // handle if user is not authenticated
       async initialize() {
         return axios.get('http://localhost:3000/api/users')
           .then(result => this.users = result.data);
       }, 
+      // handle if user is not authenticated
       async getRoles() {
         return axios.get('http://localhost:3000/api/roles')
           .then(result => this.user_roles = result.data);
       }, 
       async createUser() {
         return axios.post('http://localhost:3000/api/user/add', this.form_data)
-          .then(() => this.$router.go());
+          .then(() => this.$router.go()).catch((error) => console.log(error));
       }
     }, 
     created() {
