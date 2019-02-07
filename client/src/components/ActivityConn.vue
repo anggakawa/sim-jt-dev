@@ -48,9 +48,9 @@
     >
       <template slot="items" slot-scope="props">
         <td>{{ props.item.activity_name }}</td>
-        <td>{{ props.item.activity_next_id }}</td>
-        <td>{{ props.item.activity_alt_id }}</td>
-        <td>{{ props.item.activity_back_id }}</td>
+        <td>{{ convertToActivity(props.item.activity_next_id) }}</td>
+        <td>{{ convertToActivity(props.item.activity_alternate_id) }}</td>
+        <td>{{ convertToActivity(props.item.activity_back_id) }}</td>
         <td class="justify-center">
           <v-icon
             small
@@ -106,9 +106,9 @@
       editedIndex: -1,
       editedItem: {
         activity_id: 0,
-        activity_next_id: 0,
-        activity_alt_id: 0,
-        activity_back_id: 0,
+        activity_next_id: null,
+        activity_alt_id: null,
+        activity_back_id: null,
       },
       defaultItem: {
       }
@@ -133,8 +133,14 @@
 
     methods: {
 
-      YesOrNo(item) {
-        return item === 1 ? 'Ya' : 'Tidak';
+      convertToActivity(item) {
+        const activities = this.activities;
+        for (let index = 0; index < activities.length; index++) {
+          const element = activities[index];
+          if (element.activity_id === item) {
+            return element.activity_name;
+          }
+        }
       },
 
       initialize () {
@@ -156,7 +162,7 @@
       deleteItem (item) {
         const index = this.activity_cons.indexOf(item);
         if(confirm('Are you sure you want to delete this item?')) {
-          return axios.delete('http://localhost:3000/api/activity/' + item.activity_id)
+          return axios.delete('http://localhost:3000/api/activity-step/' + item.activity_connections_id)
             .then(() => this.activity_cons.splice(index, 1));
         }
       },
@@ -171,11 +177,13 @@
 
       save () {
         if (this.editedIndex > -1) {
-          
+          this.close();
         } else {
-          
+          return axios.post('http://localhost:3000/api/activity-step', this.editedItem)
+            .then((res) => {
+              this.$router.go();
+            }); 
         }
-        this.close();
       }
     },
   }
