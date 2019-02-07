@@ -16,16 +16,7 @@
               <v-container grid-list-md>
                 <v-layout row wrap>
                   <v-flex xs12>
-                    <v-text-field v-model="form_data.username" label="Username" required></v-text-field>
-                  </v-flex>
-                  <v-flex xs12>
-                    <v-text-field label="Password" v-model="form_data.password" type="password" required></v-text-field>
-                  </v-flex>
-                  <v-flex xs12>
-                    <v-select :items="user_roles" v-model="form_data.role_id" item-text="role_name" item-value="role_id" label="User Role" required></v-select>
-                  </v-flex>
-                  <v-flex xs12>
-                    <v-textarea name="input-7-1" box label="Keterangan" v-model="form_data.user_description" auto-grow></v-textarea>
+                    <v-text-field v-model="form_data.role_name" label="Nama Role" required></v-text-field>
                   </v-flex>
                 </v-layout>
               </v-container>
@@ -33,16 +24,15 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue darken-1" flat @click="dialog = false">Close</v-btn>
-              <v-btn color="blue darken-1" flat @click="createUser">Save</v-btn>
+              <v-btn color="blue darken-1" flat @click="createRole">Save</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
       </v-card-title>
-      <v-data-table :headers="headers" :items="users" :search="search">
+      <v-data-table :headers="headers" :items="roles" :search="search">
         <template slot="items" slot-scope="props">
-          <td class="text-xs-left">{{ props.item.username }}</td>
+          <td class="text-xs-left">{{ props.item.role_id }}</td>
           <td class="text-xs-left">{{ props.item.role_name }}</td>
-          <td class="text-xs-left">{{ props.item.user_description }}</td>
         </template>
         <v-alert slot="no-results" :value="true" color="error" icon="warning">
           Your search for "{{ search }}" found no results.
@@ -60,48 +50,36 @@
       return {
         dialog: false,
         form_data: {
-          username: '', 
-          password: '', 
-          role_id: 0,
-          user_description: '',
+          role_name: '',
         },
         search: '',
-        headers: [{
-            text: 'Username',
-            value: 'username'
+        headers: [
+          {
+            text: 'Role ID',
+            value: 'role_id'
           },
           {
-            text: 'Role',
+            text: 'Role Name',
             value: 'role_name'
           },
-          {
-            text: 'User Description',
-            value: 'user_description'
-          },
         ],
-        users: [],
+        roles: [],
         user_roles:[]
       }
     }, 
     methods: {
       // handle if user is not authenticated
       async initialize() {
-        return axios.get('http://localhost:3000/api/users')
-          .then(result => this.users = result.data);
-      }, 
-      // handle if user is not authenticated
-      async getRoles() {
         return axios.get('http://localhost:3000/api/roles')
-          .then(result => this.user_roles = result.data);
-      }, 
-      async createUser() {
-        return axios.post('http://localhost:3000/api/user/add', this.form_data)
+          .then(result => this.roles = result.data);
+      },
+      async createRole() {
+        return axios.post('http://localhost:3000/api/roles/add', this.form_data)
           .then(() => this.$router.go()).catch((error) => console.log(error));
       }
     }, 
     created() {
       this.initialize();
-      this.getRoles();
     }
   }
 
