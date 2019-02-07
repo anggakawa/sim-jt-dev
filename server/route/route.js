@@ -2,6 +2,7 @@ const UserController = require('../controllers/controller.user.js');
 const ActivitiyController = require('../controllers/controller.activity');
 const ActivConnController = require('../controllers/controller.activity_connections');
 const RoleController = require('../controllers/controller.role.js');
+const ActivOptController = require('../controllers/controller.activity_options.js');
 
 const jwt = require('jsonwebtoken');
 
@@ -64,4 +65,11 @@ module.exports = (router) => {
   router.get('/activity-step/:activityId/:optionValue', ActivConnController.getNextStep);
   router.post('/activity-step', checkIfAdmin, ActivConnController.createConnection);
   router.delete('/activity-step/:activityConnId', checkIfAdmin, ActivConnController.deleteConnection);
+
+  // options per activity routes
+  router.get('/activity-options/all', ActivOptController.getAllActivityOptions);
+  router.get('/activity-options/:activityId', ActivOptController.getActivityOptionsById);
+  router.post('/activity-options', ActivOptController.createActivityOption);
+  router.delete('/activity-options/:activityOptId', ActivOptController.deleteActivity);
+
 }
