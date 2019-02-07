@@ -47,6 +47,8 @@ module.exports = (router) => {
 
   // role route
   router.get('/roles', RoleController.selectAllRoles);
+  router.post('/roles/add', RoleController.createNewRole);
+  router.delete('/roles/:roleId', RoleController.deleteRole);
 
   // user routes
   router.get('/users', UserController.getAllUsers);
