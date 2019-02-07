@@ -6,9 +6,9 @@ module.exports = {
     try {
       const result = await pool.query(`INSERT INTO activity
         (activity_name, activity_description, role_id, require_status, 
-        require_information, require_attachment, can_close) VALUES
-        ('${req.body.activity_name}', '${req.body.activity_description}', ${req.body.role_id}, 
-        ${req.body.require_status}, ${req.body.require_information}, ${req.body.require_attachment}, ${req.body.can_close})`);
+        require_information, require_attachment, can_close, can_choose_vendor) VALUES
+        ('${req.body.activity_name}', '${req.body.activity_description}', ${req.body.role_id}, ${req.body.require_status}, 
+        ${req.body.require_information}, ${req.body.require_attachment}, ${req.body.can_close}, ${req.body.can_choose_vendor})`);
       return res.json({
         success: true, 
         results: result

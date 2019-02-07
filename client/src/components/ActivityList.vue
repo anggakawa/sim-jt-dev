@@ -39,6 +39,9 @@
                 <v-flex xs6>
                   <v-select :items="options_select" v-model="editedItem.can_close" item-text="text" item-value="value" label="Can Close" required></v-select>
                 </v-flex>
+                <v-flex xs6>
+                  <v-select :items="options_select" v-model="editedItem.can_choose_vendor" item-text="text" item-value="value" label="Can Choose Vendor" required></v-select>
+                </v-flex>
               </v-layout>
             </v-container>
           </v-card-text>
@@ -64,6 +67,7 @@
         <td>{{ YesOrNo(props.item.require_information) }}</td>
         <td>{{ YesOrNo(props.item.require_attachment) }}</td>
         <td>{{ YesOrNo(props.item.can_close) }}</td>
+        <td>{{ YesOrNo(props.item.can_choose_vendor) }}</td>
         <td class="justify-center">
           <v-icon
             small
@@ -108,6 +112,7 @@
         { text: 'Require Information', value: 'require_information' },
         { text: 'Require Attachment', value: 'require_attachment'},
         { text: 'Can Close', value: 'can_close' },
+        { text: 'Can Choose Vendor', value: 'can_choose_vendor' },
         { text: 'Actions', value: 'action', sortable: false }
       ],
       activities: [],
@@ -132,6 +137,7 @@
         require_information: '', 
         require_attachment: '',
         can_close: '',
+        can_choose_vendor: '',
       },
       defaultItem: {
       }
