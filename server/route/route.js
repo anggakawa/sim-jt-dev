@@ -3,6 +3,8 @@ const ActivitiyController = require('../controllers/controller.activity');
 const ActivConnController = require('../controllers/controller.activity_connections');
 const RoleController = require('../controllers/controller.role.js');
 const ActivOptController = require('../controllers/controller.activity_options.js');
+const OrderController = require('../controllers/controller.order.js');
+const STOOfficeController = require('../controllers/controller.sto_office.js');
 
 const jwt = require('jsonwebtoken');
 
@@ -56,6 +58,9 @@ module.exports = (router) => {
   router.post('/user/add', checkIfAdmin, UserController.addnewUser);
   router.delete('/user/:userId', checkIfAdmin, UserController.deleteUser);
   
+  // get data sto 
+  router.get('/offices', STOOfficeController.getAllOffice);
+
   // activity routes
   router.get('/activities', ActivitiyController.getAllActivity);
   router.post('/activity/add', checkIfAdmin, ActivitiyController.createNewActivity);
@@ -73,5 +78,10 @@ module.exports = (router) => {
   router.get('/activity-options/:activityId', ActivOptController.getActivityOptionsById);
   router.post('/activity-options', ActivOptController.createActivityOption);
   router.delete('/activity-options/:activityOptId', ActivOptController.deleteActivity);
+
+  router.get('/orders', OrderController.getAllOrder);
+  router.get('/order/:orderId', OrderController.getOrderById);
+  router.post('/orders/add', OrderController.createNewOrder);
+  router.delete('/order/:orderId', OrderController.deleteOrder);
 
 }

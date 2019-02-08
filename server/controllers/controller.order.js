@@ -2,15 +2,31 @@ const pool = require('../config/db.js');
 
 module.exports = {
 
+  async getAllOrder(req, res){
+    try {
+      const result = await pool.query(`SELECT * FROM orders INNER JOIN sto_office ON orders.sto_office_id = sto_office.sto_office_id`);
+      res.json(result);
+    } catch (error) {
+      console.log(error);
+      return res.json({
+        success: false, 
+        result: 'something gone wrong'
+      });
+    }
+  }, 
+
   async createNewOrder(req, res) {
     try {
-      const result = await pool.query(`INSERT INTO order 
-        (date, customer_name, customer_address, sto_office_id, customer_coordinat_latitude, 
-        customer_coordinat_longitude, pic_name, pic_contact, vendor_id) VALUES
-        ('${req.body.date}', '${req.body.customer_name}',
+      const latitude = parseFloat(req.body.customer_coordinat_latitude);
+      const longitude = parseFloat(req.body.customer_coordinat_longitude); 
+      const result = await pool.query(`INSERT INTO orders 
+        (order_id, date, customer_name, customer_address, service_name, sto_office_id, customer_coordinat_latitude, 
+        customer_coordinat_longitude, pic_name, pic_contact, open_status) VALUES
+        ('${req.body.order_id}', '${req.body.date}', '${req.body.customer_name}',
         '${req.body.customer_address}', '${req.body.service_name}', 
-        ${req.body.sto_office_id}, ${req.body.latitude}, ${req.body.longitude}, 
-        '${req.body.pic_name}', '${req.body.pic_contact}', ${req.body.vendor_id})`);
+        ${req.body.sto_office_id}, ${latitude}, 
+        ${longitude}, 
+        '${req.body.pic_name}', '${req.body.pic_contact}', true)`);
       return res.json({
         success: true, 
         results: result
@@ -26,21 +42,10 @@ module.exports = {
 
   async getOrderById(req, res) {
     try {
-      const result = await pool.query(`SELECT * FROM order WHERE order_id = '${req.params.orderId}'`);
-      res.json({ result });
-    } catch (error) {
-      console.log(error);
-      return res.json({
-        success: false, 
-        result: 'something gone wrong'
-      });
-    }
-  }, 
-
-  async getAllOrder(req, res){
-    try {
-      const result = await pool.query(`SELECT * FROM order`);
-      res.json({result});
+      const result = await pool.query(`SELECT * FROM orders 
+        INNER JOIN sto_office ON orders.sto_office_id = sto_office.sto_office_id
+        WHERE order_id = '${req.params.orderId}'`);
+      res.json(result);
     } catch (error) {
       console.log(error);
       return res.json({
@@ -52,7 +57,11 @@ module.exports = {
 
   async deleteOrder(req, res) {
     try {
-      const result = await pool.query(`DELETE FROM order WHERE order_id = '${req.params.orderId}'`)
+      const result = await pool.query(`DELETE FROM orders WHERE order_id = '${req.params.orderId}'`);
+      res.json({
+        success: true, 
+        result: result
+      });
     } catch (error) {
       console.log(error);
       return res.json({
