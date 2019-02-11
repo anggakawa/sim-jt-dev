@@ -1,6 +1,6 @@
 <template>
   <v-layout row wrap>
-    <!-- <v-flex xs12>
+    <v-flex xs12>
       <h2>Aktivitas</h2>
     </v-flex>
     <v-flex xs12>
@@ -14,76 +14,41 @@
               <v-flex xs12 style="font-size: 18px">
                 {{ task_description }}
               </v-flex>
-              <v-flex xs12>
+              <v-flex xs10 v-if="true">
                 <v-select v-model="selected_option" :items="options" item-text="optiontext"
                   item-value="optionvalue" label="Keputusan" required></v-select>
               </v-flex>
-              <v-flex xs12 v-show="true">
+              <v-flex xs2>
+                <v-btn block :loading="loading2" :disabled="loading2" color="success" @click="loader = 'loading2'">
+                  SIMPAN
+                  <span slot="loader">Loading...</span>
+                </v-btn>
+              </v-flex>
+              <v-flex xs10 v-if="true">
                 <v-textarea name="input-7-1" box label="Keterangan" auto-grow></v-textarea>
               </v-flex>
-              <v-flex xs12 v-show="true">
-                <input type="file" name="Upload Dokumen">
+              <v-flex xs2>
+                <v-btn block :loading="loading2" :disabled="loading2" color="success" @click="loader = 'loading2'">
+                  SIMPAN
+                  <span slot="loader">Loading...</span>
+                </v-btn>
               </v-flex>
-            </v-layout>
-          </v-container>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="purple" flat>Save</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-flex> -->
-    <v-flex xs12>
-      <h2>Aktivitas</h2>
-    </v-flex>
-    <v-flex xs12>
-      <v-card>
-        <v-card-title>
-          <span class="headline">To Do List</span>
-        </v-card-title>
-        <v-card-text>
-          <v-container grid-list-md>
-            <v-layout row wrap>
-              <v-flex xs12 style="font-size: 18px">
-                {{ task_description }}
-              </v-flex>
-              <v-flex xs12>
+              <v-flex xs12 v-if="true">
+                Silahkan Upload Lampiran Yang Dibutuhkan
                 <v-dialog v-model="dialog" persistent max-width="600px">
-                  <v-btn slot="activator" color="primary" dark>Open Dialog</v-btn>
+                  <v-btn slot="activator" color="success" >Upload Files</v-btn>
                   <v-card>
                     <v-card-title>
-                      <span class="headline">User Profile</span>
+                      <span class="headline">Upload Lampiran</span>
                     </v-card-title>
                     <v-card-text>
                       <v-container grid-list-md>
                         <v-layout wrap>
                           <v-flex xs12 sm6 md4>
-                            <v-text-field label="Legal first name*" required></v-text-field>
-                          </v-flex>
-                          <v-flex xs12 sm6 md4>
-                            <v-text-field label="Legal middle name" hint="example of helper text only on focus"></v-text-field>
-                          </v-flex>
-                          <v-flex xs12 sm6 md4>
-                            <v-text-field label="Legal last name*" hint="example of persistent helper text"
-                              persistent-hint required></v-text-field>
-                          </v-flex>
-                          <v-flex xs12>
-                            <v-text-field label="Email*" required></v-text-field>
-                          </v-flex>
-                          <v-flex xs12>
-                            <v-text-field label="Password*" type="password" required></v-text-field>
-                          </v-flex>
-                          <v-flex xs12 sm6>
-                            <v-select :items="['0-17', '18-29', '30-54', '54+']" label="Age*"
-                              required></v-select>
-                          </v-flex>
-                          <v-flex xs12 sm6>
-                            <v-autocomplete :items="['Skiing', 'Ice hockey', 'Soccer', 'Basketball', 'Hockey', 'Reading', 'Writing', 'Coding', 'Basejump']"
-                              label="Interests" multiple></v-autocomplete>
+                            <input type="file" name="Upload Dokumen">
                           </v-flex>
                         </v-layout>
                       </v-container>
-                      <small>*indicates required field</small>
                     </v-card-text>
                     <v-card-actions>
                       <v-spacer></v-spacer>
@@ -93,22 +58,12 @@
                   </v-card>
                 </v-dialog>
               </v-flex>
-              <v-flex xs12>
-                <v-select v-model="selected_option" :items="options" item-text="optiontext"
-                  item-value="optionvalue" label="Keputusan" required></v-select>
-              </v-flex>
-              <v-flex xs12 v-show="true">
-                <v-textarea name="input-7-1" box label="Keterangan" auto-grow></v-textarea>
-              </v-flex>
-              <v-flex xs12 v-show="true">
-                <input type="file" name="Upload Dokumen">
-              </v-flex>
             </v-layout>
           </v-container>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="purple" flat>Save</v-btn>
+          <v-btn color="purple" flat>Next</v-btn>
         </v-card-actions>
       </v-card>
     </v-flex>
@@ -119,10 +74,13 @@
   export default {
     data() {
       return {
+        loader: null,
         dialog: false,
+        loading2: false,
         selected_option: '',
         task_description: 'Hello there',
-        options: [{
+        options: [
+          {
             optiontext: 'YES',
             optionvalue: true
           },
@@ -133,6 +91,64 @@
         ],
       };
     },
+    watch: {
+      loader() {
+        const l = this.loader
+        this[l] = !this[l]
+
+        setTimeout(() => (this[l] = false), 3000)
+
+        this.loader = null
+      }
+    }
   }
 
 </script>
+
+<style>
+  .custom-loader {
+    animation: loader 1s infinite;
+    display: flex;
+  }
+
+  @-moz-keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @-webkit-keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @-o-keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+</style>
