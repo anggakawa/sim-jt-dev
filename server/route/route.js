@@ -5,6 +5,7 @@ const RoleController = require('../controllers/controller.role.js');
 const ActivOptController = require('../controllers/controller.activity_options.js');
 const OrderController = require('../controllers/controller.order.js');
 const STOOfficeController = require('../controllers/controller.sto_office.js');
+const OrderHistory = require('../controllers/controller.order_history.js');
 
 const jwt = require('jsonwebtoken');
 
@@ -83,5 +84,10 @@ module.exports = (router) => {
   router.get('/order/:orderId', OrderController.getOrderById);
   router.post('/orders/add', OrderController.createNewOrder);
   router.delete('/order/:orderId', OrderController.deleteOrder);
+
+  router.get('/order-history/all', OrderHistory.getAllOrderHistory);
+  router.get('/order-history/:orderId', OrderHistory.getAllOrderHistoryPerId);
+  router.post('/order-history/post', OrderHistory.createNewOrderLog);
+  router.delete('/order-history/:orderLogId', OrderHistory.deleteOrderLog);
 
 }

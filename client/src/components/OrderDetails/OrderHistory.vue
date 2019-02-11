@@ -8,11 +8,12 @@
           <v-data-table :headers="headers" :items="order_logs"
             class="elevation-5" :rows-per-page-items="[10,20,30]">
             <template slot="items" slot-scope="props">
-              <td>{{ props.item.log_date }}</td>
+              <td>{{ props.item.date }}</td>
               <td class="text-xs-left">{{ props.item.username }}</td>
               <td class="text-xs-left">{{ props.item.user_description }}</td>
-              <td class="text-xs-left">{{ props.item.activity }}</td>
+              <td class="text-xs-left">{{ props.item.activity_name }}</td>
               <td class="text-xs-left">{{ props.item.information }}</td>
+              <td class="text-xs-left">{{ props.item.attachment_name }}</td>
               <td class="text-xs-left">{{ props.item.attachment_id }}</td>
             </template>
           </v-data-table>
@@ -21,6 +22,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {
@@ -45,27 +48,15 @@ export default {
         value: '',
       },
       {
+        text: 'Nama Lampiran', 
+        value: '',
+      },
+      {
         text: 'Lampiran',
         value: '',
       },
       ],
-      order_logs: [{
-        log_date: new Date().toDateString(),
-        username: 'anggakawa',
-        user_description: 'Admin',
-        information: 'Inisiasi Pengerjaan',
-        activity: 'Initialization',
-        attachment_id: 1,
-      },
-      {
-        log_date: new Date().toDateString(),
-        username: 'ccan_user',
-        user_description: 'CCAN',
-        information: 'Pembuatan NDE, sudah menyerahkan',
-        activity: 'Pembuatan NDE',
-        attachment_id: 2,
-      },
-      ],
+      order_logs: [],
       headers_activity: [{
         text: 'Nomor',
         value: 'number',
@@ -88,6 +79,18 @@ export default {
         { text: 'NO', value: false },
       ],
     };
+  },
+  methods: {
+    initialize() {
+      return axios.get('http://localhost:3000/api/order-history/' + this.$route.params.order_id)
+        .then(result => {
+          console.log(result);
+          this.order_logs = result.data
+        });
+    }
+  }, 
+  created() {
+    this.initialize();
   },
 }
 </script>
