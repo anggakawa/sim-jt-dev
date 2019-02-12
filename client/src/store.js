@@ -38,6 +38,7 @@ export default new Vuex.Store({
             const role = res.data.user_role;
             sessionStorage.setItem('user-role', role);
             localStorage.setItem('user-token', token_data);
+            localStorage.setItem('user-id', res.data.user_id);
             commit('authSuccess', { token_data, role });
             // dispatch()
           } else {
@@ -55,6 +56,7 @@ export default new Vuex.Store({
     logout({ commit }, user) {
       return new Promise((resolve, reject) => {
         localStorage.removeItem('user-token');
+        localStorage.removeItem('user-id');
         sessionStorage.removeItem('user-role');
         resolve();
       });

@@ -7,6 +7,7 @@ const OrderController = require('../controllers/controller.order.js');
 const STOOfficeController = require('../controllers/controller.sto_office.js');
 const OrderHistory = require('../controllers/controller.order_history.js');
 const ActivityTracker = require('../controllers/controller.activity_tracker.js');
+const OrderVendorHistory = require('../controllers/controller.order_vendor.js');
 
 const jwt = require('jsonwebtoken');
 
@@ -92,6 +93,9 @@ module.exports = (router) => {
   router.get('/order-history/:orderId', OrderHistory.getAllOrderHistoryPerId);
   router.post('/order-history/post', OrderHistory.createNewOrderLog);
   router.delete('/order-history/:orderLogId', OrderHistory.deleteOrderLog);
+  
+  router.post('/order-vendor', OrderVendorHistory.addNewOrderVendor);
+  router.get('/order-vendor/:orderId', OrderVendorHistory.getOrderVendor);
 
   router.get('/current-activity/:orderId', ActivityTracker.getCurrentActivity);
   router.put('/current-activity/:activityId', ActivityTracker.updateActivity);

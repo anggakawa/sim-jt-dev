@@ -8,8 +8,8 @@
           <v-data-table :headers="headers" :items="order_logs"
             class="elevation-5" :rows-per-page-items="[10,20,30]">
             <template slot="items" slot-scope="props">
-              <td>{{ props.item.date }}</td>
-              <td class="text-xs-left">{{ props.item.username }}</td>
+              <td>{{ new Date(props.item.date).toISOString().slice(0, 19).replace('T', ' ') }}</td>
+              <td class="text-xs-left">{{  props.item.username }}</td>
               <td class="text-xs-left">{{ props.item.user_description }}</td>
               <td class="text-xs-left">{{ props.item.activity_name }}</td>
               <td class="text-xs-left">{{ props.item.information }}</td>

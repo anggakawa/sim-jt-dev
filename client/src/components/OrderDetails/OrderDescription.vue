@@ -4,7 +4,7 @@
       <h2>Detail Order</h2>
     </v-flex>
     <v-flex xs6>
-      <v-text-field v-model="order_desc.date" readonly label="Tanggal">
+      <v-text-field :value="changeDate(order_desc.date)" readonly label="Tanggal">
       </v-text-field>
     </v-flex>
     <v-flex xs6>
@@ -65,6 +65,9 @@
           .then(result => {  
             this.order_desc = result.data[0]
           });
+      }, 
+      changeDate(props) {
+        return new Date(props).toISOString().slice(0, 19).replace('T', ' ')
       }
     }
   }

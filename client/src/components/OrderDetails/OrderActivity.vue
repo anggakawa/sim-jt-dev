@@ -21,35 +21,37 @@
               <v-flex xs12>
                 <h2>TASK</h2>
               </v-flex>
-              <v-flex xs10>
-                <v-select v-model="selected_option" :items="vendors" item-text="optiontext"
-                  item-value="optionvalue" label="Pilih Vendor" required></v-select>
+
+              <v-flex xs12 v-if="current_activity.require_attachment">
+                Silahkan Pilih Vendor
+                <v-dialog v-model="dialog4" persistent max-width="600px">
+                  <v-btn slot="activator" color="success">Pilih Vendor</v-btn>
+                  <v-card>
+                    <v-card-title>
+                      <span class="headline">Pilih Vendor</span>
+                    </v-card-title>
+                    <v-card-text>
+                      <v-container grid-list-md>
+                        <v-layout wrap>
+                          <v-flex xs12>
+                            <v-select v-model="selected_vendor" :items="vendors" item-text="user_description"
+                              item-value="user_id" label="Pilih Vendor" required></v-select>
+                          </v-flex>
+                          <v-flex xs12>
+                            <v-textarea name="input-7-1" box label="Keterangan" v-model="vendor_information" auto-grow></v-textarea>
+                          </v-flex>
+                        </v-layout>
+                      </v-container>
+                    </v-card-text>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn color="blue darken-1" flat @click="dialog4 = false">Close</v-btn>
+                      <v-btn color="blue darken-1" flat @click="saveOrderVendor">Save</v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
               </v-flex>
-              <v-flex xs2>
-                <v-btn block :loading="loading2" :disabled="loading2" color="success" @click="loader = 'loading2'">
-                  SIMPAN
-                  <span slot="loader">Loading...</span>
-                </v-btn>
-              </v-flex>
-              <v-flex xs10 v-if="current_activity.require_status">
-                <v-select v-model="selected_option" :items="options" item-text="optiontext"
-                  item-value="optionvalue" label="Keputusan" required></v-select>
-              </v-flex>
-              <v-flex xs2>
-                <v-btn block :loading="loading2" :disabled="loading2" color="success" @click="loader = 'loading2'">
-                  SIMPAN
-                  <span slot="loader">Loading...</span>
-                </v-btn>
-              </v-flex>
-              <v-flex xs10 v-if="current_activity.require_information">
-                <v-textarea name="input-7-1" box label="Keterangan" auto-grow></v-textarea>
-              </v-flex>
-              <v-flex xs2 v-if="current_activity.require_information">
-                <v-btn block :loading="loading2" :disabled="loading2" color="success" @click="loader = 'loading2'">
-                  SIMPAN
-                  <span slot="loader">Loading...</span>
-                </v-btn>
-              </v-flex>
+
               <v-flex xs12 v-if="current_activity.require_attachment">
                 Silahkan Upload Lampiran Yang Dibutuhkan
                 <v-dialog v-model="dialog" persistent max-width="600px">
@@ -75,6 +77,37 @@
                   </v-card>
                 </v-dialog>
               </v-flex>
+
+              <v-flex xs12>
+                Masukkan Informasi dan Keputusan
+                <v-dialog v-model="dialog3" persistent max-width="600px">
+                  <v-btn slot="activator" color="success">Tambahkan Informasi</v-btn>
+                  <v-card>
+                    <v-card-title>
+                      <span class="headline">Informasi</span>
+                    </v-card-title>
+                    <v-card-text>
+                      <v-container grid-list-md>
+                        <v-layout wrap>
+                          <v-flex xs12 v-if="current_activity.require_status">
+                            <v-select v-model="selected_option" :items="options" item-text="optiontext"
+                              item-value="optionvalue" label="Keputusan" required></v-select>
+                          </v-flex>
+                          <v-flex xs12 v-if="current_activity.require_information">
+                            <v-textarea name="input-7-1" box label="Keterangan" auto-grow></v-textarea>
+                          </v-flex>
+                        </v-layout>
+                      </v-container>
+                    </v-card-text>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn color="blue darken-1" flat @click="dialog3 = false">Close</v-btn>
+                      <v-btn color="blue darken-1" flat @click="saveToOrderLog">Save</v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+              </v-flex>
+
               <v-flex xs12 v-if="current_activity.can_close">
                 Apakah anda ingin menutup (close) Order?
                 <v-btn color="success" dark @click="dialog2 = true">
@@ -120,19 +153,22 @@
         loader: null,
         dialog: false,
         dialog2: false,
+        dialog3: false,
+        dialog4: false,
         loading2: false,
-        selected_option: '',
+        selected_option: null,
         selected_vendor: '',
-        task_description: 'Hello there',
+        vendor_information: '',
         options: [{
             optiontext: 'YES',
-            optionvalue: true
+            optionvalue: 1
           },
           {
             optiontext: 'NO',
-            optionvalue: false
+            optionvalue: 0
           },
         ],
+        information: '',
         current_activity: {},
         vendors: [],
       };
@@ -154,7 +190,24 @@
       },
       getVendors() {
         axios.get('http://localhost:3000/api/vendors')
-          .then((result) => console.log(result));
+          .then((result) => this.vendors = result.data);
+      },
+      saveToOrderLog() {
+        axios.post('http://localhost:3000/api/order-history/post', {
+          order_id: this.$route.params.order_id,
+          activity_id: this.current_activity.activity_id,
+          information: this.information,
+          status: this.selected_option,
+          date: new Date().toISOString().slice(0, 19).replace('T', ' '),
+          user_id: localStorage.getItem('user-id'),
+        }).then(() => this.dialog3 = false);
+      }, 
+      saveOrderVendor() {
+        axios.post('http://localhost:3000/api/order-vendor', {
+          order_id: this.$route.params.order_id, 
+          vendor_id: this.selected_vendor,
+          vendor_information: this.vendor_information,
+        }).then(() => this.dialog4 = false);
       }
 
     },
