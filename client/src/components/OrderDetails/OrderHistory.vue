@@ -84,7 +84,6 @@ export default {
     initialize() {
       return axios.get('http://localhost:3000/api/order-history/' + this.$route.params.order_id)
         .then(result => {
-          console.log(result);
           this.order_logs = result.data
         });
     }

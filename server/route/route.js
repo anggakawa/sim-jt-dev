@@ -6,6 +6,7 @@ const ActivOptController = require('../controllers/controller.activity_options.j
 const OrderController = require('../controllers/controller.order.js');
 const STOOfficeController = require('../controllers/controller.sto_office.js');
 const OrderHistory = require('../controllers/controller.order_history.js');
+const ActivityTracker = require('../controllers/controller.activity_tracker.js');
 
 const jwt = require('jsonwebtoken');
 
@@ -53,12 +54,14 @@ module.exports = (router) => {
   router.post('/roles/add', RoleController.createNewRole);
   router.delete('/roles/:roleId', RoleController.deleteRole);
 
+  router.get('/vendors', UserController.getVendors);
+
   // user routes
   router.get('/users', UserController.getAllUsers);
   router.get('/user/:userId', UserController.selectUser);
   router.post('/user/add', checkIfAdmin, UserController.addnewUser);
   router.delete('/user/:userId', checkIfAdmin, UserController.deleteUser);
-  
+
   // get data sto 
   router.get('/offices', STOOfficeController.getAllOffice);
 
@@ -89,5 +92,8 @@ module.exports = (router) => {
   router.get('/order-history/:orderId', OrderHistory.getAllOrderHistoryPerId);
   router.post('/order-history/post', OrderHistory.createNewOrderLog);
   router.delete('/order-history/:orderLogId', OrderHistory.deleteOrderLog);
+
+  router.get('/current-activity/:orderId', ActivityTracker.getCurrentActivity);
+  router.put('/current-activity/:activityId', ActivityTracker.updateActivity);
 
 }

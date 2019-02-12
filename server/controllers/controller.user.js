@@ -18,6 +18,20 @@ module.exports = {
     }
   },
 
+  async getVendors(req, res) {
+    try {
+      const result = await pool.query(`SELECT users.user_id, users.username, users.user_description FROM users 
+        INNER JOIN roles ON users.role_id = roles.role_id WHERE roles.role_name = 'vendor'`);
+      res.json(result);
+    } catch (error) {
+      console.log(error);
+      res.json({
+        success: false, 
+        result: 'something gone wrong'
+      })
+    }
+  },
+
   // create forgot password function
   async addnewUser(req, res) {
     try {
