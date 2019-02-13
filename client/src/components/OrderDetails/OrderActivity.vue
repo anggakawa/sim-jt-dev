@@ -22,7 +22,7 @@
                 <h2>TASK</h2>
               </v-flex>
 
-              <v-flex xs12 v-if="current_activity.require_attachment">
+              <v-flex xs12 v-if="current_activity.can_choose_vendor">
                 Silahkan Pilih Vendor
                 <v-dialog v-model="dialog4" persistent max-width="600px">
                   <v-btn slot="activator" color="success">Pilih Vendor</v-btn>
