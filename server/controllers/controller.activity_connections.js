@@ -48,17 +48,17 @@ module.exports = {
 
   async getNextStep(req, res) {
     try {
-      const option_value = req.params.optionValue;
-      const query = ``;
+      const option_value = parseInt(req.params.optionValue);
+      let query = ``;
       if (option_value === 1) {
-        query += `SELECT activity_next_id FROM activity_connections WHERE activity_id = ${req.params.activityId}`;
+        query += `SELECT activity_next_id AS next_step FROM activity_connections WHERE activity_id = ${req.params.activityId}`;
       } else if (option_value === 2) {
-        query += `SELECT activity_alternate_id FROM activity_connections WHERE activity_id = ${req.params.activityId}`;
+        query += `SELECT activity_alternate_id AS next_step FROM activity_connections WHERE activity_id = ${req.params.activityId}`;
       } else if (option_value === 3) {
-        query += `SELECT activity_back_id FROM activity_connections WHERE activity_id = ${req.params.activityId}`;
+        query += `SELECT activity_back_id AS next_step FROM activity_connections WHERE activity_id = ${req.params.activityId}`;
       }
       const result = await pool.query(query);
-      res.json({ result });
+      res.json( result );
     } catch (error) {
       console.log(error);
       res.json({

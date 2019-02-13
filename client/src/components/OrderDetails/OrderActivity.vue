@@ -81,7 +81,7 @@
               <v-flex xs12>
                 Masukkan Informasi dan Keputusan
                 <v-dialog v-model="dialog3" persistent max-width="600px">
-                  <v-btn slot="activator" color="success">Tambahkan Informasi</v-btn>
+                  <v-btn slot="activator" color="success" @click="getOptions()">Tambahkan Informasi</v-btn>
                   <v-card>
                     <v-card-title>
                       <span class="headline">Informasi</span>
@@ -90,8 +90,8 @@
                       <v-container grid-list-md>
                         <v-layout wrap>
                           <v-flex xs12 v-if="current_activity.require_status">
-                            <v-select v-model="selected_option" :items="options" item-text="optiontext"
-                              item-value="optionvalue" label="Keputusan" required></v-select>
+                            <v-select v-model="selected_option" :items="options" item-text="option_text"
+                              item-value="option_value" label="Keputusan" required></v-select>
                           </v-flex>
                           <v-flex xs12 v-if="current_activity.require_information">
                             <v-textarea name="input-7-1" box label="Keterangan" auto-grow></v-textarea>
@@ -137,7 +137,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="purple" flat>Next</v-btn>
+          <v-btn color="purple" flat @click="getAndUpdateStep()">Next</v-btn>
         </v-card-actions>
       </v-card>
     </v-flex>
@@ -156,17 +156,10 @@
         dialog3: false,
         dialog4: false,
         loading2: false,
-        selected_option: null,
+        selected_option: 1,
         selected_vendor: '',
         vendor_information: '',
-        options: [{
-            optiontext: 'YES',
-            optionvalue: 1
-          },
-          {
-            optiontext: 'NO',
-            optionvalue: 0
-          },
+        options: [
         ],
         information: '',
         current_activity: {},
@@ -208,8 +201,17 @@
           vendor_id: this.selected_vendor,
           vendor_information: this.vendor_information,
         }).then(() => this.dialog4 = false);
+      }, 
+      getOptions() {
+        axios.get('http://localhost:3000/api/activity-options/' + this.current_activity.activity_id)
+          .then(result => this.options = result.data);
+      }, 
+      async getAndUpdateStep() {
+        if (confirm('apakah anda yakin? anda tidak akan bisa mengubah kembali kegiatan ini')) {
+          const result = await axios.get('http://localhost:3000/api/activity-step/' + this.current_activity.activity_id + '/' + this.selected_option);
+          return axios.put('http://localhost:3000/api/current-activity/' + result.data[0].next_step).then(() => this.$router.go());
+        }
       }
-
     },
     created() {
       this.getCurrentActivity();
