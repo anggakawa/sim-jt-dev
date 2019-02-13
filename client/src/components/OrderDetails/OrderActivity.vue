@@ -125,7 +125,7 @@
                       <v-btn color="green darken-1" flat="flat" @click="dialog2 = false">
                         Cancel
                       </v-btn>
-                      <v-btn color="green darken-1" flat="flat" @click="dialog2 = false">
+                      <v-btn color="green darken-1" flat="flat" @click="closeOrder()">
                         Agree
                       </v-btn>
                     </v-card-actions>
@@ -211,6 +211,12 @@
           const result = await axios.get('http://localhost:3000/api/activity-step/' + this.current_activity.activity_id + '/' + this.selected_option);
           return axios.put('http://localhost:3000/api/current-activity/' + result.data[0].next_step).then(() => this.$router.go());
         }
+      }, 
+      closeOrder() {
+        axios.put('http://localhost:3000/api/order/' + this.$route.params.order_id + '/close')
+          .then(() => {
+            this.dialog2 = false;
+          })
       }
     },
     created() {

@@ -69,5 +69,19 @@ module.exports = {
         result: 'something gone wrong'
       });
     }
-  }
+  }, 
+
+  async closeOrder(req, res) {
+    try {
+      const result = await pool.query(`UPDATE orders SET open_status = false WHERE order_id = '${req.params.orderId}'`);
+      res.json(result);
+    } catch (error) {
+      console.log(error);
+      res.json({
+        success: false, 
+        result: 'something gone wrong',
+      });
+    }
+  }, 
+
 }
