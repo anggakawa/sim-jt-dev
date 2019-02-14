@@ -14,7 +14,9 @@
               <td class="text-xs-left">{{ props.item.activity_name }}</td>
               <td class="text-xs-left">{{ props.item.information }}</td>
               <td class="text-xs-left">{{ props.item.attachment_name }}</td>
-              <td class="text-xs-left">{{ props.item.attachment_id }}</td>
+              <td class="text-xs-left">
+                <button>{{ props.item.path }}</button>
+              </td>
             </template>
           </v-data-table>
         </v-flex>

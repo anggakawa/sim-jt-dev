@@ -38,7 +38,8 @@
                               item-value="user_id" label="Pilih Vendor" required></v-select>
                           </v-flex>
                           <v-flex xs12>
-                            <v-textarea name="input-7-1" box label="Keterangan" v-model="vendor_information" auto-grow></v-textarea>
+                            <v-textarea name="input-7-1" box label="Keterangan" v-model="vendor_information"
+                              auto-grow></v-textarea>
                           </v-flex>
                         </v-layout>
                       </v-container>
@@ -64,6 +65,29 @@
                       <v-container grid-list-md>
                         <v-layout wrap>
                           <v-flex xs12 sm6 md4>
+                            <input type="file" id="file" ref="files" name="Upload Dokumen" multiple
+                              v-on:change="handleFileUploads()">
+                          </v-flex>
+                        </v-layout>
+                      </v-container>
+                    </v-card-text>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn color="blue darken-1" flat @click="dialog = false">Close</v-btn>
+                      <v-btn color="blue darken-1" flat @click="uploadFiles()">Save</v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+                <!-- <v-dialog v-model="dialog" persistent max-width="600px">
+                  <v-btn slot="activator" color="success">Upload Files</v-btn>
+                  <v-card>
+                    <v-card-title>
+                      <span class="headline">Upload Lampiran</span>
+                    </v-card-title>
+                    <v-card-text>
+                      <v-container grid-list-md>
+                        <v-layout wrap>
+                          <v-flex xs12 sm6 md4>
                             <input type="file" name="Upload Dokumen">
                           </v-flex>
                         </v-layout>
@@ -75,7 +99,7 @@
                       <v-btn color="blue darken-1" flat @click="dialog = false">Save</v-btn>
                     </v-card-actions>
                   </v-card>
-                </v-dialog>
+                </v-dialog> -->
               </v-flex>
 
               <v-flex xs12>
@@ -94,7 +118,8 @@
                               item-value="option_value" label="Keputusan" required></v-select>
                           </v-flex>
                           <v-flex xs12 v-if="current_activity.require_information">
-                            <v-textarea name="input-7-1" box label="Keterangan" auto-grow></v-textarea>
+                            <v-textarea v-model="information" name="input-7-1" box label="Keterangan"
+                              auto-grow></v-textarea>
                           </v-flex>
                         </v-layout>
                       </v-container>
@@ -145,6 +170,7 @@
 </template>
 
 <script>
+  import FileUpload from './UploadForm.vue';
   import axios from 'axios';
 
   export default {
@@ -159,11 +185,12 @@
         selected_option: 1,
         selected_vendor: '',
         vendor_information: '',
-        options: [
-        ],
+        insert_id: 3,
+        options: [],
         information: '',
         current_activity: {},
         vendors: [],
+        files: [],
       };
     },
     watch: {
@@ -187,36 +214,67 @@
       },
       saveToOrderLog() {
         axios.post('http://localhost:3000/api/order-history/post', {
-          order_id: this.$route.params.order_id,
-          activity_id: this.current_activity.activity_id,
-          information: this.information,
-          status: this.selected_option,
-          date: new Date().toISOString().slice(0, 19).replace('T', ' '),
-          user_id: localStorage.getItem('user-id'),
-        }).then(() => this.dialog3 = false);
-      }, 
+            order_id: this.$route.params.order_id,
+            activity_id: this.current_activity.activity_id,
+            information: this.information,
+            status: this.selected_option,
+            date: new Date().toISOString().slice(0, 19).replace('T', ' '),
+            user_id: localStorage.getItem('user-id'),
+          })
+          .then((result) => {
+            this.insert_id = result.data[0].insertId;
+          })
+          .then(() => this.dialog3 = false);
+      },
       saveOrderVendor() {
         axios.post('http://localhost:3000/api/order-vendor', {
-          order_id: this.$route.params.order_id, 
+          order_id: this.$route.params.order_id,
           vendor_id: this.selected_vendor,
           vendor_information: this.vendor_information,
         }).then(() => this.dialog4 = false);
-      }, 
+      },
       getOptions() {
         axios.get('http://localhost:3000/api/activity-options/' + this.current_activity.activity_id)
           .then(result => this.options = result.data);
-      }, 
+      },
       async getAndUpdateStep() {
         if (confirm('apakah anda yakin? anda tidak akan bisa mengubah kembali kegiatan ini')) {
-          const result = await axios.get('http://localhost:3000/api/activity-step/' + this.current_activity.activity_id + '/' + this.selected_option);
-          return axios.put('http://localhost:3000/api/current-activity/' + result.data[0].next_step).then(() => this.$router.go());
+          const result = await axios.get('http://localhost:3000/api/activity-step/' + this.current_activity
+            .activity_id + '/' + this.selected_option);
+          return axios.put('http://localhost:3000/api/current-activity/' + result.data[0].next_step)
+            .then(() => this.$router.go());
         }
-      }, 
+      },
       closeOrder() {
         axios.put('http://localhost:3000/api/order/' + this.$route.params.order_id + '/close')
           .then(() => {
             this.dialog2 = false;
           })
+      }, 
+      uploadFiles() {
+        console.log(typeof this.insert_id === typeof 1)
+        if ((typeof this.insert_id === typeof 1)) {
+          let formData =  new FormData();
+          for (let index = 0; index < this.files.length; index++) {
+            let file = this.files[index];
+            // formData.append('files[' + index + '' , file);
+            formData.append('attachments' , file);
+          }
+          return axios.post('http://localhost:3000/api/uploads/' + this.insert_id, 
+            formData,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+                // "Content-Type": "application/x-www-form-urlencoded",
+              }, 
+            }
+          ).then(() => console.log('success')).then(() => this.dialog = false)
+          .catch((error) => console.log(error));
+        }
+        this.dialog = false;
+      },
+      handleFileUploads() {
+        this.files = this.$refs.files.files;
       }
     },
     created() {
@@ -224,7 +282,6 @@
       this.getVendors();
     },
   }
-
 </script>
 
 <style>
@@ -272,5 +329,4 @@
       transform: rotate(360deg);
     }
   }
-
 </style>
