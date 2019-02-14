@@ -8,6 +8,7 @@ const STOOfficeController = require('../controllers/controller.sto_office.js');
 const OrderHistory = require('../controllers/controller.order_history.js');
 const ActivityTracker = require('../controllers/controller.activity_tracker.js');
 const OrderVendorHistory = require('../controllers/controller.order_vendor.js');
+const attachmentController = require('../controllers/controller.attachment.js');
 
 const jwt = require('jsonwebtoken');
 
@@ -26,7 +27,9 @@ function checkIfAdmin(req, res, next) {
 module.exports = (router) => {
   router.get('/', (req, res) => res.send('Hello World'));
   router.post('/token', UserController.authenticateUser);
-  
+  router.post('/uploads/:orderLogsId', attachmentController.uploadFiles);
+  router.get('/download/:attachmentId', attachmentController.downloadFile);
+
   // authenticate user
   router.use((req, res, next) => {
     const header = req.headers['authorization'];
