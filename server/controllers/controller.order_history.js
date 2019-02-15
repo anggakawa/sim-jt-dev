@@ -11,7 +11,7 @@ module.exports = {
       return res.json({
         success: false, 
         result: 'something gone wrong',
-      })
+      });
     }
   }, 
 
@@ -28,7 +28,7 @@ module.exports = {
       return res.json({
         success: false, 
         result: 'something gone wrong',
-      })
+      });
     }
   },
 

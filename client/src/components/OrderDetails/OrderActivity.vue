@@ -190,7 +190,7 @@
         selected_option: 1,
         selected_vendor: '',
         vendor_information: '',
-        insert_id: 3,
+        insert_id: '',
         options: [],
         information: '',
         current_activity: {},
@@ -227,7 +227,8 @@
             user_id: localStorage.getItem('user-id'),
           })
           .then((result) => {
-            this.insert_id = result.data[0].insertId;
+            console.log(result);
+            this.insert_id = result.data.insertId;
           })
           .then(() => this.dialog3 = false);
       },

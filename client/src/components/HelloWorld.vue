@@ -51,7 +51,7 @@
     },
     methods: {
       getTasks() {
-        axios.get('http://localhost:3000/api/tasks/' + '7')
+        axios.get('http://localhost:3000/api/tasks/' + this.$store.getters.roleStatus)
           .then((result) => this.tasks = result.data);
       }
     },
