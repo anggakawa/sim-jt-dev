@@ -22,7 +22,6 @@ module.exports = {
         INNER JOIN activity ON order_logs.activity_id = activity.activity_id
         LEFT JOIN order_attachment ON order_logs.order_logs_id = order_attachment.order_logs_id 
         WHERE order_id = '${req.params.orderId}'`);
-      console.log(result);
       res.json(result);
     } catch (error) {
       console.log(error);
