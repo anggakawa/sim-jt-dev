@@ -15,7 +15,7 @@
               <td class="text-xs-left">{{ props.item.information }}</td>
               <td class="text-xs-left">{{ props.item.attachment_name }}</td>
               <td class="text-xs-left">
-                <button>{{ props.item.path }}</button>
+                <a :href="downloadFile(props.item.order_attachment_id)">Download File</a>
               </td>
             </template>
           </v-data-table>
@@ -88,6 +88,22 @@ export default {
         .then(result => {
           this.order_logs = result.data
         });
+    }, 
+    downloadFile(props) {
+      // return axios({
+      //   method: 'get',
+      //   url: 'http://localhost:3000/api/download/' + props, 
+      //   responseType: 'blob'
+      //   }).then(result => {
+      //     console.log(result.data);
+      //     const url = window.URL.createObjectURL(new Blob([result.data], { type: result.data.type}));
+      //     const link = document.createElement('a');
+      //     link.href = url;
+      //     link.target = '_blank';
+      //     document.body.appendChild(link);
+      //     link.click();
+      //   });
+      return 'http://localhost:3000/api/download/' + props;
     }
   }, 
   created() {
