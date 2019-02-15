@@ -9,6 +9,7 @@ const OrderHistory = require('../controllers/controller.order_history.js');
 const ActivityTracker = require('../controllers/controller.activity_tracker.js');
 const OrderVendorHistory = require('../controllers/controller.order_vendor.js');
 const attachmentController = require('../controllers/controller.attachment.js');
+const TaskController = require('../controllers/controller.task.js');
 
 const jwt = require('jsonwebtoken');
 
@@ -30,6 +31,8 @@ module.exports = (router) => {
   router.post('/uploads/:orderLogsId', attachmentController.uploadFiles);
   router.get('/download/:attachmentId', attachmentController.downloadFile);
 
+  router.get('/tasks/:roleId', TaskController.getTask);
+  
   // authenticate user
   router.use((req, res, next) => {
     const header = req.headers['authorization'];

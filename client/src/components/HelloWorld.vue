@@ -1,67 +1,64 @@
 <template>
   <v-container>
-    <v-layout row wrap>
-      <v-flex xs12>Disini tugas</v-flex>
-    </v-layout>
+    <v-card>
+      <v-card-title>
+        <h2 style="margin: 20px">Tugas</h2>
+        <v-spacer></v-spacer>
+        <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
+      </v-card-title>
+      <v-data-table :headers="headers" :items="tasks" :search="search">
+        <template slot="items" slot-scope="props">
+          <td class="text-xs-center">{{ props.item.order_id }}</td>
+          <td>{{ props.item.activity_name }}</td>
+          <td>
+            <router-link :to="{ name: 'order', 
+              params: { order_id: props.item.order_id } }">
+              Lihat
+            </router-link>
+          </td>
+        </template>
+        <v-alert slot="no-results" :value="true" color="error" icon="warning">
+          Your search for "{{ search }}" found no results.
+        </v-alert>
+      </v-data-table>
+    </v-card>
   </v-container>
 </template>
 
 <script>
-export default {
-  data: () => ({
-    ecosystem: [
-      {
-        text: 'vuetify-loader',
-        href: 'https://github.com/vuetifyjs/vuetify-loader',
-      },
-      {
-        text: 'github',
-        href: 'https://github.com/vuetifyjs/vuetify',
-      },
-      {
-        text: 'awesome-vuetify',
-        href: 'https://github.com/vuetifyjs/awesome-vuetify',
-      },
-    ],
-    importantLinks: [
-      {
-        text: 'Documentation',
-        href: 'https://vuetifyjs.com',
-      },
-      {
-        text: 'Chat',
-        href: 'https://community.vuetifyjs.com',
-      },
-      {
-        text: 'Made with Vuetify',
-        href: 'https://madewithvuetifyjs.com',
-      },
-      {
-        text: 'Twitter',
-        href: 'https://twitter.com/vuetifyjs',
-      },
-      {
-        text: 'Articles',
-        href: 'https://medium.com/vuetify',
-      },
-    ],
-    whatsNext: [
-      {
-        text: 'Explore components',
-        href: 'https://vuetifyjs.com/components/api-explorer',
-      },
-      {
-        text: 'Select a layout',
-        href: 'https://vuetifyjs.com/layout/pre-defined',
-      },
-      {
-        text: 'Frequently Asked Questions',
-        href: 'https://vuetifyjs.com/getting-started/frequently-asked-questions',
-      },
+  import axios from 'axios';
 
-    ],
-  }),
-};
+  export default {
+    data() {
+      return {
+        search: '',
+        headers: [{
+            text: 'Order ID',
+            align: 'center',
+            sortable: false,
+            value: 'order_id'
+          },
+          {
+            text: 'Aktivitas',
+            value: 'activity_name'
+          },
+          {
+            text: 'Aksi'
+          }
+        ],
+        tasks: []
+      }
+    },
+    methods: {
+      getTasks() {
+        axios.get('http://localhost:3000/api/tasks/' + '7')
+          .then((result) => this.tasks = result.data);
+      }
+    },
+    created() {
+      this.getTasks();
+    }
+  }
 </script>
 
 <style>
