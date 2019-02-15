@@ -4,7 +4,7 @@
       <h2>Aktivitas</h2>
     </v-flex>
     <v-flex xs12>
-      <v-card>
+      <v-card v-if="checkIfEligible()">
         <!-- <v-card-title>
           <span class="headline">To Do List</span>
         </v-card-title> -->
@@ -165,6 +165,11 @@
           <v-btn color="purple" flat @click="getAndUpdateStep()">Next</v-btn>
         </v-card-actions>
       </v-card>
+      <v-card class="text-md-center" v-else>
+        <div style="padding: 50px; font-size: 20px">
+          No activity to do
+        </div>
+      </v-card>
     </v-flex>
   </v-layout>
 </template>
@@ -275,6 +280,9 @@
       },
       handleFileUploads() {
         this.files = this.$refs.files.files;
+      }, 
+      checkIfEligible() {
+        return parseInt(this.$store.getters.roleStatus) === this.current_activity.role_id;
       }
     },
     created() {
