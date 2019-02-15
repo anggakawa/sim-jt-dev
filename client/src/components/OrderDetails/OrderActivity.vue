@@ -162,7 +162,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="purple" flat @click="getAndUpdateStep()">Next</v-btn>
+          <v-btn color="purple" :disabled="!checkIfEligible()" flat @click="getAndUpdateStep()">Next</v-btn>
         </v-card-actions>
       </v-card>
       <v-card class="text-md-center" v-else>
@@ -270,7 +270,6 @@
             {
               headers: {
                 "Content-Type": "multipart/form-data",
-                // "Content-Type": "application/x-www-form-urlencoded",
               }, 
             }
           ).then(() => console.log('success')).then(() => this.dialog = false)
@@ -282,7 +281,7 @@
         this.files = this.$refs.files.files;
       }, 
       checkIfEligible() {
-        return parseInt(this.$store.getters.roleStatus) === this.current_activity.role_id;
+        return parseInt(this.$store.getters.roleStatus) === this.current_activity.role_id || parseInt(this.$store.getters.roleStatus) === 1;
       }
     },
     created() {
