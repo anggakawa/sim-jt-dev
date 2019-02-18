@@ -133,8 +133,7 @@ export default {
       value: 'order_id',
     },
     {
-      text: 'Status', 
-      sortable: false,
+      text: 'Status',
       value: 'open_status'
     },
     {
