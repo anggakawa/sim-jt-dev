@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable camelcase */
 import Vue from 'vue';
 import Vuex from 'vuex';
@@ -32,13 +33,14 @@ export default new Vuex.Store({
       commit('authRequest');
       const result = await axios.post('http://localhost:3000/api/token', user)
         .then((res) => {
-          // console.log(res);
+          // console.log(res.data);
           if (res.data.success === true) {
             const token_data = res.data.token;
             const role = res.data.user_role;
             sessionStorage.setItem('user-role', role);
             localStorage.setItem('user-token', token_data);
             localStorage.setItem('user-id', res.data.user_id);
+            localStorage.setItem('username', res.data.username);
             commit('authSuccess', { token_data, role });
             // dispatch()
           } else {

@@ -10,7 +10,7 @@
             </v-list-tile-avatar>
 
             <v-list-tile-content>
-              <v-list-tile-title>John Leider</v-list-tile-title>
+              <v-list-tile-title>{{ username }}</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
         </v-list>
@@ -61,6 +61,7 @@ export default {
   },
   data() {
     return {
+      username: localStorage.getItem('username') || '',
       drawer: false,
       clipped: false,
       items: [

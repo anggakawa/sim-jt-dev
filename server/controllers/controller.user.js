@@ -122,6 +122,7 @@ module.exports = {
             message: 'auth success', 
             user_role: result[0].role_id, 
             user_id: result[0].user_id,
+            username: result[0].username,
           });
         }
       }
