@@ -109,8 +109,13 @@ module.exports = {
           });
         } else {
           // save secret-code on environment variable
-          const payload = result[0] ;
-          const token = jwt.sign({payload}, 'koderahasia', { expiresIn: "1d" });
+          const payload = {
+            user_id: result[0].user_id,
+            username: result[0].username, 
+            role_id: result[0].role_id, 
+            user_description: result[0].user_description,
+          }
+          const token = jwt.sign(payload, 'koderahasia', { expiresIn: "1d" });
           res.json({
             success: true, 
             token: token, 
