@@ -71,18 +71,24 @@
         </v-card>
       </v-dialog>
     </v-toolbar>
-    <v-data-table :headers="headers" :items="orders" class="elevation-1">
+    <v-data-table :headers="headers" :items="orders" class="elevation-1" :pagination.sync="pagination">
       <template slot="headers" slot-scope="props">
-        <tr>
-          <th v-for="header in props.headers" :key="header.text" class="text-xs-left" >
-            {{ header.text }}
+          <th v-for="header in props.headers" :key="header.text" 
+            :class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
+            @click="changeSort(header.value)" class="text-xs-left" 
+          >
+          <v-icon small>arrow_upward</v-icon>
+          {{ header.text }}
           </th>
           <th v-if="checkIfAdmin()">Aksi</th>
-        </tr>
       </template>
       <template slot="items" slot-scope="props">
         <td>{{ props.item.date }}</td>
         <td class="text-xs-left">{{ props.item.order_id }}</td>
+        <td class="text-xs-left">
+          <v-chip v-if="props.item.open_status" color="green" text-color="white">{{ checkStatus(props.item.open_status) }}</v-chip>
+          <v-chip v-else color="red" text-color="white">{{ checkStatus(props.item.open_status) }}</v-chip>
+        </td>
         <td class="text-xs-left">{{ props.item.customer_name }}</td>
         <td class="text-xs-left">{{ props.item.service_name }}</td>
         <td class="text-xs-left">{{ props.item.sto_office_name }}</td>
@@ -112,17 +118,24 @@ import axios from 'axios';
 export default {
   data: () => ({
     dialog: false,
+    pagination: {
+      sortBy: 'order_id'
+    },
     calendar_menu: false,
     headers: [{
       text: 'Tanggal',
       value: 'date',
-      sortable: true,
     },
     {
       text: 'Nomor Order',
       align: 'left',
       sortable: false,
       value: 'order_id',
+    },
+    {
+      text: 'Status', 
+      sortable: false,
+      value: 'open_status'
     },
     {
       text: 'Nama Pelanggan',
@@ -223,6 +236,20 @@ export default {
     checkIfAdmin() {
       return this.$store.getters.roleStatus === '1';
     },
+    
+    checkStatus(props) {
+      return props ? 'ONGOING' : 'CLOSED';
+    }, 
+
+    changeSort (column) {
+        if (this.pagination.sortBy === column) {
+          this.pagination.descending = !this.pagination.descending
+        } else {
+          this.pagination.sortBy = column
+          this.pagination.descending = false
+        }
+      }
+
   },
 };
 
