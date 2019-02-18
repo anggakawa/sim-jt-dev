@@ -53,6 +53,37 @@
                 </v-dialog>
               </v-flex>
 
+              <v-flex xs12>
+                Masukkan Informasi dan Keputusan
+                <v-dialog v-model="dialog3" persistent max-width="600px">
+                  <v-btn slot="activator" color="success" @click="getOptions()">Tambahkan Informasi</v-btn>
+                  <v-card>
+                    <v-card-title>
+                      <span class="headline">Informasi</span>
+                    </v-card-title>
+                    <v-card-text>
+                      <v-container grid-list-md>
+                        <v-layout wrap>
+                          <v-flex xs12 v-if="current_activity.require_status">
+                            <v-select v-model="selected_option" :items="options" item-text="option_text"
+                              item-value="option_value" label="Keputusan" required></v-select>
+                          </v-flex>
+                          <v-flex xs12 v-if="current_activity.require_information">
+                            <v-textarea v-model="information" name="input-7-1" box label="Keterangan"
+                              auto-grow></v-textarea>
+                          </v-flex>
+                        </v-layout>
+                      </v-container>
+                    </v-card-text>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn color="blue darken-1" flat @click="dialog3 = false">Close</v-btn>
+                      <v-btn color="blue darken-1" flat @click="saveToOrderLog">Save</v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+              </v-flex>
+
               <v-flex xs12 v-if="current_activity.require_attachment">
                 Silahkan Upload Lampiran Yang Dibutuhkan
                 <v-dialog v-model="dialog" persistent max-width="600px">
@@ -102,36 +133,7 @@
                 </v-dialog> -->
               </v-flex>
 
-              <v-flex xs12>
-                Masukkan Informasi dan Keputusan
-                <v-dialog v-model="dialog3" persistent max-width="600px">
-                  <v-btn slot="activator" color="success" @click="getOptions()">Tambahkan Informasi</v-btn>
-                  <v-card>
-                    <v-card-title>
-                      <span class="headline">Informasi</span>
-                    </v-card-title>
-                    <v-card-text>
-                      <v-container grid-list-md>
-                        <v-layout wrap>
-                          <v-flex xs12 v-if="current_activity.require_status">
-                            <v-select v-model="selected_option" :items="options" item-text="option_text"
-                              item-value="option_value" label="Keputusan" required></v-select>
-                          </v-flex>
-                          <v-flex xs12 v-if="current_activity.require_information">
-                            <v-textarea v-model="information" name="input-7-1" box label="Keterangan"
-                              auto-grow></v-textarea>
-                          </v-flex>
-                        </v-layout>
-                      </v-container>
-                    </v-card-text>
-                    <v-card-actions>
-                      <v-spacer></v-spacer>
-                      <v-btn color="blue darken-1" flat @click="dialog3 = false">Close</v-btn>
-                      <v-btn color="blue darken-1" flat @click="saveToOrderLog">Save</v-btn>
-                    </v-card-actions>
-                  </v-card>
-                </v-dialog>
-              </v-flex>
+              
 
               <v-flex xs12 v-if="current_activity.can_close">
                 Apakah anda ingin menutup (close) Order?

@@ -72,23 +72,31 @@
       </v-dialog>
     </v-toolbar>
     <v-data-table :headers="headers" :items="orders" class="elevation-1">
+      <template slot="headers" slot-scope="props">
+        <tr>
+          <th v-for="header in props.headers" :key="header.text" class="text-xs-left" >
+            {{ header.text }}
+          </th>
+          <th v-if="checkIfAdmin()">Aksi</th>
+        </tr>
+      </template>
       <template slot="items" slot-scope="props">
         <td>{{ props.item.date }}</td>
         <td class="text-xs-left">{{ props.item.order_id }}</td>
         <td class="text-xs-left">{{ props.item.customer_name }}</td>
         <td class="text-xs-left">{{ props.item.service_name }}</td>
         <td class="text-xs-left">{{ props.item.sto_office_name }}</td>
-        <td class="justify-center" v-if="true">
+        <td>
+          <router-link :to="{ name: 'order',
+            params: { order_id: props.item.order_id }}">Lihat</router-link>
+        </td>
+        <td v-if="checkIfAdmin()" class="justify-center">
           <v-icon small class="mr-2" @click="editItem(props.item)">
             edit
           </v-icon>
           <v-icon small @click="deleteItem(props.item)">
             delete
           </v-icon>
-        </td>
-        <td>
-          <router-link :to="{ name: 'order',
-            params: { order_id: props.item.order_id }}">Lihat</router-link>
         </td>
       </template>
       <template slot="no-data">
@@ -127,11 +135,6 @@ export default {
     {
       text: 'STO',
       value: 'sto_office',
-    },
-    {
-      text: 'Actions',
-      value: 'action',
-      sortable: false,
     },
     {
       text: 'Links',
@@ -215,6 +218,10 @@ export default {
           .then(() => this.$router.go());
       }
       this.close();
+    },
+
+    checkIfAdmin() {
+      return this.$store.getters.roleStatus === '1';
     },
   },
 };
