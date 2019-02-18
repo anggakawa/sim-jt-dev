@@ -8,8 +8,8 @@
               {{ error_message }}
             </v-alert>
           </div>
-          <v-toolbar dark color="primary">
-            <v-toolbar-title>Login form</v-toolbar-title>
+          <v-toolbar dark color="red">
+            <v-toolbar-title>Login Form</v-toolbar-title>
           </v-toolbar>
           <v-card-text>
             <v-form>
@@ -21,7 +21,7 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="primary" @click="login">Login</v-btn>
+            <v-btn @click="login" class="red white--text">Login</v-btn>
           </v-card-actions>
         </v-card>
       </v-flex>

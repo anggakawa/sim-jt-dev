@@ -1,8 +1,12 @@
 <template>
   <v-layout row wrap>
-    <v-flex xs12>
-      <h2>Detail Order</h2>
-    </v-flex>
+      <v-flex xs6>
+        <h2>Detail Order</h2>
+      </v-flex>
+      <v-flex xs6 class="text-xs-right">
+        <v-chip v-if="order_desc.open_status" color="green" text-color="white">{{ checkStatus(order_desc.open_status) }}</v-chip>
+        <v-chip v-else color="red" text-color="white">{{ checkStatus(order_desc.open_status) }}</v-chip>
+      </v-flex>
     <v-flex xs6>
       <v-text-field :value="changeDate(order_desc.date)" readonly label="Tanggal">
       </v-text-field>
@@ -28,7 +32,7 @@
       </v-text-field>
     </v-flex>
     <v-flex xs6>
-      <v-text-field v-model="order_desc.sto_office_name" readonly label="Kantor STO"> // gunakan select
+      <v-text-field v-model="order_desc.sto_office_name" readonly label="Kantor STO">
       </v-text-field>
     </v-flex>
     <v-flex xs6>
@@ -77,6 +81,9 @@
               this.vendor_name = result.data[0].username;
             }
           });
+      },
+      checkStatus(props) {
+        return props ? 'ONGOING' : 'CLOSED';
       },
     }
   }

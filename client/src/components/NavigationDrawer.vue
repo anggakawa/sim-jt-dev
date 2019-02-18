@@ -1,16 +1,14 @@
 <template>
   <div>
-
     <v-navigation-drawer :clipped="clipped" v-model="drawer" enable-resize-watcher app>
-      <v-toolbar>
+      <v-toolbar class="red darken-3">
         <v-list class="pa-0">
           <v-list-tile avatar>
             <v-list-tile-avatar>
               <img src="https://randomuser.me/api/portraits/men/85.jpg">
             </v-list-tile-avatar>
-
             <v-list-tile-content>
-              <v-list-tile-title>{{ username }}</v-list-tile-title>
+              <v-list-tile-title class="white--text">{{ username }}</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
         </v-list>
@@ -39,11 +37,11 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-toolbar fixed app :clipped-left="clipped">
-      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+    <v-toolbar class="red darken-3 white--text" fixed app :clipped-left="clipped">
+      <v-toolbar-side-icon @click.stop="drawer = !drawer" class="white--text"></v-toolbar-side-icon>
       <v-toolbar-title>Menu</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn icon>
+      <v-btn class="white--text" icon>
         <v-icon>more_vert</v-icon>
       </v-btn>
     </v-toolbar>
