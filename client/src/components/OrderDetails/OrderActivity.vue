@@ -5,19 +5,30 @@
     </v-flex>
     <v-flex xs12>
       <v-card v-if="checkIfEligible()">
-        <!-- <v-card-title>
-          <span class="headline">To Do List</span>
-        </v-card-title> -->
+
+        <v-stepper v-model="e1">
+          <v-stepper-header>
+            <v-stepper-step :complete="e1 > 1" step="1">Name of step 1</v-stepper-step>
+            <v-divider></v-divider>
+            <v-stepper-step :complete="e1 > 2" step="2">Name of step 2</v-stepper-step>
+            <v-divider></v-divider>
+            <v-stepper-step step="3">Name of step 3</v-stepper-step>
+          </v-stepper-header>
+        </v-stepper>
+
         <v-card-text>
           <v-container grid-list-md>
             <v-layout row wrap>
+
               <v-flex xs12 style="font-size: 15px">
                 <h2>{{ current_activity.activity_name }}</h2>
                 <p style="padding-top: 25px">{{ current_activity.activity_description }}</p>
               </v-flex>
+
               <v-flex xs12>
                 <v-divider></v-divider>
               </v-flex>
+
               <v-flex xs12>
                 <h2>TASK</h2>
               </v-flex>
@@ -133,7 +144,7 @@
                 </v-dialog> -->
               </v-flex>
 
-              
+
 
               <v-flex xs12 v-if="current_activity.can_close">
                 Apakah anda ingin menutup (close) Order?
@@ -184,6 +195,7 @@
     data() {
       return {
         loader: null,
+        e1: 0,
         dialog: false,
         dialog2: false,
         dialog3: false,
@@ -226,10 +238,8 @@
             information: this.information,
             status: this.selected_option,
             date: new Date().toISOString().slice(0, 19).replace('T', ' '),
-            user_id: localStorage.getItem('user-id'),
           })
           .then((result) => {
-            console.log(result);
             this.insert_id = result.data.insertId;
           })
           .then(() => this.dialog3 = false);
@@ -249,7 +259,8 @@
         if (confirm('apakah anda yakin? anda tidak akan bisa mengubah kembali kegiatan ini')) {
           const result = await axios.get('http://localhost:3000/api/activity-step/' + this.current_activity
             .activity_id + '/' + this.selected_option);
-          return axios.put('http://localhost:3000/api/current-activity/' + this.$route.params.order_id + '/' + result.data[0].next_step)
+          return axios.put('http://localhost:3000/api/current-activity/' + this.$route.params.order_id +
+              '/' + result.data[0].next_step)
             .then(() => this.$router.go());
         }
       },
@@ -258,33 +269,33 @@
           .then(() => {
             this.dialog2 = false;
           })
-      }, 
+      },
       uploadFiles() {
         console.log(typeof this.insert_id === typeof 1)
         if ((typeof this.insert_id === typeof 1)) {
-          let formData =  new FormData();
+          let formData = new FormData();
           for (let index = 0; index < this.files.length; index++) {
             let file = this.files[index];
             // formData.append('files[' + index + '' , file);
-            formData.append('attachments' , file);
+            formData.append('attachments', file);
           }
-          return axios.post('http://localhost:3000/api/uploads/' + this.insert_id, 
-            formData,
-            {
-              headers: {
-                "Content-Type": "multipart/form-data",
-              }, 
-            }
-          ).then(() => console.log('success')).then(() => this.dialog = false)
-          .catch((error) => console.log(error));
+          return axios.post('http://localhost:3000/api/uploads/' + this.insert_id,
+              formData, {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                },
+              }
+            ).then(() => console.log('success')).then(() => this.dialog = false)
+            .catch((error) => console.log(error));
         }
         this.dialog = false;
       },
       handleFileUploads() {
         this.files = this.$refs.files.files;
-      }, 
+      },
       checkIfEligible() {
-        return parseInt(this.$store.getters.roleStatus) === this.current_activity.role_id || parseInt(this.$store.getters.roleStatus) === 1;
+        return parseInt(this.$store.getters.roleStatus) === this.current_activity.role_id ||
+          parseInt(this.$store.getters.roleStatus) === 1;
       }
     },
     created() {
@@ -292,6 +303,7 @@
       this.getVendors();
     },
   }
+
 </script>
 
 <style>
@@ -339,4 +351,5 @@
       transform: rotate(360deg);
     }
   }
+
 </style>

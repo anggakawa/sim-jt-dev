@@ -60,6 +60,7 @@ export default new Vuex.Store({
         localStorage.removeItem('user-token');
         localStorage.removeItem('user-id');
         sessionStorage.removeItem('user-role');
+        localStorage.removeItem('username');
         resolve();
       });
     },
