@@ -53,11 +53,12 @@
     data() {
       return {
         order_desc: {},
-        vendor_name: 'Telkom',
+        vendor_name: 'Tidak Ada',
       }
     },
     created() {
       this.getOrderDetails();
+      this.getVendor();
     },
     methods: {
       getOrderDetails() {
@@ -68,7 +69,15 @@
       }, 
       changeDate(props) {
         return new Date(props).toISOString().slice(0, 19).replace('T', ' ')
-      }
+      }, 
+      getVendor() {
+        return axios.get('http://localhost:3000/api/order-vendor/' + this.$route.params.order_id)
+          .then((result) => {
+            if (result.data.length > 0) {
+              this.vendor_name = result.data[0].username;
+            }
+          });
+      },
     }
   }
 

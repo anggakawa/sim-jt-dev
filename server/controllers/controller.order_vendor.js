@@ -5,7 +5,7 @@ module.exports = {
   async getOrderVendor(req, res) {
     try {
       const result = await pool.query(`SELECT * FROM order_vendor_history o INNER JOIN users u
-        ON o.vendor_id = u.user_id WHERE o.order_id = '${req.params.orderId}'`);
+        ON o.vendor_id = u.user_id WHERE o.order_id = '${req.params.orderId}' ORDER BY history_id DESC`);
       res.json(result);
     } catch (error) {
       console.log(error);
