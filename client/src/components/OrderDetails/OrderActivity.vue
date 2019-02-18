@@ -249,7 +249,7 @@
         if (confirm('apakah anda yakin? anda tidak akan bisa mengubah kembali kegiatan ini')) {
           const result = await axios.get('http://localhost:3000/api/activity-step/' + this.current_activity
             .activity_id + '/' + this.selected_option);
-          return axios.put('http://localhost:3000/api/current-activity/' + result.data[0].next_step)
+          return axios.put('http://localhost:3000/api/current-activity/' + this.$route.params.order_id + '/' + result.data[0].next_step)
             .then(() => this.$router.go());
         }
       },

@@ -18,7 +18,8 @@ module.exports = {
 
   async updateActivity(req, res) {
     try {
-      const result = await pool.query(`UPDATE activity_track SET activity_id = ${req.params.activityId}`);
+      const result = await pool.query(`UPDATE activity_track SET activity_id = ${req.params.activityId}
+        WHERE order_id = '${req.params.orderId}'`);
       res.json({
         success: true, 
         result: result, 
