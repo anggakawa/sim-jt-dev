@@ -8,11 +8,13 @@
 
         <v-stepper v-model="e1">
           <v-stepper-header>
-            <v-stepper-step :complete="e1 > 1" step="1">Name of step 1</v-stepper-step>
-            <v-divider></v-divider>
-            <v-stepper-step :complete="e1 > 2" step="2">Name of step 2</v-stepper-step>
-            <v-divider></v-divider>
-            <v-stepper-step step="3">Name of step 3</v-stepper-step>
+            <v-stepper-step v-if="current_activity.can_choose_vendor" :complete="e1 > 1" step="1">Pilih Vendor</v-stepper-step>
+            <v-divider v-if="current_activity.can_choose_vendor"></v-divider>
+            <v-stepper-step v-if="current_activity.require_information || current_activity.require_status" :complete="e1 > 2" step="2">Tambah Informasi</v-stepper-step>
+            <v-divider v-if="current_activity.require_information || current_activity.require_status"></v-divider>
+            <v-stepper-step v-if="current_activity.require_attachment" :complete="e1 > 3" step="3">Tambah Lampiran</v-stepper-step>
+            <v-divider v-if="current_activity.require_attachment"></v-divider>
+            <v-stepper-step v-if="current_activity.can_close" step="4">Tutup Order</v-stepper-step>
           </v-stepper-header>
         </v-stepper>
 
@@ -195,7 +197,7 @@
     data() {
       return {
         loader: null,
-        e1: 0,
+        e1: 2,
         dialog: false,
         dialog2: false,
         dialog3: false,
@@ -242,14 +244,20 @@
           .then((result) => {
             this.insert_id = result.data.insertId;
           })
-          .then(() => this.dialog3 = false);
+          .then(() => {
+            this.e1 = 3;
+            this.dialog3 = false;
+          });
       },
       saveOrderVendor() {
         axios.post('http://localhost:3000/api/order-vendor', {
           order_id: this.$route.params.order_id,
           vendor_id: this.selected_vendor,
           vendor_information: this.vendor_information,
-        }).then(() => this.dialog4 = false);
+        }).then(() => {
+          this.el1 = 2;
+          this.dialog4 = false;
+        });
       },
       getOptions() {
         axios.get('http://localhost:3000/api/activity-options/' + this.current_activity.activity_id)
@@ -285,7 +293,10 @@
                   "Content-Type": "multipart/form-data",
                 },
               }
-            ).then(() => console.log('success')).then(() => this.dialog = false)
+            ).then(() => console.log('success')).then(() => {
+                this.e1 = 4;
+                this.dialog = false;
+              })
             .catch((error) => console.log(error));
         }
         this.dialog = false;
