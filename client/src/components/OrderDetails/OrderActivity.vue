@@ -227,11 +227,13 @@
     methods: {
       getCurrentActivity() {
         axios.get('http://localhost:3000/api/current-activity/' + this.$route.params.order_id)
-          .then((result) => this.current_activity = result.data[0]);
+          .then((result) => this.current_activity = result.data[0])
+          .catch((error) => console.log(error));
       },
       getVendors() {
         axios.get('http://localhost:3000/api/vendors')
-          .then((result) => this.vendors = result.data);
+          .then((result) => this.vendors = result.data)
+          .catch((error) => console.log(error));
       },
       saveToOrderLog() {
         axios.post('http://localhost:3000/api/order-history/post', {
@@ -247,7 +249,8 @@
           .then(() => {
             this.e1 = 3;
             this.dialog3 = false;
-          });
+          })
+          .catch((error) => console.log(error));
       },
       saveOrderVendor() {
         axios.post('http://localhost:3000/api/order-vendor', {
@@ -257,11 +260,12 @@
         }).then(() => {
           this.el1 = 2;
           this.dialog4 = false;
-        });
+        }).catch((error) => console.log(error));
       },
       getOptions() {
         axios.get('http://localhost:3000/api/activity-options/' + this.current_activity.activity_id)
-          .then(result => this.options = result.data);
+          .then(result => this.options = result.data)
+          .catch((error) => console.log(error));
       },
       async getAndUpdateStep() {
         if (confirm('apakah anda yakin? anda tidak akan bisa mengubah kembali kegiatan ini')) {
@@ -269,7 +273,8 @@
             .activity_id + '/' + this.selected_option);
           return axios.put('http://localhost:3000/api/current-activity/' + this.$route.params.order_id +
               '/' + result.data[0].next_step)
-            .then(() => this.$router.go());
+            .then(() => this.$router.go())
+            .catch((error) => console.log(error));
         }
       },
       closeOrder() {
