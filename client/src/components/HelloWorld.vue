@@ -17,6 +17,11 @@
             </router-link>
           </td>
         </template>
+        <template slot="no-data">
+          <v-alert :value="true" color="green darken-2" icon="info">
+            Yeay, saat ini sedang tidak ada tugas
+          </v-alert>
+        </template>
         <v-alert slot="no-results" :value="true" color="error" icon="warning">
           Your search for "{{ search }}" found no results.
         </v-alert>
@@ -59,6 +64,7 @@
       this.getTasks();
     }
   }
+
 </script>
 
 <style>
