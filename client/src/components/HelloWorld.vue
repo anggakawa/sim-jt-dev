@@ -31,7 +31,7 @@
 </template>
 
 <script>
-  import axios from 'axios';
+  import axios from '@/services/service.api.js';
 
   export default {
     data() {
@@ -56,7 +56,7 @@
     },
     methods: {
       getTasks() {
-        axios.get('http://localhost:3000/api/tasks/' + this.$store.getters.roleStatus)
+        axios.get('/tasks/' + this.$store.getters.roleStatus)
           .then((result) => this.tasks = result.data);
       }
     },

@@ -75,7 +75,7 @@
 </template>
 
 <script>
-  import axios from 'axios';
+  import axios from '@/services/service.api.js';
 
   export default {
     data: () => ({
@@ -144,12 +144,12 @@
       },
 
       initialize () {
-        return axios.get('http://localhost:3000/api/activity-step/all')
+        return axios.get('activity-step/all')
           .then(result => this.activity_cons = result.data);
       },
 
       getAllActivities() {
-        return axios.get('http://localhost:3000/api/activities')
+        return axios.get('activities')
           .then((result) => this.activities = result.data);
       },
       
@@ -162,7 +162,7 @@
       deleteItem (item) {
         const index = this.activity_cons.indexOf(item);
         if(confirm('Are you sure you want to delete this item?')) {
-          return axios.delete('http://localhost:3000/api/activity-step/' + item.activity_connections_id)
+          return axios.delete('activity-step/' + item.activity_connections_id)
             .then(() => this.activity_cons.splice(index, 1));
         }
       },
@@ -179,7 +179,7 @@
         if (this.editedIndex > -1) {
           this.close();
         } else {
-          return axios.post('http://localhost:3000/api/activity-step', this.editedItem)
+          return axios.post('/activity-step', this.editedItem)
             .then((res) => {
               this.$router.go();
             }); 

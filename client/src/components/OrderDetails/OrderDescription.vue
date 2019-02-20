@@ -51,7 +51,7 @@
 </template>
 
 <script>
-  import axios from 'axios';
+  import axios from '@/services/service.api.js';
 
   export default {
     data() {
@@ -66,7 +66,7 @@
     },
     methods: {
       getOrderDetails() {
-        return axios.get('http://localhost:3000/api/order/' + this.$route.params.order_id)
+        return axios.get('order/' + this.$route.params.order_id)
           .then(result => {  
             this.order_desc = result.data[0]
           });
@@ -75,7 +75,7 @@
         return new Date(props).toISOString().slice(0, 19).replace('T', ' ')
       }, 
       getVendor() {
-        return axios.get('http://localhost:3000/api/order-vendor/' + this.$route.params.order_id)
+        return axios.get('order-vendor/' + this.$route.params.order_id)
           .then((result) => {
             if (result.data.length > 0) {
               this.vendor_name = result.data[0].username;

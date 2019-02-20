@@ -43,7 +43,7 @@
 </template>
 <script>
 
-  import axios from 'axios';
+  import axios from '@/services/service.api.js';
 
   export default {
     data() {
@@ -70,11 +70,11 @@
     methods: {
       // handle if user is not authenticated
       async initialize() {
-        return axios.get('http://localhost:3000/api/roles')
+        return axios.get('roles')
           .then(result => this.roles = result.data);
       },
       async createRole() {
-        return axios.post('http://localhost:3000/api/roles/add', this.form_data)
+        return axios.post('roles/add', this.form_data)
           .then(() => this.$router.go()).catch((error) => console.log(error));
       }
     }, 

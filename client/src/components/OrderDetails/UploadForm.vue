@@ -24,7 +24,7 @@
 </template>
 
 <script>
-  import axios from "axios";
+  import axios from "@/services/service.api.js";
   export default {
     data() {
       return {
@@ -41,7 +41,7 @@
             const file = this.files[index];
             formData.append(`files[${index}]`, file);
           }
-          axios.post('http://localhost:3000/api/uploads/' + this.insert_id, 
+          axios.post('uploads/' + this.insert_id, 
             formData,
             {
               headers : {

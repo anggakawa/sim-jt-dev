@@ -92,7 +92,7 @@
 </template>
 
 <script>
-  import axios from 'axios';
+  import axios from '@/services/service.api.js';
 
   export default {
     data: () => ({
@@ -167,12 +167,12 @@
       },
 
       initialize () {
-        return axios.get('http://localhost:3000/api/activities')
+        return axios.get('activities')
           .then(result => this.activities = result.data);
       },
       
       getRoles () {
-        return axios.get('http://localhost:3000/api/roles')
+        return axios.get('roles')
           .then((result) => this.roles = result.data);
       },
 
@@ -185,7 +185,7 @@
       deleteItem (item) {
         const index = this.activities.indexOf(item);
         if(confirm('Are you sure you want to delete this item?')) {
-          return axios.delete('http://localhost:3000/api/activity/' + item.activity_id)
+          return axios.delete('activity/' + item.activity_id)
             .then(() => this.activities.splice(index, 1));
         }
       },
@@ -202,7 +202,7 @@
         if (this.editedIndex > -1) {
           Object.assign(this.activities[this.editedIndex], this.editedItem)
         } else {
-          return axios.post('http://localhost:3000/api/activity/add', this.editedItem)
+          return axios.post('activity/add', this.editedItem)
             // .then(() => this.activities.push(this.editedItem))
             // .then(() => this.close())
             .then(() => this.$router.go());

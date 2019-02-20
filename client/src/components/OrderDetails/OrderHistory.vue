@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from '@/services/service.api.js';
 
 export default {
   data() {
@@ -84,7 +84,7 @@ export default {
   },
   methods: {
     initialize() {
-      return axios.get('http://localhost:3000/api/order-history/' + this.$route.params.order_id)
+      return axios.get('order-history/' + this.$route.params.order_id)
         .then(result => {
           this.order_logs = result.data
         });
@@ -103,7 +103,7 @@ export default {
       //     document.body.appendChild(link);
       //     link.click();
       //   });
-      return 'http://localhost:3000/api/download/' + props;
+      return 'download/' + props;
     }
   }, 
   created() {

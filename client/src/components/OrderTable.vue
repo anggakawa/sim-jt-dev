@@ -113,7 +113,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from '@/services/service.api.js';
 
 export default {
   data: () => ({
@@ -193,9 +193,9 @@ export default {
   methods: {
     async initialize() {
       await Promise.all([
-        axios.get('http://localhost:3000/api/orders')
+        axios.get('orders')
           .then((result) => this.orders = result.data),
-        axios.get('http://localhost:3000/api/offices')
+        axios.get('offices')
           .then((result) => this.offices = result.data)  
       ]);
     },
@@ -209,7 +209,7 @@ export default {
     deleteItem(item) {
       const index = this.orders.indexOf(item);
       if(confirm('Are you sure you want to delete this item?')){
-        axios.delete('http://localhost:3000/api/order/' + item.order_id)
+        axios.delete('order/' + item.order_id)
           .then(() => this.$router.go());
       }
     },
@@ -226,7 +226,7 @@ export default {
       if (this.editedIndex > -1) {
         Object.assign(this.orders[this.editedIndex], this.editedItem);
       } else {
-        axios.post('http://localhost:3000/api/orders/add', this.editedItem)
+        axios.post('orders/add', this.editedItem)
           .then(() => this.$router.go());
       }
       this.close();

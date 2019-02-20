@@ -3,7 +3,10 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
-import axios from 'axios';
+// try to add this and change to axios again
+// import axios from 'axios';
+
+import api from './services/service.api';
 
 Vue.use(Vuex);
 
@@ -22,7 +25,7 @@ export default new Vuex.Store({
       state.token = token_data;
       state.user_role = role.toString();
       // set authorization header
-      axios.defaults.headers.common['Authorization'] = "Bearer " + token_data;
+      api.defaults.headers.common['Authorization'] = "Bearer " + token_data;
     },
     authError: (state) => {
       state.status = 'error';
@@ -31,7 +34,7 @@ export default new Vuex.Store({
   actions: {
     async login({ commit }, user) {
       commit('authRequest');
-      const result = await axios.post('http://localhost:3000/api/token', user)
+      const result = await api.post('/token', user)
         .then((res) => {
           // console.log(res.data);
           if (res.data.success === true) {

@@ -191,7 +191,7 @@
 
 <script>
   import FileUpload from './UploadForm.vue';
-  import axios from 'axios';
+  import axios from '@/services/service.api.js';
 
   export default {
     data() {
@@ -226,17 +226,17 @@
     },
     methods: {
       getCurrentActivity() {
-        axios.get('http://localhost:3000/api/current-activity/' + this.$route.params.order_id)
+        axios.get('current-activity/' + this.$route.params.order_id)
           .then((result) => this.current_activity = result.data[0])
           .catch((error) => console.log(error));
       },
       getVendors() {
-        axios.get('http://localhost:3000/api/vendors')
+        axios.get('vendors')
           .then((result) => this.vendors = result.data)
           .catch((error) => console.log(error));
       },
       saveToOrderLog() {
-        axios.post('http://localhost:3000/api/order-history/post', {
+        axios.post('order-history/post', {
             order_id: this.$route.params.order_id,
             activity_id: this.current_activity.activity_id,
             information: this.information,
@@ -253,7 +253,7 @@
           .catch((error) => console.log(error));
       },
       saveOrderVendor() {
-        axios.post('http://localhost:3000/api/order-vendor', {
+        axios.post('order-vendor', {
           order_id: this.$route.params.order_id,
           vendor_id: this.selected_vendor,
           vendor_information: this.vendor_information,
@@ -263,22 +263,22 @@
         }).catch((error) => console.log(error));
       },
       getOptions() {
-        axios.get('http://localhost:3000/api/activity-options/' + this.current_activity.activity_id)
+        axios.get('activity-options/' + this.current_activity.activity_id)
           .then(result => this.options = result.data)
           .catch((error) => console.log(error));
       },
       async getAndUpdateStep() {
         if (confirm('apakah anda yakin? anda tidak akan bisa mengubah kembali kegiatan ini')) {
-          const result = await axios.get('http://localhost:3000/api/activity-step/' + this.current_activity
+          const result = await axios.get('activity-step/' + this.current_activity
             .activity_id + '/' + this.selected_option);
-          return axios.put('http://localhost:3000/api/current-activity/' + this.$route.params.order_id +
+          return axios.put('current-activity/' + this.$route.params.order_id +
               '/' + result.data[0].next_step)
             .then(() => this.$router.go())
             .catch((error) => console.log(error));
         }
       },
       closeOrder() {
-        axios.put('http://localhost:3000/api/order/' + this.$route.params.order_id + '/close')
+        axios.put('order/' + this.$route.params.order_id + '/close')
           .then(() => {
             this.dialog2 = false;
           })
@@ -292,7 +292,7 @@
             // formData.append('files[' + index + '' , file);
             formData.append('attachments', file);
           }
-          return axios.post('http://localhost:3000/api/uploads/' + this.insert_id,
+          return axios.post('uploads/' + this.insert_id,
               formData, {
                 headers: {
                   "Content-Type": "multipart/form-data",
