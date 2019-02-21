@@ -1,9 +1,24 @@
 <template>
   <v-container grid-list-md>
     <v-layout row wrap>
+      
+      <v-flex xs3>
+        <v-card color="blue darken-2" class="white--text" @click="changeOrder(0)">
+          <v-card-title primary-title>
+            <div>
+              <h3 class="title font-weight-medium">Total</h3>
+            </div>
+          </v-card-title>
+          <v-card-text>
+            <div class="text-xs-center font-weight-medium display-1">
+              {{ countAllOrder }}
+            </div>
+          </v-card-text>
+        </v-card>
+      </v-flex>
 
       <v-flex xs3>
-        <v-card color="green darken-2" class="white--text">
+        <v-card color="green darken-2" class="white--text" @click="changeOrder(1)">
           <v-card-title primary-title>
             <div>
               <h3 class="title font-weight-medium">Order Ongoing</h3>
@@ -11,14 +26,14 @@
           </v-card-title>
           <v-card-text>
             <div class="text-xs-center font-weight-medium display-1">
-              {{ countOrder(1) }}
+              {{ countOrderOpen }}
             </div>
           </v-card-text>
         </v-card>
       </v-flex>
 
       <v-flex xs3>
-        <v-card color="red darken-2" class="white--text">
+        <v-card color="red darken-2" class="white--text" @click="changeOrder(2)">
           <v-card-title primary-title>
             <div>
               <h3 class="title font-weight-medium">Order Closed</h3>
@@ -26,7 +41,22 @@
           </v-card-title>
           <v-card-text>
             <div class="text-xs-center font-weight-medium display-1">
-              {{countOrder(0)}}
+              {{countOrderClosed }}
+            </div>
+          </v-card-text>
+        </v-card>
+      </v-flex>
+
+      <v-flex xs3>
+        <v-card color="grey darken-2" class="white--text" @click="changeOrder(3)">
+          <v-card-title primary-title>
+            <div>
+              <h3 class="title font-weight-medium">Canceled Order</h3>
+            </div>
+          </v-card-title>
+          <v-card-text>
+            <div class="text-xs-center font-weight-medium display-1">
+              {{countCanceledOrder}}
             </div>
           </v-card-text>
         </v-card>
@@ -114,9 +144,11 @@
               <td>{{ props.item.date }}</td>
               <td class="text-xs-left">{{ props.item.order_id }}</td>
               <td class="text-xs-left">
-                <v-chip v-if="props.item.open_status" color="green" text-color="white">{{
+                <v-chip v-if="props.item.open_status === 1" color="green" text-color="white">{{
                   checkStatus(props.item.open_status) }}</v-chip>
-                <v-chip v-else color="red" text-color="white">{{
+                <v-chip v-if="props.item.open_status === 2" color="red" text-color="white">{{
+                  checkStatus(props.item.open_status) }}</v-chip>
+                <v-chip v-if="props.item.open_status === 3" color="grey darken-2" text-color="white">{{
                   checkStatus(props.item.open_status) }}</v-chip>
               </td>
               <td class="text-xs-left">{{ props.item.customer_name }}</td>
@@ -151,8 +183,10 @@
   export default {
     data: () => ({
       dialog: false,
+      order_origin: [],
       order_open: [],
       order_closed: [],
+      order_canceled: [],
       pagination: {
         sortBy: 'order_id'
       },
@@ -213,6 +247,22 @@
       formTitle() {
         return this.editedIndex === -1 ? 'New Item' : 'Edit Item';
       },
+
+      countOrderOpen() {
+        return this.order_open.length;
+      },
+      
+      countOrderClosed() {
+        return this.order_closed.length;
+      }, 
+
+      countAllOrder() {
+        return this.order_origin.length;
+      },
+
+      countCanceledOrder() {
+        return this.order_canceled.length;
+      }
     },
 
     watch: {
@@ -229,7 +279,19 @@
       async initialize() {
         await Promise.all([
           axios.get('orders')
-          .then((result) => this.orders = result.data),
+          .then((result) => {
+            this.orders = result.data
+            this.order_origin = result.data
+            this.order_open = result.data.filter((value) => {
+              return value.open_status === 1
+            });
+            this.order_closed = result.data.filter((value) => {
+              return value.open_status === 2
+            });
+            this.order_canceled = result.data.filter((value) => {
+              return value.open_status === 3
+            });
+          }),
           axios.get('offices')
           .then((result) => this.offices = result.data)
         ]);
@@ -272,7 +334,13 @@
       },
 
       checkStatus(props) {
-        return props ? 'ONGOING' : 'CLOSED';
+        if (props === 1) {
+          return 'ONGOING';
+        }else if (props === 2) {
+          return 'CLOSED';
+        } else {
+          return 'CANCELED';
+        }
       },
 
       changeSort(column) {
@@ -282,13 +350,19 @@
           this.pagination.sortBy = column
           this.pagination.descending = false
         }
-      }, 
+      },
 
-      countOrder(prop) {
-        const new_order = this.orders.filter((value) => {
-          return value.open_status === prop;
-        });
-        return new_order.length;
+      changeOrder(checker) {
+        if (checker === 0) {
+          this.orders = this.order_origin;
+        }
+        else if (checker === 1) {
+          this.orders = this.order_open;
+        } else if (checker === 2) {
+          this.orders = this.order_closed;
+        } else {
+          this.orders = this.order_canceled;
+        }
       }
 
     },

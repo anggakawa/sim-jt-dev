@@ -80,7 +80,7 @@ module.exports = {
 
   async closeOrder(req, res) {
     try {
-      const result = await pool.query(`UPDATE orders SET open_status = false WHERE order_id = '${req.params.orderId}'`);
+      const result = await pool.query(`UPDATE orders SET open_status = ${req.params.status} WHERE order_id = '${req.params.orderId}'`);
       res.json(result);
     } catch (error) {
       console.log(error);

@@ -4,8 +4,14 @@
         <h2>Detail Order</h2>
       </v-flex>
       <v-flex xs6 class="text-xs-right">
-        <v-chip v-if="order_desc.open_status" color="green" text-color="white">{{ checkStatus(order_desc.open_status) }}</v-chip>
-        <v-chip v-else color="red" text-color="white">{{ checkStatus(order_desc.open_status) }}</v-chip>
+        <!-- <v-chip v-if="order_desc.open_status" color="green" text-color="white">{{ checkStatus(order_desc.open_status) }}</v-chip>
+        <v-chip v-else color="red" text-color="white">{{ checkStatus(order_desc.open_status) }}</v-chip> -->
+        <v-chip v-if="order_desc.open_status === 1" color="green" text-color="white">{{
+                  checkStatus(order_desc.open_status) }}</v-chip>
+                <v-chip v-if="order_desc.open_status === 2" color="red" text-color="white">{{
+                  checkStatus(order_desc.open_status) }}</v-chip>
+                <v-chip v-if="order_desc.open_status === 3" color="grey darken-2" text-color="white">{{
+                  checkStatus(order_desc.open_status) }}</v-chip>
       </v-flex>
     <v-flex xs6>
       <v-text-field :value="changeDate(order_desc.date)" readonly label="Tanggal">
@@ -83,7 +89,13 @@
           });
       },
       checkStatus(props) {
-        return props ? 'ONGOING' : 'CLOSED';
+        if (props === 1) {
+          return 'ONGOING';
+        }else if (props === 2) {
+          return 'CLOSED';
+        } else {
+          return 'CANCELED';
+        }
       },
     }
   }

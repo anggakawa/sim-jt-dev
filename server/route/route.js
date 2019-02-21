@@ -91,7 +91,7 @@ module.exports = (router) => {
   router.delete('/activity-options/:activityOptId', ActivOptController.deleteActivity);
 
   router.get('/orders', OrderController.getAllOrder);
-  router.put('/order/:orderId/close', OrderController.closeOrder);
+  router.put('/order/:orderId/:status', OrderController.closeOrder);
   router.get('/order/:orderId', OrderController.getOrderById);
   router.post('/orders/add', OrderController.createNewOrder);
   router.delete('/order/:orderId', OrderController.deleteOrder);

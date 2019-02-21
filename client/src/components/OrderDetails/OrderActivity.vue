@@ -149,11 +149,11 @@
 
 
               <v-flex xs12 v-if="current_activity.can_close">
-                Apakah anda ingin menutup (close) Order?
+                Apakah anda ingin menutup (close) atau membatalkan Order?
                 <v-btn color="success" dark @click="dialog2 = true">
                   CLOSE ORDER
                 </v-btn>
-                <v-dialog v-model="dialog2" max-width="290">
+                <v-dialog v-model="dialog2" max-width="440">
                   <v-card>
                     <v-card-title class="headline">Close Order?</v-card-title>
                     <v-card-text>
@@ -161,12 +161,15 @@
                       *<b>Anda tidak dapat membatalkan aksi ketika sudah melakukan close order</b>
                     </v-card-text>
                     <v-card-actions>
-                      <v-spacer></v-spacer>
                       <v-btn color="green darken-1" flat="flat" @click="dialog2 = false">
-                        Cancel
+                        Close Dialog
                       </v-btn>
-                      <v-btn color="green darken-1" flat="flat" @click="closeOrder()">
-                        Agree
+                      <v-spacer></v-spacer>
+                      <v-btn color="green darken-1" flat="flat" @click="closeOrder(3)">
+                        Cancel Order
+                      </v-btn>
+                      <v-btn color="green darken-1" flat="flat" @click="closeOrder(2)">
+                        Agree Order
                       </v-btn>
                     </v-card-actions>
                   </v-card>
@@ -277,8 +280,8 @@
             .catch((error) => console.log(error));
         }
       },
-      closeOrder() {
-        axios.put('order/' + this.$route.params.order_id + '/close')
+      closeOrder(props) {
+        axios.put('order/' + this.$route.params.order_id + '/' + props)
           .then(() => {
             this.dialog2 = false;
           })
