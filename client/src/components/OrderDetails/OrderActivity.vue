@@ -197,7 +197,7 @@
     data() {
       return {
         loader: null,
-        e1: 2,
+        e1: 0,
         dialog: false,
         dialog2: false,
         dialog3: false,

@@ -15,7 +15,7 @@ const jwt = require('jsonwebtoken');
 
 // check user's role is admin
 function checkIfAdmin(req, res, next) {
-  if (req.decoded.payload.role_id === 1) {
+  if (req.decoded.role_id === 1) {
     next();
   } else {
     return res.status(401).send({

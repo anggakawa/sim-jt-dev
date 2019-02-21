@@ -103,7 +103,9 @@ export default {
       //     document.body.appendChild(link);
       //     link.click();
       //   });
-      return 'download/' + props;
+      
+      // untuk download
+      return 'http://localhost:3000/api/download/' + props;
     }
   }, 
   created() {
