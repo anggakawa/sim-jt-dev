@@ -37,7 +37,7 @@ module.exports = {
       const result = await pool.query(`INSERT INTO order_logs
         (order_id, activity_id, information, status, date, user_id)
         VALUES ('${req.body.order_id}', ${req.body.activity_id}, '${req.body.information}',
-        ${req.body.status}, '${req.body.date}', ${req.decoded.user_id})`);
+        ${req.body.status}, NOW(), ${req.decoded.user_id})`);
       res.json(result);  
     } catch (error) {
       console.log(error);

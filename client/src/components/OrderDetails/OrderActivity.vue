@@ -244,7 +244,6 @@
             activity_id: this.current_activity.activity_id,
             information: this.information,
             status: this.selected_option,
-            date: new Date().toISOString().slice(0, 19).replace('T', ' '),
           })
           .then((result) => {
             this.insert_id = result.data.insertId;

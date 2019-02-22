@@ -15,7 +15,8 @@
               <td class="text-xs-left">{{ props.item.information }}</td>
               <td class="text-xs-left">{{ props.item.attachment_name }}</td>
               <td class="text-xs-left">
-                <a :href="downloadFile(props.item.order_attachment_id)">Download File</a>
+                <a v-show="props.item.order_attachment_id > 0" 
+                  :href="downloadFile(props.item.order_attachment_id)">Download File</a>
               </td>
             </template>
           </v-data-table>
@@ -31,31 +32,31 @@ export default {
     return {
       headers: [{
         text: 'Tanggal',
-        value: '',
+        value: 'date',
       },
       {
         text: 'User',
-        value: '',
+        value: 'username',
       },
       {
         text: 'Loker',
-        value: '',
+        value: 'user_description',
       },
       {
         text: 'Aktivitas',
-        value: '',
+        sortable: false,
       },
       {
         text: 'Keterangan',
-        value: '',
+        sortable: false,
       },
       {
         text: 'Nama Lampiran', 
-        value: '',
+        sortable: false,
       },
       {
         text: 'Lampiran',
-        value: '',
+        sortable: false,
       },
       ],
       order_logs: [],
