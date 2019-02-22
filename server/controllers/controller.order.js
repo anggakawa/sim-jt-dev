@@ -27,13 +27,19 @@ module.exports = {
       const latitude = parseFloat(req.body.customer_coordinat_latitude);
       const longitude = parseFloat(req.body.customer_coordinat_longitude); 
       const result = await pool.query(`INSERT INTO orders 
-        (order_id, date, customer_name, customer_address, service_name, sto_office_id, customer_coordinat_latitude, 
-        customer_coordinat_longitude, pic_name, pic_contact, open_status) VALUES
-        ('${req.body.order_id}', '${req.body.date}', '${req.body.customer_name}',
-        '${req.body.customer_address}', '${req.body.service_name}', 
-        ${req.body.sto_office_id}, ${latitude}, 
-        ${longitude}, 
-        '${req.body.pic_name}', '${req.body.pic_contact}', true)`);
+          (order_id, date, customer_name, customer_address, service_name, sto_office_id, customer_coordinat_latitude, 
+          customer_coordinat_longitude, pic_name, pic_contact, open_status) VALUES
+          ('${req.body.order_id}', '${req.body.date}', '${req.body.customer_name}',
+          '${req.body.customer_address}', '${req.body.service_name}', 
+          ${req.body.sto_office_id}, ${latitude}, 
+          ${longitude}, 
+          '${req.body.pic_name}', '${req.body.pic_contact}', true)`)
+        .then(() => {
+          return pool.query(`INSERT INTO order_logs
+            (order_id, activity_id, information, status, date, user_id)
+            VALUES ('${req.body.order_id}', 17, 'Initialize Order',
+            1, NOW(), ${req.decoded.user_id})`);
+        });
       return res.json({
         success: true, 
         results: result
