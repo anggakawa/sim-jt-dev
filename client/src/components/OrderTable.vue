@@ -157,6 +157,8 @@
               </td>
               <td class="text-xs-left">{{ props.item.customer_name }}</td>
               <td class="text-xs-left">{{ props.item.service_name }}</td>
+              <td class="text-xs-left">{{ props.item.activity_name }}</td>
+              <td class="text-xs-left">{{ props.item.role_name }}</td>
               <td class="text-xs-left">{{ props.item.sto_office_name }}</td>
               <td>
                 <router-link :to="{ name: 'order',
@@ -216,6 +218,14 @@
         {
           text: 'Jenis Layanan',
           value: 'service_name',
+        },
+        {
+          text: 'Aktivitas', 
+          value: 'activity_name'
+        },
+        {
+          text: 'Loker', 
+          value: 'role_name'
         },
         {
           text: 'STO',
@@ -285,6 +295,7 @@
         await Promise.all([
           axios.get('orders')
           .then((result) => {
+            console.log(result);
             this.orders = result.data
             this.order_origin = result.data
             this.order_open = result.data.filter((value) => {
