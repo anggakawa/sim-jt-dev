@@ -74,6 +74,7 @@ module.exports = (router) => {
 
   // activity routes
   router.get('/activities', ActivitiyController.getAllActivity);
+  router.put('/activity', ActivitiyController.updateActivity);
   router.post('/activity/add', checkIfAdmin, ActivitiyController.createNewActivity);
   router.get('/activity/:activityId', ActivitiyController.getActivityById);
   router.delete('/activity/:activityId', checkIfAdmin, ActivitiyController.deleteActivity);

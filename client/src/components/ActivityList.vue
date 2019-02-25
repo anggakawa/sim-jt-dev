@@ -200,7 +200,12 @@
 
       save () {
         if (this.editedIndex > -1) {
-          Object.assign(this.activities[this.editedIndex], this.editedItem)
+          return axios.put('activity/', this.editedItem).then((result) => {
+            if (result.data.success) {
+              Object.assign(this.activities[this.editedIndex], this.editedItem);
+              this.close();
+            }
+          }).catch(error => console.log(error));
         } else {
           return axios.post('activity/add', this.editedItem)
             // .then(() => this.activities.push(this.editedItem))
