@@ -118,6 +118,10 @@
                       <v-flex xs12>
                         <v-text-field v-model="editedItem.pic_contact" label="Kontak PIC"></v-text-field>
                       </v-flex>
+                      <v-flex xs12>
+                        <v-textarea name="input-7-1" box label="Keterangan" v-model="editedItem.information"
+                          auto-grow></v-textarea>
+                      </v-flex>
                     </v-layout>
                   </v-container>
                 </v-card-text>
@@ -237,6 +241,7 @@
         customer_coordinat_longitude: '',
         pic_contact: '',
         pic_name: '',
+        information: '',
       },
       defaultItem: {
 
