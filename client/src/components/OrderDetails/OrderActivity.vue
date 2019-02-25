@@ -5,7 +5,7 @@
     </v-flex>
     <v-flex xs12>
       <v-card v-if="checkIfEligible()">
-
+        <v-form ref="form" lazy-validation>
         <v-stepper v-model="e1">
           <v-stepper-header>
             <v-stepper-step v-if="current_activity.can_choose_vendor" :complete="e1 > 1" step="1">Pilih Vendor</v-stepper-step>
@@ -21,7 +21,6 @@
         <v-card-text>
           <v-container grid-list-md>
             <v-layout row wrap>
-
               <v-flex xs12 style="font-size: 15px">
                 <h2>{{ current_activity.activity_name }}</h2>
                 <p style="padding-top: 25px">{{ current_activity.activity_description }}</p>
@@ -48,7 +47,7 @@
                         <v-layout wrap>
                           <v-flex xs12>
                             <v-select v-model="selected_vendor" :items="vendors" item-text="user_description"
-                              item-value="user_id" label="Pilih Vendor" required></v-select>
+                            :rules="[v => !!v || 'Item is required']" item-value="user_id" label="Pilih Vendor" required></v-select>
                           </v-flex>
                           <v-flex xs12>
                             <v-textarea name="input-7-1" box label="Keterangan" v-model="vendor_information"
@@ -83,7 +82,7 @@
                           </v-flex>
                           <v-flex xs12 v-if="current_activity.require_information">
                             <v-textarea v-model="information" name="input-7-1" box label="Keterangan"
-                              auto-grow></v-textarea>
+                              :rules="[v => !!v || 'Item is required']" auto-grow required></v-textarea>
                           </v-flex>
                         </v-layout>
                       </v-container>
@@ -110,7 +109,7 @@
                         <v-layout wrap>
                           <v-flex xs12 sm6 md4>
                             <input type="file" id="file" ref="files" name="Upload Dokumen" multiple
-                              v-on:change="handleFileUploads()">
+                             :rules="[v => !!v || 'Item is required']" v-on:change="handleFileUploads()" required>
                           </v-flex>
                         </v-layout>
                       </v-container>
@@ -180,8 +179,9 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="purple" :disabled="!checkIfEligible()" flat @click="getAndUpdateStep()">Next</v-btn>
+          <v-btn color="purple" :disabled="!checkSteps()" flat @click="getAndUpdateStep()">Next</v-btn>
         </v-card-actions>
+        </v-form>
       </v-card>
       <v-card class="text-md-center" v-else>
         <div style="padding: 50px; font-size: 20px">
@@ -314,6 +314,9 @@
       checkIfEligible() {
         return parseInt(this.$store.getters.roleStatus) === this.current_activity.role_id ||
           parseInt(this.$store.getters.roleStatus) === 1;
+      }, 
+      checkSteps() {
+        return this.e1 > 0;
       }
     },
     created() {
