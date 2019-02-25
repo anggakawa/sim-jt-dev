@@ -80,6 +80,7 @@ module.exports = (router) => {
   router.delete('/activity/:activityId', checkIfAdmin, ActivitiyController.deleteActivity);
 
   // activity relations routes
+  router.put('/activity-step/', ActivConnController.updateActivityConn);
   router.get('/activity-step/all', ActivConnController.getAllConnection);
   router.get('/activity-step/:activityId/:optionValue', ActivConnController.getNextStep);
   router.post('/activity-step', checkIfAdmin, ActivConnController.createConnection);

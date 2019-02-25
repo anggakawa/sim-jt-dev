@@ -25,7 +25,7 @@
                   <v-select :items="activities" v-model="editedItem.activity_next_id" item-text="activity_name" item-value="activity_id" label="Activity Next ID" required></v-select>
                 </v-flex>
                 <v-flex xs12>
-                  <v-select :items="activities" v-model="editedItem.activity_alt_id" item-text="activity_name" item-value="activity_id" label="Activity Alternate ID" required></v-select>
+                  <v-select :items="activities" v-model="editedItem.activity_alternate_id" item-text="activity_name" item-value="activity_id" label="Activity Alternate ID" required></v-select>
                 </v-flex>
                 <v-flex xs12>
                   <v-select :items="activities" v-model="editedItem.activity_back_id" item-text="activity_name" item-value="activity_id" label="Activity Back ID" required></v-select>
@@ -107,7 +107,7 @@
       editedItem: {
         activity_id: 0,
         activity_next_id: null,
-        activity_alt_id: null,
+        activity_alternate_id: null,
         activity_back_id: null,
       },
       defaultItem: {
@@ -150,7 +150,11 @@
 
       getAllActivities() {
         return axios.get('activities')
-          .then((result) => this.activities = result.data);
+          .then((result) => this.activities = result.data)
+          .then(() => this.activities.push({
+            activity_name: 'NULL', 
+            activity_id: null,
+          }));
       },
       
       editItem (item) {
@@ -177,9 +181,15 @@
 
       save () {
         if (this.editedIndex > -1) {
-          this.close();
+          axios.put('activity-step/', this.editedItem)
+            .then((result) => {
+              if (result.data.success) {
+                Object.assign(this.activity_cons[this.editedIndex], this.editedItem);
+                this.close();
+              }
+            });
         } else {
-          return axios.post('/activity-step', this.editedItem)
+          return axios.post('activity-step', this.editedItem)
             .then((res) => {
               this.$router.go();
             }); 
