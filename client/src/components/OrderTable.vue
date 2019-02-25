@@ -3,7 +3,7 @@
     <v-layout row wrap>
       
       <v-flex xs3>
-        <v-card color="blue darken-2" class="white--text" @click="changeOrder(0)">
+        <v-card color="blue darken-2" class="white--text" @click="changeOrder(0)" style="cursor: pointer">
           <v-card-title primary-title>
             <div>
               <h3 class="title font-weight-medium">Total</h3>
@@ -18,7 +18,7 @@
       </v-flex>
 
       <v-flex xs3>
-        <v-card color="green darken-2" class="white--text" @click="changeOrder(1)">
+        <v-card color="green darken-2" class="white--text" @click="changeOrder(1)" style="cursor: pointer">
           <v-card-title primary-title>
             <div>
               <h3 class="title font-weight-medium">Order Ongoing</h3>
@@ -33,7 +33,7 @@
       </v-flex>
 
       <v-flex xs3>
-        <v-card color="red darken-2" class="white--text" @click="changeOrder(2)">
+        <v-card color="red darken-2" class="white--text" @click="changeOrder(2)" style="cursor: pointer">
           <v-card-title primary-title>
             <div>
               <h3 class="title font-weight-medium">Order Closed</h3>
@@ -48,7 +48,7 @@
       </v-flex>
 
       <v-flex xs3>
-        <v-card color="grey darken-2" class="white--text" @click="changeOrder(3)">
+        <v-card color="grey darken-2" class="white--text" @click="changeOrder(3)" style="cursor: pointer">
           <v-card-title primary-title>
             <div>
               <h3 class="title font-weight-medium">Canceled Order</h3>
@@ -145,6 +145,7 @@
               <th v-if="checkIfAdmin()">Aksi</th>
             </template>
             <template slot="items" slot-scope="props">
+              <tr style="cursor: pointer" @click="linkto(props.item.order_id)">
               <td>{{ props.item.date }}</td>
               <td class="text-xs-left">{{ props.item.order_id }}</td>
               <td class="text-xs-left">
@@ -172,6 +173,7 @@
                   delete
                 </v-icon>
               </td>
+              </tr>
             </template>
             <template slot="no-data">
               There's no data to display
@@ -379,6 +381,11 @@
         } else {
           this.orders = this.order_canceled;
         }
+      }, 
+
+      linkto(props) {
+        this.$router.push({ name: 'order',
+          params: { order_id: props }});
       }
 
     },
