@@ -1,3 +1,5 @@
+/* eslint-disable prefer-template */
+/* eslint-disable dot-notation */
 // created by @anggakawa
 
 import Vue from 'vue';
@@ -19,7 +21,7 @@ if (token) {
   if (Date.now() / 1000 > decode.exp) {
     localStorage.removeItem('user-token');
   } else {
-    Axios.defaults.headers.common['Authorization'] = "Bearer " + token;
+    Axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
   }
 }
 
