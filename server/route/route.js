@@ -65,6 +65,7 @@ module.exports = (router) => {
 
   // user routes
   router.get('/users', UserController.getAllUsers);
+  router.put('/users/edit', UserController.editUser);
   router.get('/user/:userId', UserController.selectUser);
   router.post('/user/add', checkIfAdmin, UserController.addnewUser);
   router.delete('/user/:userId', checkIfAdmin, UserController.deleteUser);

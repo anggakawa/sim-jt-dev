@@ -20,6 +20,7 @@ if (token) {
   const decode = jwtDecode(token);
   if (Date.now() / 1000 > decode.exp) {
     localStorage.removeItem('user-token');
+    router.go();
   } else {
     Axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
   }

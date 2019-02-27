@@ -161,10 +161,10 @@
               <td class="text-xs-left">{{ props.item.activity_name }}</td>
               <td class="text-xs-left">{{ props.item.role_name }}</td>
               <td class="text-xs-left">{{ props.item.sto_office_name }}</td>
-              <td>
+              <!-- <td>
                 <router-link :to="{ name: 'order',
               params: { order_id: props.item.order_id }}">Lihat</router-link>
-              </td>
+              </td> -->
               <td v-if="checkIfAdmin()" class="justify-center">
                 <v-icon small class="mr-2" @click="editItem(props.item)">
                   edit
@@ -233,11 +233,11 @@
           text: 'STO',
           value: 'sto_office',
         },
-        {
-          text: 'Links',
-          value: 'links',
-          sortable: false,
-        },
+        // {
+        //   text: 'Links',
+        //   value: 'links',
+        //   sortable: false,
+        // },
       ],
       orders: [],
       offices: [],

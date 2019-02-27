@@ -133,6 +133,33 @@ module.exports = {
         result: 'something gone wrong'
       });
     }
+  }, 
+
+  async editUser(req, res) {
+    try {
+      if (req.decoded.role_id === 1) {
+        const result = pool.query(`UPDATE users SET username = '${req.body.username}', password = '${encryption.encrypt(req.body.password)}',
+          role_id = ${req.body.role_id}, user_description = '${req.body.user_description}' WHERE user_id = ${req.body.user_id}`);
+        // const result = pool.query(`UPDATE users SET username = '${req.body.username}', 
+        //   user_description = '${req.body.user_description}' WHERE user_id = ${req.body.user_id}`);
+        res.json({
+          success: true, 
+          result: result
+        })
+      } else {
+        const result = pool.query(`UPDATE users SET password = '${encryption.encrypt(req.body.password)}' WHERE user_id = ${req.decoded.user_id}`);
+        res.json({
+          success: true, 
+          result: result
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(401).json({
+        success: false, 
+        result: 'something gone wrong'
+      })
+    }
   }
 
 }
