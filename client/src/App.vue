@@ -4,6 +4,9 @@
     <v-content>
       <router-view />
     </v-content>
+    <v-footer class="grey darken-3 justify-center white--text">
+      <div>&copy;{{ new Date().getFullYear() }} - <strong>Witel Kalsel</strong></div>
+    </v-footer>
   </v-app>
 </template>
 

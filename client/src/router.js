@@ -6,6 +6,7 @@ import OrderDescription from './views/OrderDescription.vue';
 import OrderSummary from './views/OrderSummary.vue';
 import UserControl from './views/UserControl.vue';
 import ActivityControl from './views/ActivityControl.vue';
+import UserPanel from './views/UserPanel.vue';
 import store from './store';
 
 Vue.use(Router);
@@ -65,6 +66,14 @@ const router = new Router({
       component: ActivityControl,
       meta: {
         requiresAdmin: true,
+      },
+    },
+    {
+      path: '/my-account',
+      name: 'my-account',
+      component: UserPanel,
+      meta: {
+        requiresAuth: true,
       },
     },
     {

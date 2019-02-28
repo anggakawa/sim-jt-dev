@@ -73,6 +73,11 @@ export default {
           title: 'Dashboard',
           path: '/orders',
         },
+        {
+          action: 'person', 
+          title: 'My Account', 
+          path: '/my-account'
+        }
       ],
     };
   },

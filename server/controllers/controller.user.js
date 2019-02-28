@@ -28,7 +28,7 @@ module.exports = {
       res.json({
         success: false, 
         result: 'something gone wrong'
-      })
+      });
     }
   },
 
@@ -137,7 +137,7 @@ module.exports = {
 
   async editUser(req, res) {
     try {
-      if (req.decoded.role_id === 1) {
+      if (req.decoded.role_id === 1 && typeof(req.body.user_id) !== 'undefined') {
         const result = pool.query(`UPDATE users SET username = '${req.body.username}', password = '${encryption.encrypt(req.body.password)}',
           role_id = ${req.body.role_id}, user_description = '${req.body.user_description}' WHERE user_id = ${req.body.user_id}`);
         // const result = pool.query(`UPDATE users SET username = '${req.body.username}', 
@@ -145,9 +145,10 @@ module.exports = {
         res.json({
           success: true, 
           result: result
-        })
+        });
       } else {
-        const result = pool.query(`UPDATE users SET password = '${encryption.encrypt(req.body.password)}' WHERE user_id = ${req.decoded.user_id}`);
+        const result = pool.query(`UPDATE users SET password = '${encryption.encrypt(req.body.password)}',
+          user_description = '${req.body.user_description}' WHERE user_id = ${req.decoded.user_id}`);
         res.json({
           success: true, 
           result: result
