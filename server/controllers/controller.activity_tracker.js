@@ -32,6 +32,20 @@ module.exports = {
         result: 'something gone wrong',
       })
     }
+  },
+
+  async getAllActivityTracks(req, res) {
+    try {
+      const result = await pool.query(`SELECT * FROM activity_track INNER JOIN activity 
+        ON activity_track.activity_id = activity.activity_id`);
+      res.json(result);
+    } catch (error) {
+      console.log(error);
+      res.json({
+        success: false, 
+        result: 'something gone wrong'
+      });
+    }
   }
 
 }

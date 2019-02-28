@@ -107,6 +107,7 @@ module.exports = (router) => {
   router.post('/order-vendor', OrderVendorHistory.addNewOrderVendor);
   router.get('/order-vendor/:orderId', OrderVendorHistory.getOrderVendor);
 
+  router.get('/activity-trackers', ActivityTracker.getAllActivityTracks);
   router.get('/current-activity/:orderId', ActivityTracker.getCurrentActivity);
   router.put('/current-activity/:orderId/:activityId', ActivityTracker.updateActivity);
 

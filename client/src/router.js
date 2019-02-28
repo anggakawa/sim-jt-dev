@@ -7,6 +7,7 @@ import OrderSummary from './views/OrderSummary.vue';
 import UserControl from './views/UserControl.vue';
 import ActivityControl from './views/ActivityControl.vue';
 import UserPanel from './views/UserPanel.vue';
+import ActivityTrack from './views/ActivityTrack.vue';
 import store from './store';
 
 Vue.use(Router);
@@ -74,6 +75,14 @@ const router = new Router({
       component: UserPanel,
       meta: {
         requiresAuth: true,
+      },
+    },
+    {
+      path: '/activity-track',
+      name: 'activity-track',
+      component: ActivityTrack,
+      meta: {
+        requiresAdmin: true,
       },
     },
     {

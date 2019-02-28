@@ -18,15 +18,20 @@ export default {
     return {
       admin_items : [
         {
-          action: 'person', 
+          action: 'supervisor_account', 
           title: 'Users', 
           path: '/users',
         },
         {
-          action: 'timeline', 
-          title: 'Activities', 
+          action: 'timeline',
+          title: 'Activities',
           path: '/activities',
         },
+        {
+          action: 'event_note',
+          title: 'Activity Track',
+          path: '/activity-track',
+        }
       ]
     }
   }
