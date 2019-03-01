@@ -100,7 +100,7 @@ import axios from '@/services/service.api.js';
       }, 
       async createActivTracker() {
         if (this.form_index > -1) {
-          return axios.put('current_activity/' + this.form_data.order_id + '/' + this.form_data.activity_id)
+          return axios.put('current-activity/' + this.form_data.order_id + '/' + this.form_data.activity_id)
             .then((result) => {
               if (result.data.success) {
                 this.dialog = false;

@@ -1,7 +1,6 @@
 <template>
   <v-container grid-list-md>
     <v-layout row wrap>
-      
       <v-flex xs3>
         <v-card color="blue darken-2" class="white--text" @click="changeOrder(0)" style="cursor: pointer">
           <v-card-title primary-title>
@@ -73,14 +72,14 @@
                 Item</v-btn>
               <v-card>
                 <v-card-title>
-                  <span class="headline">Order Baru</span>
+                  <span class="headline">{{formTitle}}</span>
                 </v-card-title>
                 <!-- form template -->
                 <v-card-text>
                   <v-container grid-list-md>
                     <v-layout row wrap>
                       <v-flex xs12>
-                        <v-text-field v-model="editedItem.order_id" label="Nomor Order"></v-text-field>
+                        <v-text-field :disabled="!checkEditedIndex" v-model="editedItem.order_id" label="Nomor Order"></v-text-field>
                       </v-flex>
                       <v-flex xs12>
                         <v-text-field v-model="editedItem.customer_name" label="Nama Pelanggan"></v-text-field>
@@ -118,9 +117,13 @@
                       <v-flex xs12>
                         <v-text-field v-model="editedItem.pic_contact" label="Kontak PIC"></v-text-field>
                       </v-flex>
-                      <v-flex xs12>
+                      <v-flex xs12 v-if="checkEditedIndex">
                         <v-textarea name="input-7-1" box label="Keterangan" v-model="editedItem.information"
                           auto-grow></v-textarea>
+                      </v-flex>
+                      <v-flex xs12 v-if="!checkEditedIndex">
+                        <v-text-field label="Keterangan" 
+                         hint="1 for Ongoing, 2 for Closed, 3 for Canceled" type="number" v-model="editedItem.open_status" persistent-hint></v-text-field>
                       </v-flex>
                     </v-layout>
                   </v-container>
@@ -166,10 +169,10 @@
               params: { order_id: props.item.order_id }}">Lihat</router-link>
               </td> -->
               <td v-if="checkIfAdmin()" class="justify-center">
-                <v-icon small class="mr-2" @click="editItem(props.item)">
+                <v-icon small class="mr-2" @click.stop="editItem(props.item)">
                   edit
                 </v-icon>
-                <v-icon small @click="deleteItem(props.item)">
+                <v-icon small @click.stop="deleteItem(props.item)">
                   delete
                 </v-icon>
               </td>
@@ -254,6 +257,7 @@
         pic_contact: '',
         pic_name: '',
         information: '',
+        open_status: '',
       },
       defaultItem: {
 
@@ -263,6 +267,10 @@
     computed: {
       formTitle() {
         return this.editedIndex === -1 ? 'New Item' : 'Edit Item';
+      },
+      
+      checkEditedIndex() {
+        return this.editedIndex === -1;
       },
 
       countOrderOpen() {
@@ -339,7 +347,12 @@
 
       save() {
         if (this.editedIndex > -1) {
-          Object.assign(this.orders[this.editedIndex], this.editedItem);
+          axios.put('order/edit', this.editedItem).then((result) => {
+            if (result.data.success) {
+              window.alert('Data berhasil diubah');
+              Object.assign(this.orders[this.editedIndex], this.editedItem);
+            }
+          });
         } else {
           axios.post('orders/add', this.editedItem)
             .then(() => this.$router.go());

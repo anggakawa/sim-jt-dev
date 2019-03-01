@@ -36,7 +36,7 @@ module.exports = {
           '${req.body.customer_address}', '${req.body.service_name}', 
           ${req.body.sto_office_id}, ${latitude}, 
           ${longitude}, 
-          '${req.body.pic_name}', '${req.body.pic_contact}', true)`)
+          '${req.body.pic_name}', '${req.body.pic_contact}', 1)`)
         .then(() => {
           return pool.query(`INSERT INTO order_logs
             (order_id, activity_id, information, status, date, user_id)
@@ -54,7 +54,28 @@ module.exports = {
         result: 'something gone wrong'
       });
     }
-  }, 
+  },
+
+  async updateOrder(req, res) {
+    try {
+      const latitude = parseFloat(req.body.customer_coordinat_latitude);
+      const longitude = parseFloat(req.body.customer_coordinat_longitude);
+      const result = await pool.query(`UPDATE orders SET date = '${req.body.date}', customer_name = '${req.body.customer_name}',
+        customer_address = '${req.body.customer_address}', service_name = '${req.body.service_name}', sto_office_id = ${req.body.sto_office_id},
+        customer_coordinat_latitude = ${latitude}, customer_coordinat_longitude = ${longitude},
+        pic_name = '${req.body.pic_name}', pic_contact = '${req.body.pic_contact}', open_status = ${req.body.open_status} WHERE order_id = '${req.body.order_id}'`);
+      res.json({
+        success: true, 
+        result: result
+      });
+    } catch (error) {
+      console.log(error);
+      return res.json({
+        success: false,
+        result: 'something gone wrong',
+      })
+    }
+  },
 
   async getOrderById(req, res) {
     try {
