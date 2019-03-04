@@ -94,8 +94,10 @@
                         </v-menu>
                       </v-flex>
                       <v-flex md6>
-                        <v-text-field v-model="editedItem.service_name" prepend-icon="network_wifi"
-                          label="Jenis Layanan"></v-text-field>
+                        <!-- <v-text-field v-model="editedItem.service_name" prepend-icon="network_wifi"
+                          label="Jenis Layanan"></v-text-field> -->
+                        <v-select :items="telkom_services" v-model="editedItem.service_name" 
+                          label="Jenis Layanan" required></v-select>
                       </v-flex>
                       <v-flex md6>
                         <v-text-field v-model="editedItem.customer_coordinat_latitude" label="Latitude"
@@ -262,6 +264,9 @@
       defaultItem: {
 
       },
+      telkom_services : [
+        'VPN IP', 'ASTINET', 'METRO', 'IP PBX', 'OTHERS'
+      ]
     }),
 
     computed: {

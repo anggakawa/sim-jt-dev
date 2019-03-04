@@ -107,6 +107,9 @@
                     <v-card-text>
                       <v-container grid-list-md>
                         <v-layout wrap>
+                          <v-flex xs12>
+                            <p class="font-weight-bold font-italic body-2">{{ current_activity.activity_description }}</p>
+                          </v-flex>
                           <v-flex xs12 sm6 md4>
                             <input type="file" id="file" ref="files" name="Upload Dokumen" multiple
                              :rules="[v => !!v || 'Item is required']" v-on:change="handleFileUploads()" required>
@@ -319,9 +322,11 @@
         return this.e1 > 0;
       }
     },
-    created() {
-      this.getCurrentActivity();
-      this.getVendors();
+    mounted() {
+      Promise.all([
+        this.getCurrentActivity(),
+        this.getVendors()
+      ]);
     },
   }
 

@@ -6,6 +6,9 @@ module.exports = {
     try {
       if (req.decoded.role_id === 3) {
         const result = await pool.query(`SELECT * FROM orders INNER JOIN sto_office ON orders.sto_office_id = sto_office.sto_office_id
+          INNER JOIN activity_track ON orders.order_id = activity_track.order_id
+          INNER JOIN activity ON activity_track.activity_id = activity.activity_id
+          INNER JOIN roles ON roles.role_id = activity.role_id
           INNER JOIN order_vendor_history ON order_vendor_history.order_id = orders.order_id 
           WHERE order_vendor_history.vendor_id = ${req.decoded.user_id}`);
         res.json(result);
