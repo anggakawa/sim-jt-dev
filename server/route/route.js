@@ -89,6 +89,7 @@ module.exports = (router) => {
 
   // options per activity routes
   router.get('/activity-options/all', ActivOptController.getAllActivityOptions);
+  router.put('/activity-options/edit', ActivOptController.updateActivityOpt);
   router.get('/activity-options/:activityId', ActivOptController.getActivityOptionsById);
   router.post('/activity-options', ActivOptController.createActivityOption);
   router.delete('/activity-options/:activityOptId', ActivOptController.deleteActivity);

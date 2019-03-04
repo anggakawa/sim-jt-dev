@@ -8,6 +8,7 @@ import UserControl from './views/UserControl.vue';
 import ActivityControl from './views/ActivityControl.vue';
 import UserPanel from './views/UserPanel.vue';
 import ActivityTrack from './views/ActivityTrack.vue';
+import ActivityOpt from './views/ActivityOpt.vue';
 import store from './store';
 
 Vue.use(Router);
@@ -81,6 +82,14 @@ const router = new Router({
       path: '/activity-track',
       name: 'activity-track',
       component: ActivityTrack,
+      meta: {
+        requiresAdmin: true,
+      },
+    },
+    {
+      path: '/activity-options',
+      name: 'activity-options',
+      component: ActivityOpt,
       meta: {
         requiresAdmin: true,
       },

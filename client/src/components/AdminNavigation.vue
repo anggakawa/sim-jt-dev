@@ -31,6 +31,11 @@ export default {
           action: 'event_note',
           title: 'Activity Track',
           path: '/activity-track',
+        },
+        {
+          action: 'list',
+          title: 'Activity Options',
+          path: '/activity-options',
         }
       ]
     }
