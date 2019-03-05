@@ -63,6 +63,23 @@ module.exports = {
         result: 'something gone wrong',
       })
     }
+  },
+
+  async updateOrderLogInformation(req, res) {
+    try {
+      const result = await pool.query(`UPDATE order_logs SET information = '${req.body.information}', 
+        status = ${req.body.status} WHERE order_logs_id = ${req.body.order_logs_id}`);
+      res.json({
+        success: true, 
+        result: result
+      });
+    } catch (error) {
+      console.log(error);
+      res.json({
+        success: false,
+        result: 'something gone wrong',
+      });
+    }
   }
 
 }

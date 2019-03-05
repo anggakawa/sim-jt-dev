@@ -49,10 +49,10 @@
                             <v-select v-model="selected_vendor" :items="vendors" item-text="user_description"
                             :rules="[v => !!v || 'Item is required']" item-value="user_id" label="Pilih Vendor" required></v-select>
                           </v-flex>
-                          <v-flex xs12>
+                          <!-- <v-flex xs12>
                             <v-textarea name="input-7-1" box label="Keterangan" v-model="vendor_information"
                               auto-grow></v-textarea>
-                          </v-flex>
+                          </v-flex> -->
                         </v-layout>
                       </v-container>
                     </v-card-text>
