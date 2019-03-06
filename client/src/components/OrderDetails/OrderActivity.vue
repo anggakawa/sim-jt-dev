@@ -33,11 +33,11 @@
               <v-flex xs12>
                 <h2>TASK</h2>
               </v-flex>
-
+              
               <v-flex xs12 v-if="current_activity.can_choose_vendor">
                 Silahkan Pilih Vendor
                 <v-dialog v-model="dialog4" persistent max-width="600px">
-                  <v-btn slot="activator" color="success">Pilih Vendor</v-btn>
+                  <v-btn round slot="activator" color="success">Pilih Vendor</v-btn>
                   <v-card>
                     <v-card-title>
                       <span class="headline">Pilih Vendor</span>
@@ -49,10 +49,6 @@
                             <v-select v-model="selected_vendor" :items="vendors" item-text="user_description"
                             :rules="[v => !!v || 'Item is required']" item-value="user_id" label="Pilih Vendor" required></v-select>
                           </v-flex>
-                          <!-- <v-flex xs12>
-                            <v-textarea name="input-7-1" box label="Keterangan" v-model="vendor_information"
-                              auto-grow></v-textarea>
-                          </v-flex> -->
                         </v-layout>
                       </v-container>
                     </v-card-text>
@@ -66,9 +62,21 @@
               </v-flex>
 
               <v-flex xs12>
+                Masukkan informasi dan file yang diperlukan
+                <v-btn round :loading="loading2" :disabled="loading2"
+                  @click="createNewOrderHistory" color="blue-grey"
+                  class="white--text">
+                  <v-icon>add</v-icon>
+                  Order Log
+                </v-btn>
+              </v-flex>
+
+              <v-container v-show="showActivity">
+
+              <v-flex xs12>
                 Masukkan Informasi dan Keputusan
                 <v-dialog v-model="dialog3" persistent max-width="600px">
-                  <v-btn slot="activator" color="success" @click="getOptions()">Tambahkan Informasi</v-btn>
+                  <v-btn round slot="activator" color="success" @click="getOptions()">Tambahkan Informasi</v-btn>
                   <v-card>
                     <v-card-title>
                       <span class="headline">Informasi</span>
@@ -99,7 +107,7 @@
               <v-flex xs12 v-if="current_activity.require_attachment">
                 Silahkan Upload Lampiran Yang Dibutuhkan
                 <v-dialog v-model="dialog" persistent max-width="600px">
-                  <v-btn slot="activator" color="success">Upload Files</v-btn>
+                  <v-btn round slot="activator" color="success">Upload Files</v-btn>
                   <v-card>
                     <v-card-title>
                       <span class="headline">Upload Lampiran</span>
@@ -149,10 +157,11 @@
               </v-flex>
 
 
+              </v-container>
 
               <v-flex xs12 v-if="current_activity.can_close">
                 Apakah anda ingin menutup (close) atau membatalkan Order?
-                <v-btn color="success" dark @click="dialog2 = true">
+                <v-btn round color="success" dark @click="dialog2 = true">
                   CLOSE ORDER
                 </v-btn>
                 <v-dialog v-model="dialog2" max-width="440">
@@ -177,6 +186,7 @@
                   </v-card>
                 </v-dialog>
               </v-flex>
+
             </v-layout>
           </v-container>
         </v-card-text>
@@ -192,8 +202,73 @@
         </div>
       </v-card>
     </v-flex>
+
+    <v-snackbar
+      v-model="snackbar"
+      timeout="6000"
+      top
+      vertical
+    >
+      {{ msg }}
+      <v-btn
+        color="pink"
+        flat
+        @click="snackbar = false"
+      >
+        Close
+      </v-btn>
+    </v-snackbar>
+  
   </v-layout>
 </template>
+
+<style>
+  .custom-loader {
+    animation: loader 1s infinite;
+    display: flex;
+  }
+
+  @-moz-keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @-webkit-keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @-o-keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+</style>
 
 <script>
   import FileUpload from './UploadForm.vue';
@@ -202,6 +277,8 @@
   export default {
     data() {
       return {
+        snackbar: false,
+        msg: '',
         loader: null,
         e1: 0,
         dialog: false,
@@ -218,16 +295,22 @@
         current_activity: {},
         vendors: [],
         files: [],
+        showActivity: false,
       };
     },
     watch: {
       loader() {
-        const l = this.loader
-        this[l] = !this[l]
+        const l = this.loader;
+        this[l] = !this[l];
+        this.msg = 'Histori order tersimpan';
 
-        setTimeout(() => (this[l] = false), 3000)
+        setTimeout(() => {
+          this[l] = false;
+          this.showActivity = true;
+          this.snackbar = true;
+        }, 3000)
 
-        this.loader = null
+        this.loader = null;
       }
     },
     methods: {
@@ -320,6 +403,9 @@
       }, 
       checkSteps() {
         return this.e1 > 0;
+      },
+      createNewOrderHistory() {
+        this.loader = 'loading2';
       }
     },
     mounted() {
@@ -331,51 +417,3 @@
   }
 
 </script>
-
-<style>
-  .custom-loader {
-    animation: loader 1s infinite;
-    display: flex;
-  }
-
-  @-moz-keyframes loader {
-    from {
-      transform: rotate(0);
-    }
-
-    to {
-      transform: rotate(360deg);
-    }
-  }
-
-  @-webkit-keyframes loader {
-    from {
-      transform: rotate(0);
-    }
-
-    to {
-      transform: rotate(360deg);
-    }
-  }
-
-  @-o-keyframes loader {
-    from {
-      transform: rotate(0);
-    }
-
-    to {
-      transform: rotate(360deg);
-    }
-  }
-
-  @keyframes loader {
-    from {
-      transform: rotate(0);
-    }
-
-    to {
-      transform: rotate(360deg);
-    }
-  }
-
-</style>
