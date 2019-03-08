@@ -13,7 +13,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     token: localStorage.getItem('user-token') || '',
-    user_role: sessionStorage.getItem('user-role') || 0,
+    user_role: localStorage.getItem('user-role') || 0,
     status: '',
   },
   mutations: {
@@ -40,7 +40,7 @@ export default new Vuex.Store({
           if (res.data.success === true) {
             const token_data = res.data.token;
             const role = res.data.user_role;
-            sessionStorage.setItem('user-role', role);
+            localStorage.setItem('user-role', role);
             localStorage.setItem('user-token', token_data);
             localStorage.setItem('user-id', res.data.user_id);
             localStorage.setItem('username', res.data.username);
@@ -62,7 +62,7 @@ export default new Vuex.Store({
       return new Promise((resolve, reject) => {
         localStorage.removeItem('user-token');
         localStorage.removeItem('user-id');
-        sessionStorage.removeItem('user-role');
+        localStorage.removeItem('user-role');
         localStorage.removeItem('username');
         resolve();
       });
