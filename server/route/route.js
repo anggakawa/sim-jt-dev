@@ -104,6 +104,8 @@ module.exports = (router) => {
   router.get('/order-history/all', OrderHistory.getAllOrderHistory);
   router.get('/order-history/:orderId', OrderHistory.getAllOrderHistoryPerId);
   router.post('/order-history/post', OrderHistory.createNewOrderLog);
+  router.post('/order-history/new', OrderHistory.createNewOrderlogBlank);
+  router.put('/order-history/edit', OrderHistory.updateOrderLogInformation);
   router.delete('/order-history/:orderLogId', OrderHistory.deleteOrderLog);
   
   router.post('/order-vendor', OrderVendorHistory.addNewOrderVendor);

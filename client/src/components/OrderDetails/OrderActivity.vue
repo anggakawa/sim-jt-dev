@@ -62,7 +62,7 @@
               </v-flex>
 
               <v-flex xs12>
-                Masukkan informasi dan file yang diperlukan
+                Tekan untuk memasukkan informasi dan lampiran
                 <v-btn round :loading="loading2" :disabled="loading2"
                   @click="createNewOrderHistory" color="blue-grey"
                   class="white--text">
@@ -74,7 +74,7 @@
               <v-container v-show="showActivity">
 
               <v-flex xs12>
-                Masukkan Informasi dan Keputusan
+                1. Masukkan Informasi dan Keputusan
                 <v-dialog v-model="dialog3" persistent max-width="600px">
                   <v-btn round slot="activator" color="success" @click="getOptions()">Tambahkan Informasi</v-btn>
                   <v-card>
@@ -105,7 +105,7 @@
               </v-flex>
 
               <v-flex xs12 v-if="current_activity.require_attachment">
-                Silahkan Upload Lampiran Yang Dibutuhkan
+                2. Silahkan Upload Lampiran Yang Dibutuhkan
                 <v-dialog v-model="dialog" persistent max-width="600px">
                   <v-btn round slot="activator" color="success">Upload Files</v-btn>
                   <v-card>
@@ -324,21 +324,36 @@
           .then((result) => this.vendors = result.data)
           .catch((error) => console.log(error));
       },
+      createNewOrderLog() {
+        
+      }
+      ,
       saveToOrderLog() {
-        axios.post('order-history/post', {
+        // axios.post('order-history/post', {
+        //     order_id: this.$route.params.order_id,
+        //     activity_id: this.current_activity.activity_id,
+        //     information: this.information,
+        //     status: this.selected_option,
+        //   })
+        //   .then((result) => {
+        //     this.insert_id = result.data.insertId;
+        //   })
+        //   .then(() => {
+        //     this.e1 = 3;
+        //     this.dialog3 = false;
+        //   })
+        //   .catch((error) => console.log(error));
+        axios.put('order-history/edit', {
             order_id: this.$route.params.order_id,
-            activity_id: this.current_activity.activity_id,
             information: this.information,
             status: this.selected_option,
-          })
-          .then((result) => {
-            this.insert_id = result.data.insertId;
+            order_logs_id: this.insert_id
           })
           .then(() => {
             this.e1 = 3;
             this.dialog3 = false;
           })
-          .catch((error) => console.log(error));
+          .catch((error) => console.log(error));  
       },
       saveOrderVendor() {
         axios.post('order-vendor', {
@@ -372,7 +387,7 @@
           })
       },
       uploadFiles() {
-        console.log(typeof this.insert_id === typeof 1)
+        // console.log(typeof this.insert_id === typeof 1)
         if ((typeof this.insert_id === typeof 1)) {
           let formData = new FormData();
           for (let index = 0; index < this.files.length; index++) {
@@ -406,6 +421,13 @@
       },
       createNewOrderHistory() {
         this.loader = 'loading2';
+        return axios.post('order-history/new', {
+          order_id: this.$route.params.order_id,
+          activity_id: this.current_activity.activity_id
+        })
+        .then((result) => {
+          this.insert_id = result.data.insertId;
+        });
       }
     },
     mounted() {
