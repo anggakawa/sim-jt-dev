@@ -205,7 +205,7 @@
 
     <v-snackbar
       v-model="snackbar"
-      timeout="6000"
+      :timeout="timeout"
       top
       vertical
     >
@@ -277,6 +277,7 @@
   export default {
     data() {
       return {
+        timeout: 6000,
         snackbar: false,
         msg: '',
         loader: null,
