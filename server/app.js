@@ -7,6 +7,8 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const morgan = require('morgan');
 
+const helmet = require('helmet');
+
 const serveStatic = require('serve-static');
 const path = require('path');
 
@@ -19,6 +21,7 @@ app.use(morgan('combined'));
 app.use(bodyParser.urlencoded( {extended: false} ));
 app.use(bodyParser.json());
 app.use(cors());
+app.use(helmet());
 
 app.use('/', serveStatic(path.join(__dirname, '/dist')));
 
