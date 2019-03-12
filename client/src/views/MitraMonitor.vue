@@ -1,7 +1,7 @@
 <template>
   <v-container grid-list-lg>
     <v-layout row wrap>
-      <v-flex xs6>
+      <v-flex xs12>
         <chart v-if="loaded" :chartdata="vendor_history"/>
       </v-flex>
       <v-flex xs12>

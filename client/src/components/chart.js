@@ -1,3 +1,6 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable camelcase */
+/* eslint-disable no-plusplus */
 import { Bar } from 'vue-chartjs';
 
 // Exporting this so it can be used in other components
@@ -10,15 +13,35 @@ export default {
       datacollection: {
         // Data to be represented on x-axis
         labels: [],
-        datasets: [{
-          label: 'Ongoing',
-          backgroundColor: '#f87979',
-          pointBackgroundColor: 'white',
-          borderWidth: 1,
-          pointBorderColor: '#249EBF',
-          // Data to be represented on y-axis
-          data: [],
-        }],
+        datasets: [
+          {
+            label: 'Ongoing',
+            backgroundColor: '#3eb507',
+            pointBackgroundColor: 'white',
+            borderWidth: 1,
+            pointBorderColor: '#249EBF',
+            // Data to be represented on y-axis
+            data: [],
+          },
+          {
+            label: 'Closed',
+            backgroundColor: '#b50707',
+            pointBackgroundColor: 'white',
+            borderWidth: 1,
+            pointBorderColor: '#249EBF',
+            // Data to be represented on y-axis
+            data: [],
+          },
+          {
+            label: 'Canceled',
+            backgroundColor: '#ff888',
+            pointBackgroundColor: 'white',
+            borderWidth: 1,
+            pointBorderColor: '#249EBF',
+            // Data to be represented on y-axis
+            data: [],
+          },
+        ],
       },
       // Chart.js options that controls the appearance of the chart
       options: {
@@ -74,7 +97,42 @@ export default {
       return a;
     }).then((result) => {
       this.datacollection.datasets[0].data = result;
-    });
+    }).then(() => {
+      const orderOg = this.orderClosed;
+      const a = [];
+      let previous;
+      for (let index = 0; index < orderOg.length; index++) {
+        const element = orderOg[index];
+        if (element.username !== previous) {
+          a.push(1);
+        } else {
+          a[a.length - 1]++;
+        }
+        previous = element.username;
+      }
+      return a;
+    })
+      .then((result) => {
+        this.datacollection.datasets[1].data = result;
+      })
+      .then(() => {
+        const orderOg = this.orderCanceled;
+        const a = [];
+        let previous;
+        for (let index = 0; index < orderOg.length; index++) {
+          const element = orderOg[index];
+          if (element.username !== previous) {
+            a.push(1);
+          } else {
+            a[a.length - 1]++;
+          }
+          previous = element.username;
+        }
+        return a;
+      })
+      .then((result) => {
+        this.datacollection.datasets[2].data = result;
+      });
     promise1.then(() => this.renderChart(this.datacollection, this.options));
   },
   methods: {
