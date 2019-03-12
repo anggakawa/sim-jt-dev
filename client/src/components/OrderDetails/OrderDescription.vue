@@ -58,6 +58,7 @@
 
 <script>
   import axios from '@/services/service.api.js';
+  import moment from 'moment';
 
   export default {
     data() {
@@ -78,7 +79,7 @@
           });
       }, 
       changeDate(props) {
-        return new Date(props).toISOString().slice(0, 19).replace('T', ' ')
+        return moment(props).format('DD MMMM YYYY, HH:mm:ss')
       }, 
       getVendor() {
         return axios.get('order-vendor/' + this.$route.params.order_id)

@@ -8,7 +8,7 @@
           <v-data-table :headers="headers" :items="order_logs"
             class="elevation-5" :rows-per-page-items="[10,20,30]">
             <template slot="items" slot-scope="props">
-              <td>{{ new Date(props.item.date).toISOString().slice(0, 19).replace('T', ' ') }}</td>
+              <td>{{ changeDate(props.item.date) }}</td>
               <td class="text-xs-left">{{  props.item.username }}</td>
               <td class="text-xs-left">{{ props.item.user_description }}</td>
               <td class="text-xs-left">{{ props.item.activity_name }}</td>
@@ -26,6 +26,7 @@
 
 <script>
 import axios from '@/services/service.api.js';
+import moment from 'moment';
 
 export default {
   data() {
@@ -107,6 +108,9 @@ export default {
       
       // untuk download
       return 'http://localhost:3000/api/download/' + props;
+    }, 
+    changeDate(props) {
+      return moment(props).format('DD MMMM YYYY, HH:mm:ss');
     }
   }, 
   created() {

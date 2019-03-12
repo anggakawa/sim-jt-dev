@@ -30,8 +30,6 @@ module.exports = (router) => {
   router.post('/token', UserController.authenticateUser);
   router.post('/uploads/:orderLogsId', attachmentController.uploadFiles);
   router.get('/download/:attachmentId', attachmentController.downloadFile);
-
-  router.get('/tasks/:roleId', TaskController.getTask);
   
   // authenticate user
   router.use((req, res, next) => {
@@ -55,6 +53,8 @@ module.exports = (router) => {
       });
     }
   });
+
+  router.get('/tasks/:roleId', TaskController.getTask);
 
   // role route
   router.get('/roles', RoleController.selectAllRoles);

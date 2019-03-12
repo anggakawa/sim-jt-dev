@@ -151,7 +151,7 @@
             </template>
             <template slot="items" slot-scope="props">
               <tr style="cursor: pointer" @click="linkto(props.item.order_id)">
-              <td>{{ props.item.date }}</td>
+              <td>{{ changeDate(props.item.date) }}</td>
               <td class="text-xs-left">{{ props.item.order_id }}</td>
               <td class="text-xs-left">
                 <v-chip v-if="props.item.open_status === 1" color="green" text-color="white">{{
@@ -192,6 +192,7 @@
 
 <script>
   import axios from '@/services/service.api.js';
+  import moment from 'moment';
 
   export default {
     data: () => ({
@@ -404,6 +405,10 @@
       linkto(props) {
         this.$router.push({ name: 'order',
           params: { order_id: props }});
+      }, 
+
+      changeDate(props) {
+        return moment(props).format('DD-MMMM-YYYY');
       }
 
     },
