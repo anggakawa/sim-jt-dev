@@ -9,6 +9,7 @@ import ActivityControl from './views/ActivityControl.vue';
 import UserPanel from './views/UserPanel.vue';
 import ActivityTrack from './views/ActivityTrack.vue';
 import ActivityOpt from './views/ActivityOpt.vue';
+import MitraMonitor from './views/MitraMonitor.vue';
 import store from './store';
 
 Vue.use(Router);
@@ -92,6 +93,14 @@ const router = new Router({
       component: ActivityOpt,
       meta: {
         requiresAdmin: true,
+      },
+    },
+    {
+      path: '/mitra-review',
+      name: 'mitra-review',
+      component: MitraMonitor,
+      meta: {
+        requiresAuth: true,
       },
     },
     {
