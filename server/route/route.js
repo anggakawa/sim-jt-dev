@@ -10,6 +10,7 @@ const ActivityTracker = require('../controllers/controller.activity_tracker.js')
 const OrderVendorHistory = require('../controllers/controller.order_vendor.js');
 const attachmentController = require('../controllers/controller.attachment.js');
 const TaskController = require('../controllers/controller.task.js');
+const MitraController = require('../controllers/controller.mitra_review.js');
 
 const jwt = require('jsonwebtoken');
 
@@ -114,5 +115,7 @@ module.exports = (router) => {
   router.get('/activity-trackers', ActivityTracker.getAllActivityTracks);
   router.get('/current-activity/:orderId', ActivityTracker.getCurrentActivity);
   router.put('/current-activity/:orderId/:activityId', ActivityTracker.updateActivity);
+
+  router.get('/mitra-history/all', MitraController.getMitraOrderList);
 
 }
