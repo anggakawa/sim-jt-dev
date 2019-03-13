@@ -27,11 +27,14 @@ function checkIfAdmin(req, res, next) {
 }
 
 module.exports = (router) => {
+
   router.get('/', (req, res) => res.send('Hello World'));
   router.post('/token', UserController.authenticateUser);
   router.post('/uploads/:orderLogsId', attachmentController.uploadFiles);
   router.get('/download/:attachmentId', attachmentController.downloadFile);
   
+  router.get('/mitra-history/timelines', MitraController.getMitraTimeline);
+
   // authenticate user
   router.use((req, res, next) => {
     const header = req.headers['authorization'];
