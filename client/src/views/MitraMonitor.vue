@@ -1,8 +1,10 @@
 <template>
-  <v-container grid-list-lg>
+  <v-container grid-list-lg v-if="this.$store.getters.roleStatus !== '3'">
     <v-layout row wrap>
       <v-flex xs12>
-        <chart v-if="loaded" :chartdata="vendor_history"/>
+        <v-card>
+          <chart v-if="loaded" :chartdata="vendor_history"/>
+        </v-card>
       </v-flex>
       <v-flex xs12>
         <v-card>

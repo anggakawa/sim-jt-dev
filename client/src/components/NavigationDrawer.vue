@@ -74,10 +74,15 @@ export default {
           path: '/orders',
         },
         {
+          action: 'assessment', 
+          title: 'Mitra Review', 
+          path: '/mitra-review'
+        },
+        {
           action: 'person', 
           title: 'My Account', 
-          path: '/my-account'
-        }
+          path: '/my-account',
+        },
       ],
     };
   },
