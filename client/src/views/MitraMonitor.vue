@@ -8,6 +8,9 @@
         </v-card>
       </v-flex>
       <v-flex xs12>
+        <MitraStats />
+      </v-flex>
+      <v-flex xs12>
         <MitraOrderTable v-if="loaded" :data-mitra="vendor_history"/>
       </v-flex>
     </v-layout>
@@ -18,12 +21,14 @@
 import axios from '@/services/service.api.js';
 import chart from '@/components/chart.js';
 import MitraOrderTable from '@/components/MitraOrderTable.vue';
+import MitraStats from '@/components/MitraStats.vue';
 import moment from 'moment';
 
   export default {
     components: {
       chart,
       MitraOrderTable,
+      MitraStats
     },
     data() {
       return {
