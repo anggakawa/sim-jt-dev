@@ -454,7 +454,7 @@
         if (diff > 0) {
           const f = moment.utc(diff).format('HH:mm:ss');
           this.chip_color = 'green';
-          this.duration = f;
+          this.duration = 'Sisa waktu : ' + f;
         } else {
           const diff = current_date.diff(deadline);
           const f = moment.utc(diff).format('HH:mm:ss');
