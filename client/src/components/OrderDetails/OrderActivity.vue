@@ -1,7 +1,10 @@
 <template>
   <v-layout row wrap>
-    <v-flex xs12>
+    <v-flex xs8>
       <h2>Aktivitas</h2>
+    </v-flex>
+    <v-flex xs4>
+      <v-chip :color="chip_color" text-color="white"><span class="font-weight-medium">{{ getDay }}</span></v-chip>
     </v-flex>
     <v-flex xs12>
       <v-card v-if="checkIfEligible()">
@@ -273,6 +276,7 @@
 <script>
   import FileUpload from './UploadForm.vue';
   import axios from '@/services/service.api.js';
+  import moment from 'moment';
 
   export default {
     data() {
@@ -297,6 +301,10 @@
         vendors: [],
         files: [],
         showActivity: false,
+        latestDate: '',
+        deadline: '',
+        duration: 0,
+        chip_color: 'red',
       };
     },
     watch: {
@@ -429,13 +437,44 @@
         .then((result) => {
           this.insert_id = result.data.insertId;
         });
+      },
+      getLatestLogDate() {
+        return axios.get('order-history/latest-date/' + this.$route.params.order_id)
+          .then(result => this.latestDate = result.data[0].date);
+      },
+      getDeadlineDate() {
+        const time = this.current_activity.max_duration || 2;
+        this.deadline = moment(this.latestDate).add(time, 'hours').utc().format();
+        console.log(moment(this.deadline).format("LLLL"));
+      },
+      getDifferences() {
+        const current_date = moment();
+        const deadline = moment(this.deadline);
+        const diff = deadline.diff(current_date);
+        if (diff > 0) {
+          const f = moment.utc(diff).format('HH:mm:ss');
+          this.chip_color = 'green';
+          this.duration = f;
+        } else {
+          const diff = current_date.diff(deadline);
+          const f = moment.utc(diff).format('HH:mm:ss');
+          this.chip_color = 'red';
+          this.duration = 'Durasi anda ' + f + ' lebih'; 
+        }
       }
     },
     created() {
       Promise.all([
         this.getCurrentActivity(),
-        this.getVendors()
-      ]);
+        this.getVendors(),
+        this.getLatestLogDate()
+      ]).then(() => this.getDeadlineDate())
+      .then(() => setInterval(() => this.getDifferences(), 1000));
+    },
+    computed: {
+      getDay() {
+        return this.duration;
+      }
     },
   }
 

@@ -33,8 +33,6 @@ module.exports = (router) => {
   router.post('/uploads/:orderLogsId', attachmentController.uploadFiles);
   router.get('/download/:attachmentId', attachmentController.downloadFile);
   
-  router.get('/mitra-history/timelines', MitraController.getMitraTimeline);
-
   // authenticate user
   router.use((req, res, next) => {
     const header = req.headers['authorization'];
@@ -106,6 +104,7 @@ module.exports = (router) => {
   router.delete('/order/:orderId', OrderController.deleteOrder);
 
   router.get('/order-history/all', OrderHistory.getAllOrderHistory);
+  router.get('/order-history/latest-date/:orderId', OrderHistory.getOrderLogDate);
   router.get('/order-history/:orderId', OrderHistory.getAllOrderHistoryPerId);
   router.post('/order-history/post', OrderHistory.createNewOrderLog);
   router.post('/order-history/new', OrderHistory.createNewOrderlogBlank);
@@ -120,5 +119,6 @@ module.exports = (router) => {
   router.put('/current-activity/:orderId/:activityId', ActivityTracker.updateActivity);
 
   router.get('/mitra-history/all', MitraController.getMitraOrderList);
+  router.get('/mitra-history/timelines', MitraController.getMitraTimeline);
 
 }

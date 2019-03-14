@@ -95,6 +95,19 @@ module.exports = {
         result: 'something gone wrong',
       });
     }
-  }
+  },
+
+  async getOrderLogDate(req, res) {
+    try {
+      const result = await pool.query(`SELECT MAX(date) AS date FROM order_logs WHERE order_id = '${req.params.orderId}'`);
+      res.json(result);
+    } catch (error) {
+      console.log(error);
+      res.json({
+        success: false,
+        result: 'something gone wrong',
+      });
+    }
+  },
 
 }
