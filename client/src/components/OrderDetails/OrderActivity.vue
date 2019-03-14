@@ -431,7 +431,7 @@
         });
       }
     },
-    mounted() {
+    created() {
       Promise.all([
         this.getCurrentActivity(),
         this.getVendors()
