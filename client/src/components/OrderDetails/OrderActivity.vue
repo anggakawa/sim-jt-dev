@@ -1,10 +1,10 @@
 <template>
   <v-layout row wrap>
-    <v-flex xs8>
-      <h2>Aktivitas</h2>
-    </v-flex>
-    <v-flex xs4>
-      <v-chip :color="chip_color" text-color="white"><span class="font-weight-medium">{{ getDay }}</span></v-chip>
+    <v-flex xs12>
+      <div style="margin-bottom: 30px; padding-top: 5px">
+        <h2 id="activity-title">Aktivitas</h2>
+        <v-chip label :color="chip_color" text-color="white" id="chip"><span class="font-weight-medium">{{ getDay }}</span></v-chip>
+      </div>
     </v-flex>
     <v-flex xs12>
       <v-card v-if="checkIfEligible()">
@@ -201,7 +201,8 @@
       </v-card>
       <v-card class="text-md-center" v-else>
         <div style="padding: 50px; font-size: 20px">
-          No activity to do
+          <h2>{{ current_activity.activity_name }}</h2>
+          <p>No activity to do.</p>
         </div>
       </v-card>
     </v-flex>
@@ -443,7 +444,7 @@
           .then(result => this.latestDate = result.data[0].date);
       },
       getDeadlineDate() {
-        const time = this.current_activity.max_duration || 2;
+        const time = this.current_activity.max_duration || 88;
         this.deadline = moment(this.latestDate).add(time, 'hours').utc().format();
         console.log(moment(this.deadline).format("LLLL"));
       },
@@ -456,10 +457,10 @@
           this.chip_color = 'green';
           this.duration = 'Sisa waktu : ' + f;
         } else {
-          const diff = current_date.diff(deadline);
-          const f = moment.utc(diff).format('HH:mm:ss');
+          const f = current_date.to(deadline);
+          // const f = moment.duration(diff).asHours();
           this.chip_color = 'red';
-          this.duration = 'Durasi anda ' + f + ' lebih'; 
+          this.duration = 'Expired ' + f; 
         }
       }
     },
@@ -479,3 +480,13 @@
   }
 
 </script>
+
+<style>
+#chip {
+  position: absolute;
+  right: 35px;
+}
+#activity-title {
+  position: absolute;
+}
+</style>
