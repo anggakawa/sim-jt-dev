@@ -12,10 +12,14 @@ const helmet = require('helmet');
 const serveStatic = require('serve-static');
 const path = require('path');
 
+const http = require('http');
+
 const routes = require('./route/route.js');
 
 const app = express();
 const port = 3000;
+
+const httpServer = http.createServer(app);
 
 app.use(morgan('combined'));
 app.use(bodyParser.urlencoded( {extended: false} ));
@@ -30,4 +34,5 @@ const router = express.Router();
 routes(router);
 app.use('/api', router);
 
-app.listen(port, () => console.log('running on ' + port));
+// app.listen(port, () => console.log('running on ' + port));
+httpServer.listen(port, () => console.log('running on port ' + port));
