@@ -42,6 +42,12 @@
                 <v-flex xs6>
                   <v-select :items="options_select" v-model="editedItem.can_choose_vendor" item-text="text" item-value="value" label="Can Choose Vendor" required></v-select>
                 </v-flex>
+                <v-flex xs6>
+                  <v-select :items="options_select" v-model="editedItem.can_cancel" item-text="text" item-value="value" label="Can Cancel" required></v-select>
+                </v-flex>
+                <v-flex xs12>
+                  <v-text-field type="number" v-model="editedItem.max_duration" label="Maximum Duration (in hours)"></v-text-field>
+                </v-flex>
               </v-layout>
             </v-container>
           </v-card-text>
@@ -68,6 +74,8 @@
         <td>{{ YesOrNo(props.item.require_attachment) }}</td>
         <td>{{ YesOrNo(props.item.can_close) }}</td>
         <td>{{ YesOrNo(props.item.can_choose_vendor) }}</td>
+        <td>{{ YesOrNo(props.item.can_cancel) }}</td>
+        <td>{{ props.item.max_duration }}</td>
         <td class="justify-center">
           <v-icon
             small
@@ -113,6 +121,8 @@
         { text: 'Require Attachment', value: 'require_attachment'},
         { text: 'Can Close', value: 'can_close' },
         { text: 'Can Choose Vendor', value: 'can_choose_vendor' },
+        { text: 'Can Cancel', value: 'can_cancel' },
+        { text: 'Max Duration', value: 'max_duration' },
         { text: 'Actions', value: 'action', sortable: false }
       ],
       activities: [],
@@ -138,6 +148,8 @@
         require_attachment: '',
         can_close: '',
         can_choose_vendor: '',
+        can_cancel: '',
+        max_duration: '',
       },
       defaultItem: {
       }
