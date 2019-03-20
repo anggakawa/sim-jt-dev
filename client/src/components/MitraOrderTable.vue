@@ -18,6 +18,8 @@
             checkStatus(props.item.open_status) }}</v-chip>
           <v-chip v-if="props.item.open_status === 3" color="grey darken-2" text-color="white">{{
             checkStatus(props.item.open_status) }}</v-chip>
+          <v-chip v-if="props.item.open_status === 4" color="blue darken-2" text-color="white">{{
+            checkStatus(props.item.open_status) }}</v-chip>  
         </td>
         <td>
           <router-link :to="{ name: 'order', 
@@ -85,8 +87,10 @@ export default {
           return 'ONGOING';
         }else if (props === 2) {
           return 'CLOSED';
-        } else {
+        } else if (props === 3) {
           return 'CANCELED';
+        } else {
+          return 'FINISHING';
         }
       },
     },

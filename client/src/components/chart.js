@@ -5,6 +5,8 @@ import { Bar } from 'vue-chartjs';
 
 // Exporting this so it can be used in other components
 
+// !!! some logic error here
+
 export default {
   extends: Bar,
   props: ['chartdata'],
@@ -41,6 +43,15 @@ export default {
             // Data to be represented on y-axis
             data: [],
           },
+          {
+            label: 'Finishing',
+            backgroundColor: '#436b95',
+            pointBackgroundColor: 'white',
+            borderWidth: 1,
+            pointBorderColor: '#249EBF',
+            // Data to be represented on y-axis
+            data: [],
+          },
         ],
       },
       // Chart.js options that controls the appearance of the chart
@@ -70,6 +81,7 @@ export default {
       orderOngoing: [],
       orderClosed: [],
       orderCanceled: [],
+      orderFinishing: [],
       mitra: [],
     };
   },
@@ -132,6 +144,25 @@ export default {
       })
       .then((result) => {
         this.datacollection.datasets[2].data = result;
+      })
+      .then(() => {
+        const orderOg = this.orderFinishing;
+        const a = [];
+        let previous;
+        for (let index = 0; index < orderOg.length; index++) {
+          const element = orderOg[index];
+          if (element.username !== previous) {
+            a.push(1);
+          } else {
+            a[a.length - 1]++;
+          }
+          previous = element.username;
+        }
+        console.log(orderOg);
+        return a;
+      })
+      .then((result) => {
+        this.datacollection.datasets[3].data = result;
       });
     promise1.then(() => this.renderChart(this.datacollection, this.options));
   },
@@ -146,9 +177,11 @@ export default {
       const result_1 = await new_array.filter(value => value.open_status === 1);
       const result_2 = await new_array.filter(value => value.open_status === 2);
       const result_3 = await new_array.filter(value => value.open_status === 3);
+      const result_4 = await new_array.filter(value => value.open_status === 4);
       this.orderOngoing = result_1;
       this.orderClosed = result_2;
       this.orderCanceled = result_3;
+      this.orderFinishing = result_4;
       this.datacollection.labels = name;
     },
     async dataPerMitra(array, mitra) {
