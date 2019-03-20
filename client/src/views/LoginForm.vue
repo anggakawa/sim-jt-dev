@@ -13,7 +13,7 @@
           </v-toolbar>
           <v-card-text>
             <v-form>
-              <v-text-field prepend-icon="person" v-model="username" name="login" label="Login"
+              <v-text-field id="username" prepend-icon="person" v-model="username" name="login" label="Login"
                 type="text"></v-text-field>
               <v-text-field prepend-icon="lock" name="password" v-model="password" label="Password"
                 id="password" type="password" @keyup.enter="login"></v-text-field>
@@ -21,7 +21,7 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn @click="login" class="red white--text">Login</v-btn>
+            <v-btn id="submit-form" @click="login" class="red white--text">Login</v-btn>
           </v-card-actions>
         </v-card>
       </v-flex>

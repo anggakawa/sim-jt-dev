@@ -38,7 +38,7 @@
     </v-navigation-drawer>
 
     <v-toolbar class="red darken-3 white--text" fixed app :clipped-left="clipped">
-      <v-toolbar-side-icon @click.stop="drawer = !drawer" class="white--text"></v-toolbar-side-icon>
+      <v-toolbar-side-icon id="minimize-menu" @click.stop="drawer = !drawer" class="white--text"></v-toolbar-side-icon>
       <v-toolbar-title>Menu</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn class="white--text" icon>
@@ -82,6 +82,11 @@ export default {
           action: 'person', 
           title: 'My Account', 
           path: '/my-account',
+        },
+        {
+          action: 'feedback', 
+          title: 'About Page', 
+          path: '/about',
         },
       ],
     };

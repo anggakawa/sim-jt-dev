@@ -17,7 +17,7 @@
       </v-flex>
 
       <v-flex xs3>
-        <v-card color="green darken-2" class="white--text" @click="changeOrder(1)" style="cursor: pointer">
+        <v-card id="order-ongoing" color="green darken-2" class="white--text" @click="changeOrder(1)" style="cursor: pointer">
           <v-card-title primary-title>
             <div>
               <h3 class="title font-weight-medium">Order Ongoing</h3>
