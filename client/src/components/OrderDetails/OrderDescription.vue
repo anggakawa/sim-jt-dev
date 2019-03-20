@@ -12,6 +12,8 @@
                   checkStatus(order_desc.open_status) }}</v-chip>
                 <v-chip v-if="order_desc.open_status === 3" color="grey darken-2" text-color="white">{{
                   checkStatus(order_desc.open_status) }}</v-chip>
+                <v-chip v-if="order_desc.open_status === 4" color="blue darken-2" text-color="white">{{
+                  checkStatus(order_desc.open_status) }}</v-chip>
       </v-flex>
     <v-flex xs6>
       <v-text-field :value="changeDate(order_desc.date)" readonly label="Tanggal">
@@ -94,8 +96,10 @@
           return 'ONGOING';
         }else if (props === 2) {
           return 'CLOSED';
-        } else {
+        } else if (props === 3) {
           return 'CANCELED';
+        } else {
+          return 'FINISHING';
         }
       },
     }

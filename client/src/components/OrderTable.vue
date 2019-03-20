@@ -1,8 +1,8 @@
 <template>
   <v-container grid-list-md>
     <v-layout row wrap>
-      <v-flex xs3>
-        <v-card color="blue darken-2" class="white--text" @click="changeOrder(0)" style="cursor: pointer">
+      <v-flex xs2>
+        <v-card color="yellow darken-2" class="white--text" @click="changeOrder(0)" style="cursor: pointer">
           <v-card-title primary-title>
             <div>
               <h3 class="title font-weight-medium">Total</h3>
@@ -16,7 +16,7 @@
         </v-card>
       </v-flex>
 
-      <v-flex xs3>
+      <v-flex xs2>
         <v-card id="order-ongoing" color="green darken-2" class="white--text" @click="changeOrder(1)" style="cursor: pointer">
           <v-card-title primary-title>
             <div>
@@ -31,7 +31,7 @@
         </v-card>
       </v-flex>
 
-      <v-flex xs3>
+      <v-flex xs2>
         <v-card color="red darken-2" class="white--text" @click="changeOrder(2)" style="cursor: pointer">
           <v-card-title primary-title>
             <div>
@@ -46,7 +46,7 @@
         </v-card>
       </v-flex>
 
-      <v-flex xs3>
+      <v-flex xs2>
         <v-card color="grey darken-2" class="white--text" @click="changeOrder(3)" style="cursor: pointer">
           <v-card-title primary-title>
             <div>
@@ -56,6 +56,21 @@
           <v-card-text>
             <div class="text-xs-center font-weight-medium display-1">
               {{countCanceledOrder}}
+            </div>
+          </v-card-text>
+        </v-card>
+      </v-flex>
+
+      <v-flex xs2>
+        <v-card color="blue darken-2" class="white--text" @click="changeOrder(4)" style="cursor: pointer">
+          <v-card-title primary-title>
+            <div>
+              <h3 class="title font-weight-medium">Finishing Order</h3>
+            </div>
+          </v-card-title>
+          <v-card-text>
+            <div class="text-xs-center font-weight-medium display-1">
+              {{countFinishingOrder}}
             </div>
           </v-card-text>
         </v-card>
@@ -125,7 +140,7 @@
                       </v-flex>
                       <v-flex xs12 v-if="!checkEditedIndex">
                         <v-text-field label="Keterangan" 
-                         hint="1 for Ongoing, 2 for Closed, 3 for Canceled" type="number" v-model="editedItem.open_status" persistent-hint></v-text-field>
+                         hint="1 for Ongoing, 2 for Closed, 3 for Canceled, 4 for Finishing" type="number" v-model="editedItem.open_status" persistent-hint></v-text-field>
                       </v-flex>
                     </v-layout>
                   </v-container>
@@ -159,6 +174,8 @@
                 <v-chip v-if="props.item.open_status === 2" color="red" text-color="white">{{
                   checkStatus(props.item.open_status) }}</v-chip>
                 <v-chip v-if="props.item.open_status === 3" color="grey darken-2" text-color="white">{{
+                  checkStatus(props.item.open_status) }}</v-chip>
+                <v-chip v-if="props.item.open_status === 4" color="blue darken-2" text-color="white">{{
                   checkStatus(props.item.open_status) }}</v-chip>
               </td>
               <td class="text-xs-left">{{ props.item.customer_name }}</td>
@@ -201,6 +218,7 @@
       order_open: [],
       order_closed: [],
       order_canceled: [],
+      order_finishing: [],
       pagination: {
         sortBy: 'order_id'
       },
@@ -293,6 +311,10 @@
 
       countCanceledOrder() {
         return this.order_canceled.length;
+      },
+
+      countFinishingOrder() {
+        return this.order_finishing.length;
       }
     },
 
@@ -322,6 +344,9 @@
             });
             this.order_canceled = result.data.filter((value) => {
               return value.open_status === 3
+            });
+            this.order_finishing = result.data.filter((value) => {
+              return value.open_status === 4
             });
           }),
           axios.get('offices')
@@ -375,8 +400,10 @@
           return 'ONGOING';
         }else if (props === 2) {
           return 'CLOSED';
-        } else {
+        } else if (props === 3) {
           return 'CANCELED';
+        } else {
+          return 'FINISHING';
         }
       },
 
@@ -397,8 +424,10 @@
           this.orders = this.order_open;
         } else if (checker === 2) {
           this.orders = this.order_closed;
-        } else {
+        } else if (checker === 3) {
           this.orders = this.order_canceled;
+        } else {
+          this.orders = this.order_finishing;
         }
       }, 
 

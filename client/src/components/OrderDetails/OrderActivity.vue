@@ -162,7 +162,7 @@
 
               </v-container>
 
-              <v-flex xs12 v-if="current_activity.can_close || current_activity.can_cancel">
+              <v-flex xs12 v-if="current_activity.can_close || current_activity.can_cancel || current_activity.can_finish">
                 Apakah anda ingin menutup (close) atau membatalkan Order?
                 <v-btn round color="success" dark @click="dialog2 = true">
                   CLOSE ORDER
@@ -171,8 +171,8 @@
                   <v-card>
                     <v-card-title class="headline">Close Order?</v-card-title>
                     <v-card-text>
-                      <p>Anda akan menutup order, apakah anda yakin?</p>
-                      *<b>Anda tidak dapat membatalkan aksi ketika sudah melakukan close order</b>
+                      <p>Anda akan menutup/cancel order, apakah anda yakin?</p>
+                      *<b>Anda tidak dapat membatalkan aksi ketika sudah melakukan aksi</b>
                     </v-card-text>
                     <v-card-actions>
                       <v-btn color="green darken-1" flat="flat" @click="dialog2 = false">
@@ -181,6 +181,9 @@
                       <v-spacer></v-spacer>
                       <v-btn v-if="current_activity.can_cancel" color="green darken-1" flat="flat" @click="closeOrder(3)">
                         Cancel Order
+                      </v-btn>
+                      <v-btn v-if="current_activity.can_finish" color="green darken-1" flat="flat" @click="closeOrder(4)">
+                        Finish Order
                       </v-btn>
                       <v-btn v-if="current_activity.can_close" color="green darken-1" flat="flat" @click="closeOrder(2)">
                         Agree Order
