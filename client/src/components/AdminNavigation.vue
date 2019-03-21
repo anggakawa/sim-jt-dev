@@ -23,6 +23,11 @@ export default {
           path: '/users',
         },
         {
+          action: 'business', 
+          title: 'STO Office', 
+          path: '/STO-Office',
+        },
+        {
           action: 'timeline',
           title: 'Activities',
           path: '/activities',
