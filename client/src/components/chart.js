@@ -117,7 +117,7 @@ export default {
         this.datacollection.datasets[1].data = result;
       })
       .then(() => {
-        const orderOg = this.orderClosed;
+        const orderOg = this.orderCanceled;
         const mitra = this.datacollection.labels;
         const counter = Array.from(mitra).map((x) => {
           return orderOg.filter(value => value.username === x).length;
