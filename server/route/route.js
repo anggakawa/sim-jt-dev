@@ -74,6 +74,9 @@ module.exports = (router) => {
 
   // get data sto 
   router.get('/offices', STOOfficeController.getAllOffice);
+  router.post('/offices/add', STOOfficeController.createNewOffice);
+  router.put('/updateOffice/:sto_office_id', STOOfficeController.updateOffice);
+  router.delete('/deleteOffice/:sto_office_id', STOOfficeController.deleteOffice);
 
   // activity routes
   router.get('/activities', ActivitiyController.getAllActivity);

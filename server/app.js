@@ -22,10 +22,10 @@ const app = express();
 const port = 3000;
 
 const httpServer = http.createServer(app);
-const httpsServer = https.createServer({ 
-    key: fs.readFileSync('./credentials/server.key'), 
-    cert: fs.readFileSync('./credentials/server.cert')
-  }, app);
+// const httpsServer = https.createServer({ 
+//     // key: fs.readFileSync('./credentials/server.key'), 
+//     // cert: fs.readFileSync('./credentials/server.cert')
+//   }, app);
 
 app.use(morgan('combined'));
 app.use(bodyParser.urlencoded( {extended: false} ));
