@@ -6,7 +6,7 @@
           <v-card-title class="title">{{ item.user_description }}</v-card-title>
           <v-card-text>
             <p class="font-weight-medium font-italic">Rata-rata penyelesaian</p>
-            <span class="display-1 font-weight-bold">{{ getTimelinePerMitra(item.user_id) }}</span>
+            <span class="font-weight-bold">{{ getTimelinePerMitra(item.username) }}</span>
           </v-card-text>
         </v-card>
       </v-flex>
@@ -54,10 +54,12 @@ export default {
       axios.get('/vendors').then((result) => this.mitra = result.data);
     },
     getTimelines() {
-      axios.get('/mitra-history/timelines').then((result) => this.timelines = result.data);
+      axios.get('/mitra-history/timelines').then((result) => {
+        this.timelines = result.data
+      });
     },
     getTimelinePerMitra(mitra) {
-      let arrayperMitra = this.timelines.filter((value) => value.user_id === mitra);
+      let arrayperMitra = this.timelines.filter((value) => value.username === mitra);
       let result = groupBy(arrayperMitra, 'order_id');
       let differences = [];
       let sum = 0;
@@ -71,8 +73,8 @@ export default {
       differences.forEach(value => {
         sum += value;
       });
-      let stats = moment.duration(sum / differences.length); 
-      return (`${stats.days()} hari, ${stats.hours()} jam, ${stats.minutes()} menit`);
+      let stats = moment.duration(sum / differences.length);
+      return (`${stats.days()} hari, ${stats.hours()} jam, ${stats.minutes()} menit, ${stats.seconds()} detik`);
     }
   },
   mounted() {

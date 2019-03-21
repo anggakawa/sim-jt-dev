@@ -70,7 +70,6 @@ module.exports = {
 
   async updateActivity(req, res) {
     try {
-      console.log(req.body);
       const result = pool.query(`UPDATE activity SET activity_name = '${req.body.activity_name}', activity_description = '${req.body.activity_description}',
         role_id = ${req.body.role_id}, require_status = ${req.body.require_status}, require_information = ${req.body.require_information}, 
         require_attachment = ${req.body.require_attachment}, can_close = ${req.body.can_close}, can_choose_vendor = ${req.body.can_choose_vendor},

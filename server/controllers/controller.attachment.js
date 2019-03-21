@@ -17,7 +17,6 @@ module.exports = {
   
   async uploadFiles(req, res) {
     upload(req, res, (err) => {
-      console.log(req.files);
       if (err) {
         console.log(err);
         return res.json({

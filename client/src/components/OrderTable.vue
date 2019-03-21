@@ -333,7 +333,6 @@
         await Promise.all([
           axios.get('orders')
           .then((result) => {
-            console.log(result);
             this.orders = result.data
             this.order_origin = result.data
             this.order_open = result.data.filter((value) => {

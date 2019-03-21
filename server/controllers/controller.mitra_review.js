@@ -18,10 +18,13 @@ module.exports = {
 
   async getMitraTimeline(req, res) {
     try {
-      const result = await pool.query(`SELECT * FROM order_logs o INNER JOIN users u ON u.user_id = o.user_id
+      const result = await pool.query(`SELECT o.order_id, 
+        u.username, u.user_id, u.user_description, o.date, a.activity_name, a.activity_description,
+        i.open_status, a.activity_id 
+      FROM order_logs o INNER JOIN users u ON u.user_id = o.user_id
         INNER JOIN activity a ON a.activity_id = o.activity_id 
         INNER JOIN orders i ON i.order_id = i.order_id
-        WHERE u.role_id = 3 AND i.open_status = 2 OR i.open_status = 3`);
+        WHERE u.role_id = 3 AND (i.open_status = 2 OR i.open_status = 3)`);
       res.json(result);
     } catch (error) {
       console.log(error);
