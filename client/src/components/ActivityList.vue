@@ -45,6 +45,9 @@
                 <v-flex xs6>
                   <v-select :items="options_select" v-model="editedItem.can_cancel" item-text="text" item-value="value" label="Can Cancel" required></v-select>
                 </v-flex>
+                <v-flex xs6>
+                  <v-select :items="options_select" v-model="editedItem.can_finish" item-text="text" item-value="value" label="Can Finish" required></v-select>
+                </v-flex>
                 <v-flex xs12>
                   <v-text-field type="number" v-model="editedItem.max_duration" label="Maximum Duration (in hours)"></v-text-field>
                 </v-flex>
@@ -75,6 +78,7 @@
         <td>{{ YesOrNo(props.item.can_close) }}</td>
         <td>{{ YesOrNo(props.item.can_choose_vendor) }}</td>
         <td>{{ YesOrNo(props.item.can_cancel) }}</td>
+        <td>{{ YesOrNo(props.item.can_finish) }}</td>
         <td>{{ props.item.max_duration }}</td>
         <td class="justify-center">
           <v-icon
@@ -122,6 +126,7 @@
         { text: 'Can Close', value: 'can_close' },
         { text: 'Can Choose Vendor', value: 'can_choose_vendor' },
         { text: 'Can Cancel', value: 'can_cancel' },
+        { text: 'Can Finish', value: 'can_finish' },
         { text: 'Max Duration', value: 'max_duration' },
         { text: 'Actions', value: 'action', sortable: false }
       ],
@@ -149,7 +154,8 @@
         can_close: '',
         can_choose_vendor: '',
         can_cancel: '',
-        max_duration: '',
+        max_duration: 0,
+        can_finish: '',
       },
       defaultItem: {
       }
