@@ -1,3 +1,6 @@
+/* eslint-disable arrow-body-style */
+/* eslint-disable no-return-assign */
+/* eslint-disable no-param-reassign */
 /* eslint-disable no-unused-vars */
 /* eslint-disable camelcase */
 /* eslint-disable no-plusplus */
@@ -95,71 +98,42 @@ export default {
       resolve(this.cleanData(this.chartdata));
     }).then(() => {
       const orderOg = this.orderOngoing;
-      const a = [];
-      let previous;
-      for (let index = 0; index < orderOg.length; index++) {
-        const element = orderOg[index];
-        if (element.username !== previous) {
-          a.push(1);
-        } else {
-          a[a.length - 1]++;
-        }
-        previous = element.username;
-      }
-      return a;
+      const mitra = this.datacollection.labels;
+      const counter = Array.from(mitra).map((x) => {
+        return orderOg.filter(value => value.username === x).length;
+      });
+      return counter;
     }).then((result) => {
       this.datacollection.datasets[0].data = result;
     }).then(() => {
       const orderOg = this.orderClosed;
-      const a = [];
-      let previous;
-      for (let index = 0; index < orderOg.length; index++) {
-        const element = orderOg[index];
-        if (element.username !== previous) {
-          a.push(1);
-        } else {
-          a[a.length - 1]++;
-        }
-        previous = element.username;
-      }
-      return a;
+      const mitra = this.datacollection.labels;
+      const counter = Array.from(mitra).map((x) => {
+        return orderOg.filter(value => value.username === x).length;
+      });
+      return counter;
     })
       .then((result) => {
         this.datacollection.datasets[1].data = result;
       })
       .then(() => {
-        const orderOg = this.orderCanceled;
-        const a = [];
-        let previous;
-        for (let index = 0; index < orderOg.length; index++) {
-          const element = orderOg[index];
-          if (element.username !== previous) {
-            a.push(1);
-          } else {
-            a[a.length - 1]++;
-          }
-          previous = element.username;
-        }
-        return a;
+        const orderOg = this.orderClosed;
+        const mitra = this.datacollection.labels;
+        const counter = Array.from(mitra).map((x) => {
+          return orderOg.filter(value => value.username === x).length;
+        });
+        return counter;
       })
       .then((result) => {
         this.datacollection.datasets[2].data = result;
       })
       .then(() => {
         const orderOg = this.orderFinishing;
-        const a = [];
-        let previous;
-        for (let index = 0; index < orderOg.length; index++) {
-          const element = orderOg[index];
-          if (element.username !== previous) {
-            a.push(1);
-          } else {
-            a[a.length - 1]++;
-          }
-          previous = element.username;
-        }
-        console.log(orderOg);
-        return a;
+        const mitra = this.datacollection.labels;
+        const counter = Array.from(mitra).map((x) => {
+          return orderOg.filter(value => value.username === x).length;
+        });
+        return counter;
       })
       .then((result) => {
         this.datacollection.datasets[3].data = result;
