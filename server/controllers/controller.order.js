@@ -43,7 +43,7 @@ module.exports = {
         .then(() => {
           return pool.query(`INSERT INTO order_logs
             (order_id, activity_id, information, status, date, user_id)
-            VALUES ('${req.body.order_id}', 17, '${req.body.information}',
+            VALUES ('${req.body.order_id}', 1, '${req.body.information}',
             1, NOW(), ${req.decoded.user_id})`);
         });
       return res.json({
