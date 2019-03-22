@@ -97,7 +97,10 @@ module.exports = {
 
   async deleteOrder(req, res) {
     try {
-      const result = await pool.query(`DELETE FROM orders WHERE order_id = '${req.params.orderId}'`);
+      const result = await pool.query(`DELETE FROM order_logs WHERE order_id = '${req.params.orderId}'`)
+        .then(() => {
+          return pool.query(`DELETE FROM orders WHERE order_id = '${req.params.orderId}'`)
+        });
       res.json({
         success: true, 
         result: result
