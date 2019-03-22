@@ -19,7 +19,7 @@ module.exports = {
   async createConnection(req, res) {
     try {
       const result = await pool.query(`INSERT INTO activity_connections (activity_id, activity_next_id, activity_alternate_id, activity_back_id)
-        VALUES (${req.body.activity_id}, ${req.body.activity_next_id}, ${req.body.activity_alt_id}, ${req.body.activity_back_id})`);
+        VALUES (${req.body.activity_id}, ${req.body.activity_next_id}, ${req.body.activity_alternate_id}, ${req.body.activity_back_id})`);
       res.json({success: true, results: result});
     } catch (error) {
       console.log(error);
