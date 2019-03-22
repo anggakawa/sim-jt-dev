@@ -64,7 +64,7 @@
                 </v-dialog>
               </v-flex>
 
-              <v-flex xs12>
+              <v-flex xs12 v-if="current_activity.require_information || current_activity.require_status || current_activity.require_attachment">
                 Tekan untuk memasukkan informasi dan lampiran
                 <v-btn round :loading="loading2" :disabled="loading2"
                   @click="createNewOrderHistory" color="blue-grey"
@@ -76,7 +76,7 @@
 
               <v-container v-show="showActivity">
 
-              <v-flex xs12>
+              <v-flex xs12 v-if="current_activity.require_information || current_activity.require_status">
                 1. Masukkan Informasi dan Keputusan
                 <v-dialog v-model="dialog3" persistent max-width="600px">
                   <v-btn round slot="activator" color="success" @click="getOptions()">Tambahkan Informasi</v-btn>
