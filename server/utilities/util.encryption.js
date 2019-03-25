@@ -1,7 +1,9 @@
+require('dotenv').config();
+
 const crypto = require('crypto');
 // save variables below to environment variables
-const algorithm = 'aes-256-ctr';
-const password = 'dFeCCasdwww'; 
+const algorithm = process.env.ENC_ALGO;
+const password = process.env.ENC_PASS;
 
 // need to update the logic using chiperIV
 module.exports = {
