@@ -397,7 +397,8 @@
         axios.put('order/' + this.$route.params.order_id + '/' + props)
           .then(() => {
             this.dialog2 = false;
-          })
+            this.e1 = 5;
+          });
       },
       uploadFiles() {
         // console.log(typeof this.insert_id === typeof 1)
