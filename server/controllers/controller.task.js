@@ -14,7 +14,8 @@ module.exports = {
           INNER JOIN activity_track at ON o.order_id = at.order_id
           INNER JOIN activity a ON a.activity_id = at.activity_id
           INNER JOIN order_vendor_history ov ON ov.order_id = o.order_id
-          WHERE a.role_id = ${parseInt(req.params.roleId)} AND open_status = 1 AND ov.vendor_id = ${req.decoded.user_id}`);
+          WHERE a.role_id = ${parseInt(req.params.roleId)} AND open_status = 1 AND ov.vendor_id = ${req.decoded.user_id}
+          AND ov.replaced = 0`);
         res.json(result);
       }
     } catch (error) {
