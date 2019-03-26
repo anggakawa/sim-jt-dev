@@ -49,6 +49,10 @@
                       <v-container grid-list-md>
                         <v-layout wrap>
                           <v-flex xs12>
+                            <v-select v-model="replaced" :items="options_select" item-text="text"
+                            :rules="[v => !!v || 'Item is required']" item-value="value" label="Status Pemilihan" required></v-select>
+                          </v-flex>
+                          <v-flex xs12>
                             <v-select v-model="selected_vendor" :items="vendors" item-text="user_description"
                             :rules="[v => !!v || 'Item is required']" item-value="user_id" label="Pilih Vendor" required></v-select>
                           </v-flex>
@@ -298,6 +302,7 @@
         selected_option: 1,
         selected_vendor: '',
         vendor_information: '',
+        replaced: '',
         insert_id: '',
         options: [],
         information: '',
@@ -309,6 +314,16 @@
         deadline: '',
         duration: 0,
         chip_color: 'red',
+        options_select: [
+          {
+            text: 'Ganti Vendor', 
+            value: 1,
+          },
+          {
+            text: 'Pilih Baru', 
+            value: 0,
+          },
+        ],
       };
     },
     watch: {
@@ -373,8 +388,9 @@
           order_id: this.$route.params.order_id,
           vendor_id: this.selected_vendor,
           vendor_information: this.vendor_information,
+          replaced: this.replaced
         }).then(() => {
-          this.el1 = 2;
+          this.e1 = 2;
           this.dialog4 = false;
         }).catch((error) => console.log(error));
       },
