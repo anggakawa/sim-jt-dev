@@ -37,6 +37,20 @@ module.exports = {
         result: 'something gone wrong'
       })
     }
+  },
+
+  async checkIfVendorEligible(req, res) {
+    try {
+      const result = await pool.query(`SELECT replaced FROM order_vendor_history ov WHERE ov.order_id = '${req.params.orderId}'
+        AND ov.vendor_id = ${req.decoded.user_id}`);
+      res.json(result);
+    } catch (error) {
+      console.log(error);
+      res.json({
+        success: false,
+        result: 'something gone wrong'
+      })
+    }
   }
 
 

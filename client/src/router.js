@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+import Api from './services/service.api';
 import Home from './views/Home.vue';
 import LoginForm from './views/LoginForm.vue';
 import OrderDescription from './views/OrderDescription.vue';
@@ -37,7 +38,8 @@ const router = new Router({
       name: 'order',
       component: OrderDescription,
       meta: {
-        requiresAuth: true,
+        // requiresAuth: true,
+        checkAuthorized: true,
       },
     },
     {
@@ -144,8 +146,28 @@ router.beforeEach((to, from, next) => {
         path: '/',
       });
     }
-  } else {
-    next();
+  } else if (to.matched.some(address => address.meta.checkAuthorized)) {
+    if (!store.getters.isAuthenticated) {
+      next({
+        path: '/login',
+      });
+    } else {
+      if (store.getters.roleStatus === '3') {
+        (async function checkAuthorized() {
+          const result = await Api.get(`order-vendor/check/${to.params.order_id}`);
+          if (result.data.length > 0) {
+            if (result.data[0].replaced === 0) {
+              next();
+            }
+          } else {
+            next({
+              path: '/',
+            });
+          }
+        }());
+      }
+      next();
+    }
   }
 });
 

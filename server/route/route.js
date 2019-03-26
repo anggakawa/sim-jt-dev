@@ -30,8 +30,6 @@ module.exports = (router) => {
 
   router.get('/', (req, res) => res.send('Hello World'));
   router.post('/token', UserController.authenticateUser);
-  router.post('/uploads/:orderLogsId', attachmentController.uploadFiles);
-  router.get('/download/:attachmentId', attachmentController.downloadFile);
   
   // authenticate user
   router.use((req, res, next) => {
@@ -55,6 +53,9 @@ module.exports = (router) => {
       });
     }
   });
+
+  router.post('/uploads/:orderLogsId', attachmentController.uploadFiles);
+  router.get('/download/:attachmentId', attachmentController.downloadFile);
 
   router.get('/tasks/:roleId', TaskController.getTask);
 
@@ -115,6 +116,7 @@ module.exports = (router) => {
   router.delete('/order-history/:orderLogId', OrderHistory.deleteOrderLog);
   
   router.post('/order-vendor', OrderVendorHistory.addNewOrderVendor);
+  router.get('/order-vendor/check/:orderId', OrderVendorHistory.checkIfVendorEligible);
   router.get('/order-vendor/:orderId', OrderVendorHistory.getOrderVendor);
 
   router.get('/activity-trackers', ActivityTracker.getAllActivityTracks);
