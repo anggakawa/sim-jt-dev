@@ -59,51 +59,50 @@
 </template>
 
 <script>
-  import axios from '@/services/service.api.js';
-  import moment from 'moment';
+import axios from '@/services/service.api.js';
+import moment from 'moment';
 
-  export default {
-    data() {
-      return {
-        order_desc: {},
-        vendor_name: 'Tidak Ada',
+export default {
+  data() {
+    return {
+      order_desc: {},
+      vendor_name: 'Tidak Ada',
+    };
+  },
+  created() {
+    this.getOrderDetails();
+    this.getVendor();
+  },
+  methods: {
+    getOrderDetails() {
+      return axios.get(`order/${this.$route.params.order_id}`)
+        .then((result) => {
+          this.order_desc = result.data[0];
+        });
+    },
+    changeDate(props) {
+      return moment(props).format('DD MMMM YYYY, HH:mm:ss');
+    },
+    getVendor() {
+      return axios.get(`order-vendor/${this.$route.params.order_id}`)
+        .then((result) => {
+          if (result.data.length > 0) {
+            this.vendor_name = result.data[0].username;
+          }
+        });
+    },
+    checkStatus(props) {
+      if (props === 1) {
+        return 'ONGOING';
+      } if (props === 2) {
+        return 'CLOSED';
+      } if (props === 3) {
+        return 'CANCELED';
       }
+      return 'FINISHING';
     },
-    created() {
-      this.getOrderDetails();
-      this.getVendor();
-    },
-    methods: {
-      getOrderDetails() {
-        return axios.get('order/' + this.$route.params.order_id)
-          .then(result => {  
-            this.order_desc = result.data[0]
-          });
-      }, 
-      changeDate(props) {
-        return moment(props).format('DD MMMM YYYY, HH:mm:ss')
-      }, 
-      getVendor() {
-        return axios.get('order-vendor/' + this.$route.params.order_id)
-          .then((result) => {
-            if (result.data.length > 0) {
-              this.vendor_name = result.data[0].username;
-            }
-          });
-      },
-      checkStatus(props) {
-        if (props === 1) {
-          return 'ONGOING';
-        }else if (props === 2) {
-          return 'CLOSED';
-        } else if (props === 3) {
-          return 'CANCELED';
-        } else {
-          return 'FINISHING';
-        }
-      },
-    }
-  }
+  },
+};
 
 
 </script>

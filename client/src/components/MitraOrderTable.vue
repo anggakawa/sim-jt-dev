@@ -19,10 +19,10 @@
           <v-chip v-if="props.item.open_status === 3" color="grey darken-2" text-color="white">{{
             checkStatus(props.item.open_status) }}</v-chip>
           <v-chip v-if="props.item.open_status === 4" color="blue darken-2" text-color="white">{{
-            checkStatus(props.item.open_status) }}</v-chip>  
+            checkStatus(props.item.open_status) }}</v-chip>
         </td>
         <td>
-          <router-link :to="{ name: 'order', 
+          <router-link :to="{ name: 'order',
               params: { order_id: props.item.order_id } }">
             Lihat
           </router-link>
@@ -46,57 +46,56 @@ import moment from 'moment';
 
 export default {
   data() {
-      return {
-        search: '',
-        loaded: false,
-        headers: [
-          {
-            text: 'Tanggal',
-            value: 'date'
-          },
-          {
-            text: 'User Description',
-            align: 'center',
-            value: 'user_description'
-          },
-          {
-            text: 'username',
-            value: 'username',
-          },
-          {
-            text: 'Order ID',
-            value: 'order_id'
-          },
-          {
-            text: 'Status',
-            value: 'open_status',
-          },
-          {
-            text: 'Lihat',
-          }
-        ],
-        vendor_history : [],
+    return {
+      search: '',
+      loaded: false,
+      headers: [
+        {
+          text: 'Tanggal',
+          value: 'date',
+        },
+        {
+          text: 'User Description',
+          align: 'center',
+          value: 'user_description',
+        },
+        {
+          text: 'username',
+          value: 'username',
+        },
+        {
+          text: 'Order ID',
+          value: 'order_id',
+        },
+        {
+          text: 'Status',
+          value: 'open_status',
+        },
+        {
+          text: 'Lihat',
+        },
+      ],
+      vendor_history: [],
+    };
+  },
+  methods: {
+    changeDate(props) {
+      return moment(props).format('DD MMMM YYYY');
+    },
+    checkStatus(props) {
+      if (props === 1) {
+        return 'ONGOING';
+      } if (props === 2) {
+        return 'CLOSED';
+      } if (props === 3) {
+        return 'CANCELED';
       }
+      return 'FINISHING';
     },
-    methods: {
-      changeDate(props) {
-        return moment(props).format('DD MMMM YYYY');
-      },
-      checkStatus(props) {
-        if (props === 1) {
-          return 'ONGOING';
-        }else if (props === 2) {
-          return 'CLOSED';
-        } else if (props === 3) {
-          return 'CANCELED';
-        } else {
-          return 'FINISHING';
-        }
-      },
-    },
-    mounted() {
-      // this.vendor_history = this.dataMitra;
-    },
-    props: ['data-mitra']
-}
+  },
+  mounted() {
+    // this.vendor_history = this.dataMitra;
+  },
+  props: ['data-mitra'],
+};
 </script>

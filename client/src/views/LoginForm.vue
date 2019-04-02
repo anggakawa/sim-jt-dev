@@ -30,34 +30,34 @@
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        username: '',
-        password: '',
-        alert: false,
-        error_message: '',
-      }
+export default {
+  data() {
+    return {
+      username: '',
+      password: '',
+      alert: false,
+      error_message: '',
+    };
+  },
+  methods: {
+    login() {
+      const username = this.username;
+      const password = this.password;
+      this.$store.dispatch('login', {
+        username,
+        password,
+      }).then((res) => {
+        if (res.data.success) {
+          this.$router.push('/');
+        } else {
+          this.error_message = res.data.result;
+          this.alert = true;
+          console.log(res.data.result);
+        }
+      }).catch(err => console.log(err));
     },
-    methods: {
-      login() {
-        const username = this.username;
-        const password = this.password;
-        this.$store.dispatch('login', {
-          username,
-          password
-        }).then((res) => {
-          if (res.data.success) {
-            this.$router.push('/');
-          } else {
-            this.error_message = res.data.result;
-            this.alert = true;
-            console.log(res.data.result);
-          }
-        }).catch((err) => console.log(err));
-      }
-    }
-  };
+  },
+};
 
 </script>
 

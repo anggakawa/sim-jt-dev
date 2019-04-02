@@ -36,7 +36,7 @@
               <v-flex xs12>
                 <h2>TASK</h2>
               </v-flex>
-              
+
               <v-flex xs12 v-if="current_activity.can_choose_vendor">
                 Silahkan Pilih Vendor
                 <v-dialog v-model="dialog4" persistent max-width="600px">
@@ -225,7 +225,7 @@
         Close
       </v-btn>
     </v-snackbar>
-  
+
   </v-layout>
 </template>
 
@@ -278,210 +278,208 @@
 </style>
 
 <script>
-  import FileUpload from './UploadForm.vue';
-  import axios from '@/services/service.api.js';
-  import moment from 'moment';
+import moment from 'moment';
+import FileUpload from './UploadForm.vue';
+import axios from '@/services/service.api.js';
 
-  export default {
-    data() {
-      return {
-        timeout: 6000,
-        snackbar: false,
-        msg: '',
-        loader: null,
-        e1: 0,
-        dialog: false,
-        dialog2: false,
-        dialog3: false,
-        dialog4: false,
-        loading2: false,
-        selected_option: 1,
-        selected_vendor: '',
-        vendor_information: '',
-        insert_id: '',
-        options: [],
-        information: '',
-        current_activity: {},
-        vendors: [],
-        files: [],
-        showActivity: false,
-        latestDate: '',
-        deadline: '',
-        duration: 0,
-        chip_color: 'red',
-      };
+export default {
+  data() {
+    return {
+      timeout: 6000,
+      snackbar: false,
+      msg: '',
+      loader: null,
+      e1: 0,
+      dialog: false,
+      dialog2: false,
+      dialog3: false,
+      dialog4: false,
+      loading2: false,
+      selected_option: 1,
+      selected_vendor: '',
+      vendor_information: '',
+      insert_id: '',
+      options: [],
+      information: '',
+      current_activity: {},
+      vendors: [],
+      files: [],
+      showActivity: false,
+      latestDate: '',
+      deadline: '',
+      duration: 0,
+      chip_color: 'red',
+    };
+  },
+  watch: {
+    loader() {
+      const l = this.loader;
+      this[l] = !this[l];
+      this.msg = 'Histori order tersimpan';
+
+      setTimeout(() => {
+        this[l] = false;
+        this.showActivity = true;
+        this.snackbar = true;
+      }, 3000);
+
+      this.loader = null;
     },
-    watch: {
-      loader() {
-        const l = this.loader;
-        this[l] = !this[l];
-        this.msg = 'Histori order tersimpan';
-
-        setTimeout(() => {
-          this[l] = false;
-          this.showActivity = true;
-          this.snackbar = true;
-        }, 3000)
-
-        this.loader = null;
-      }
+  },
+  methods: {
+    getCurrentActivity() {
+      axios.get(`current-activity/${this.$route.params.order_id}`)
+        .then(result => this.current_activity = result.data[0])
+        .catch(error => console.log(error));
     },
-    methods: {
-      getCurrentActivity() {
-        axios.get('current-activity/' + this.$route.params.order_id)
-          .then((result) => this.current_activity = result.data[0])
-          .catch((error) => console.log(error));
-      },
-      getVendors() {
-        axios.get('vendors')
-          .then((result) => this.vendors = result.data)
-          .catch((error) => console.log(error));
-      },
-      createNewOrderLog() {
-        
-      }
-      ,
-      saveToOrderLog() {
-        // axios.post('order-history/post', {
-        //     order_id: this.$route.params.order_id,
-        //     activity_id: this.current_activity.activity_id,
-        //     information: this.information,
-        //     status: this.selected_option,
-        //   })
-        //   .then((result) => {
-        //     this.insert_id = result.data.insertId;
-        //   })
-        //   .then(() => {
-        //     this.e1 = 3;
-        //     this.dialog3 = false;
-        //   })
-        //   .catch((error) => console.log(error));
-        axios.put('order-history/edit', {
-            order_id: this.$route.params.order_id,
-            information: this.information,
-            status: this.selected_option,
-            order_logs_id: this.insert_id
-          })
-          .then(() => {
-            this.e1 = 3;
-            this.dialog3 = false;
-          })
-          .catch((error) => console.log(error));  
-      },
-      saveOrderVendor() {
-        axios.post('order-vendor', {
-          order_id: this.$route.params.order_id,
-          vendor_id: this.selected_vendor,
-          vendor_information: this.vendor_information,
-        }).then(() => {
-          this.el1 = 2;
-          this.dialog4 = false;
-        }).catch((error) => console.log(error));
-      },
-      getOptions() {
-        axios.get('activity-options/' + this.current_activity.activity_id)
-          .then(result => this.options = result.data)
-          .catch((error) => console.log(error));
-      },
-      async getAndUpdateStep() {
-        if (confirm('apakah anda yakin? anda tidak akan bisa mengubah kembali kegiatan ini')) {
-          const result = await axios.get('activity-step/' + this.current_activity
-            .activity_id + '/' + this.selected_option);
-          return axios.put('current-activity/' + this.$route.params.order_id +
-              '/' + result.data[0].next_step)
-            .then(() => this.$router.go())
-            .catch((error) => console.log(error));
-        }
-      },
-      closeOrder(props) {
-        axios.put('order/' + this.$route.params.order_id + '/' + props)
-          .then(() => {
-            this.dialog2 = false;
-            this.e1 = 5;
-          });
-      },
-      uploadFiles() {
-        // console.log(typeof this.insert_id === typeof 1)
-        if ((typeof this.insert_id === typeof 1)) {
-          let formData = new FormData();
-          for (let index = 0; index < this.files.length; index++) {
-            let file = this.files[index];
-            // formData.append('files[' + index + '' , file);
-            formData.append('attachments', file);
-          }
-          return axios.post('uploads/' + this.insert_id,
-              formData, {
-                headers: {
-                  "Content-Type": "multipart/form-data",
-                },
-              }
-            ).then(() => console.log('success')).then(() => {
-                this.e1 = 4;
-                this.dialog = false;
-              })
-            .catch((error) => console.log(error));
-        }
-        this.dialog = false;
-      },
-      handleFileUploads() {
-        this.files = this.$refs.files.files;
-      },
-      checkIfEligible() {
-        return parseInt(this.$store.getters.roleStatus) === this.current_activity.role_id ||
-          parseInt(this.$store.getters.roleStatus) === 1;
-      }, 
-      checkSteps() {
-        return this.e1 > 0;
-      },
-      createNewOrderHistory() {
-        this.loader = 'loading2';
-        return axios.post('order-history/new', {
-          order_id: this.$route.params.order_id,
-          activity_id: this.current_activity.activity_id
+    getVendors() {
+      axios.get('vendors')
+        .then(result => this.vendors = result.data)
+        .catch(error => console.log(error));
+    },
+    createNewOrderLog() {
+
+    },
+    saveToOrderLog() {
+      // axios.post('order-history/post', {
+      //     order_id: this.$route.params.order_id,
+      //     activity_id: this.current_activity.activity_id,
+      //     information: this.information,
+      //     status: this.selected_option,
+      //   })
+      //   .then((result) => {
+      //     this.insert_id = result.data.insertId;
+      //   })
+      //   .then(() => {
+      //     this.e1 = 3;
+      //     this.dialog3 = false;
+      //   })
+      //   .catch((error) => console.log(error));
+      axios.put('order-history/edit', {
+        order_id: this.$route.params.order_id,
+        information: this.information,
+        status: this.selected_option,
+        order_logs_id: this.insert_id,
+      })
+        .then(() => {
+          this.e1 = 3;
+          this.dialog3 = false;
         })
+        .catch(error => console.log(error));
+    },
+    saveOrderVendor() {
+      axios.post('order-vendor', {
+        order_id: this.$route.params.order_id,
+        vendor_id: this.selected_vendor,
+        vendor_information: this.vendor_information,
+      }).then(() => {
+        this.el1 = 2;
+        this.dialog4 = false;
+      }).catch(error => console.log(error));
+    },
+    getOptions() {
+      axios.get(`activity-options/${this.current_activity.activity_id}`)
+        .then(result => this.options = result.data)
+        .catch(error => console.log(error));
+    },
+    async getAndUpdateStep() {
+      if (confirm('apakah anda yakin? anda tidak akan bisa mengubah kembali kegiatan ini')) {
+        const result = await axios.get(`activity-step/${this.current_activity
+          .activity_id}/${this.selected_option}`);
+        return axios.put(`current-activity/${this.$route.params.order_id
+        }/${result.data[0].next_step}`)
+          .then(() => this.$router.go())
+          .catch(error => console.log(error));
+      }
+    },
+    closeOrder(props) {
+      axios.put(`order/${this.$route.params.order_id}/${props}`)
+        .then(() => {
+          this.dialog2 = false;
+          this.e1 = 5;
+        });
+    },
+    uploadFiles() {
+      // console.log(typeof this.insert_id === typeof 1)
+      if ((typeof this.insert_id === typeof 1)) {
+        const formData = new FormData();
+        for (let index = 0; index < this.files.length; index++) {
+          const file = this.files[index];
+          // formData.append('files[' + index + '' , file);
+          formData.append('attachments', file);
+        }
+        return axios.post(`uploads/${this.insert_id}`,
+          formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          }).then(() => console.log('success')).then(() => {
+          this.e1 = 4;
+          this.dialog = false;
+        })
+          .catch(error => console.log(error));
+      }
+      this.dialog = false;
+    },
+    handleFileUploads() {
+      this.files = this.$refs.files.files;
+    },
+    checkIfEligible() {
+      return parseInt(this.$store.getters.roleStatus) === this.current_activity.role_id
+          || parseInt(this.$store.getters.roleStatus) === 1;
+    },
+    checkSteps() {
+      return this.e1 > 0;
+    },
+    createNewOrderHistory() {
+      this.loader = 'loading2';
+      return axios.post('order-history/new', {
+        order_id: this.$route.params.order_id,
+        activity_id: this.current_activity.activity_id,
+      })
         .then((result) => {
           this.insert_id = result.data.insertId;
         });
-      },
-      getLatestLogDate() {
-        return axios.get('order-history/latest-date/' + this.$route.params.order_id)
-          .then(result => this.latestDate = result.data[0].date);
-      },
-      getDeadlineDate() {
-        const time = this.current_activity.max_duration || 88;
-        this.deadline = moment(this.latestDate).add(time, 'hours').utc().format();
-        console.log(moment(this.deadline).format("LLLL"));
-      },
-      getDifferences() {
-        const current_date = moment();
-        const deadline = moment(this.deadline);
-        const diff = deadline.diff(current_date);
-        if (diff > 0) {
-          const f = moment.utc(diff).format('HH:mm:ss');
-          this.chip_color = 'green';
-          this.duration = 'Sisa waktu : ' + f;
-        } else {
-          const f = current_date.to(deadline);
-          // const f = moment.duration(diff).asHours();
-          this.chip_color = 'red';
-          this.duration = 'Expired ' + f; 
-        }
+    },
+    getLatestLogDate() {
+      return axios.get(`order-history/latest-date/${this.$route.params.order_id}`)
+        .then(result => this.latestDate = result.data[0].date);
+    },
+    getDeadlineDate() {
+      const time = this.current_activity.max_duration || 88;
+      this.deadline = moment(this.latestDate).add(time, 'hours').utc().format();
+      console.log(moment(this.deadline).format('LLLL'));
+    },
+    getDifferences() {
+      const current_date = moment();
+      const deadline = moment(this.deadline);
+      const diff = deadline.diff(current_date);
+      if (diff > 0) {
+        const f = moment.utc(diff).format('HH:mm:ss');
+        this.chip_color = 'green';
+        this.duration = `Sisa waktu : ${f}`;
+      } else {
+        const f = current_date.to(deadline);
+        // const f = moment.duration(diff).asHours();
+        this.chip_color = 'red';
+        this.duration = `Expired ${f}`;
       }
     },
-    created() {
-      Promise.all([
-        this.getCurrentActivity(),
-        this.getVendors(),
-        this.getLatestLogDate()
-      ]).then(() => this.getDeadlineDate())
+  },
+  created() {
+    Promise.all([
+      this.getCurrentActivity(),
+      this.getVendors(),
+      this.getLatestLogDate(),
+    ]).then(() => this.getDeadlineDate())
       .then(() => setInterval(() => this.getDifferences(), 1000));
+  },
+  computed: {
+    getDay() {
+      return this.duration;
     },
-    computed: {
-      getDay() {
-        return this.duration;
-      }
-    },
-  }
+  },
+};
 
 </script>
 

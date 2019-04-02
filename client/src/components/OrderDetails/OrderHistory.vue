@@ -15,7 +15,7 @@
               <td class="text-xs-left">{{ props.item.information }}</td>
               <td class="text-xs-left">{{ props.item.attachment_name }}</td>
               <td class="text-xs-left">
-                <a v-show="props.item.order_attachment_id > 0" 
+                <a v-show="props.item.order_attachment_id > 0"
                   :href="downloadFile(props.item.order_attachment_id)">Download File</a>
               </td>
             </template>
@@ -52,7 +52,7 @@ export default {
         sortable: false,
       },
       {
-        text: 'Nama Lampiran', 
+        text: 'Nama Lampiran',
         sortable: false,
       },
       {
@@ -86,15 +86,15 @@ export default {
   },
   methods: {
     initialize() {
-      return axios.get('order-history/' + this.$route.params.order_id)
-        .then(result => {
-          this.order_logs = result.data
+      return axios.get(`order-history/${this.$route.params.order_id}`)
+        .then((result) => {
+          this.order_logs = result.data;
         });
-    }, 
+    },
     downloadFile(props) {
       // return axios({
       //   method: 'get',
-      //   url: 'http://localhost:3000/api/download/' + props, 
+      //   url: 'http://localhost:3000/api/download/' + props,
       //   responseType: 'blob'
       //   }).then(result => {
       //     console.log(result.data);
@@ -105,16 +105,16 @@ export default {
       //     document.body.appendChild(link);
       //     link.click();
       //   });
-      
+
       // untuk download
-      return 'http://localhost:3000/api/download/' + props;
-    }, 
+      return `http://localhost:3000/api/download/${props}`;
+    },
     changeDate(props) {
       return moment(props).format('DD MMMM YYYY, HH:mm:ss');
-    }
-  }, 
+    },
+  },
   created() {
     this.initialize();
   },
-}
+};
 </script>

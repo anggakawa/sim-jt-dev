@@ -24,30 +24,30 @@ import MitraOrderTable from '@/components/MitraOrderTable.vue';
 import MitraStats from '@/components/MitraStats.vue';
 import moment from 'moment';
 
-  export default {
-    components: {
-      chart,
-      MitraOrderTable,
-      MitraStats
+export default {
+  components: {
+    chart,
+    MitraOrderTable,
+    MitraStats,
+  },
+  data() {
+    return {
+      loaded: false,
+      vendor_history: [],
+    };
+  },
+  methods: {
+    getVendorHistory() {
+      axios.get('/mitra-history/all')
+        .then((result) => {
+          this.vendor_history = result.data;
+          this.loaded = true;
+        });
     },
-    data() {
-      return {
-        loaded: false,
-        vendor_history: []
-      }
-    },
-    methods: {
-      getVendorHistory() {
-        axios.get('/mitra-history/all')
-          .then((result) => {
-            this.vendor_history = result.data;
-            this.loaded = true;
-          });
-      },
-    },
-    mounted() {
-      this.loaded = false;
-      this.getVendorHistory();
-    }
-  }
+  },
+  mounted() {
+    this.loaded = false;
+    this.getVendorHistory();
+  },
+};
 </script>

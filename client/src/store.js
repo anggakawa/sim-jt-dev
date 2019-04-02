@@ -25,7 +25,7 @@ export default new Vuex.Store({
       state.token = token_data;
       state.user_role = role.toString();
       // set authorization header
-      api.defaults.headers.common['Authorization'] = "Bearer " + token_data;
+      api.defaults.headers.common.Authorization = `Bearer ${token_data}`;
     },
     authError: (state) => {
       state.status = 'error';

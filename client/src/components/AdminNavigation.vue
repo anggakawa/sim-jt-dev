@@ -16,15 +16,15 @@
 export default {
   data() {
     return {
-      admin_items : [
+      admin_items: [
         {
-          action: 'supervisor_account', 
-          title: 'Users', 
+          action: 'supervisor_account',
+          title: 'Users',
           path: '/users',
         },
         {
-          action: 'business', 
-          title: 'STO Office', 
+          action: 'business',
+          title: 'STO Office',
           path: '/STO-Office',
         },
         {
@@ -41,9 +41,9 @@ export default {
           action: 'list',
           title: 'Activity Options',
           path: '/activity-options',
-        }
-      ]
-    }
-  }
-}
+        },
+      ],
+    };
+  },
+};
 </script>

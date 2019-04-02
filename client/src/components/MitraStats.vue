@@ -20,7 +20,7 @@ import moment from 'moment';
 
 function groupBy(objectArray, property) {
   return objectArray.reduce((acc, obj) => {
-    let key = obj[property];
+    const key = obj[property];
     if (!acc[key]) {
       acc[key] = [];
     }
@@ -34,54 +34,54 @@ export default {
     return {
       mitra: [],
       timelines: [],
-      card_color : [
-        "#00FFFF",
-        "#f93446",
-        "#e69588",
-        "#edd824",
-        "#3933ff",
-        "#ff33bb",
-        "#00FFFF",
-        "#f93446",
-        "#e69588",
-        "#edd824",
-        "#3933ff",
+      card_color: [
+        '#00FFFF',
+        '#f93446',
+        '#e69588',
+        '#edd824',
+        '#3933ff',
+        '#ff33bb',
+        '#00FFFF',
+        '#f93446',
+        '#e69588',
+        '#edd824',
+        '#3933ff',
       ],
-    }
+    };
   },
   methods: {
     getVendors() {
-      axios.get('/vendors').then((result) => this.mitra = result.data);
+      axios.get('/vendors').then(result => this.mitra = result.data);
     },
     getTimelines() {
       axios.get('/mitra-history/timelines').then((result) => {
-        this.timelines = result.data
+        this.timelines = result.data;
       });
     },
     getTimelinePerMitra(mitra) {
-      let arrayperMitra = this.timelines.filter((value) => value.username === mitra);
-      let result = groupBy(arrayperMitra, 'order_id');
-      let differences = [];
+      const arrayperMitra = this.timelines.filter(value => value.username === mitra);
+      const result = groupBy(arrayperMitra, 'order_id');
+      const differences = [];
       let sum = 0;
-      Object.keys(result).forEach(keys => {
-        let tickets = result[keys];
-        let startDate = moment(tickets[0].date);
-        let endDate = moment(tickets[tickets.length - 1].date);
-        let difference = moment.duration(endDate.diff(startDate));
+      Object.keys(result).forEach((keys) => {
+        const tickets = result[keys];
+        const startDate = moment(tickets[0].date);
+        const endDate = moment(tickets[tickets.length - 1].date);
+        const difference = moment.duration(endDate.diff(startDate));
         differences.push(difference.asMilliseconds());
       });
-      differences.forEach(value => {
+      differences.forEach((value) => {
         sum += value;
       });
-      let stats = moment.duration(sum / differences.length);
+      const stats = moment.duration(sum / differences.length);
       return (`${stats.days()} hari, ${stats.hours()} jam, ${stats.minutes()} menit, ${stats.seconds()} detik`);
-    }
+    },
   },
   mounted() {
     Promise.all([
       this.getVendors(),
-      this.getTimelines()
+      this.getTimelines(),
     ]);
-  }
-}
+  },
+};
 </script>

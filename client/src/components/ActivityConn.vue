@@ -75,126 +75,126 @@
 </template>
 
 <script>
-  import axios from '@/services/service.api.js';
+import axios from '@/services/service.api.js';
 
-  export default {
-    data: () => ({
-      dialog: false,
-      headers: [
-        {
-          text: 'Nama Aktivitas',
-          value: 'activity_name',
-        },
-        { text: 'Aktivitas Selanjutnya', value: 'activity_next_id' },
-        { text: 'Aktivitas Alternative', value: 'activity_alt_id' },
-        { text: 'Aktivitas Sebelumnya', value: 'activity_back_id' },
-        { text: 'Actions', value: 'action', sortable: false }
-      ],
-      activities: [],
-      activity_cons: [],
-      roles: [],
-      options_select: [
-        {
-          text: 'Ya', 
-          value: 1,
-        },
-        {
-          text: 'Tidak', 
-          value: 0,
-        },
-      ],
-      editedIndex: -1,
-      editedItem: {
-        activity_id: 0,
-        activity_next_id: null,
-        activity_alternate_id: null,
-        activity_back_id: null,
+export default {
+  data: () => ({
+    dialog: false,
+    headers: [
+      {
+        text: 'Nama Aktivitas',
+        value: 'activity_name',
       },
-      defaultItem: {
-      }
-    }),
-
-    computed: {
-      formTitle () {
-        return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+      { text: 'Aktivitas Selanjutnya', value: 'activity_next_id' },
+      { text: 'Aktivitas Alternative', value: 'activity_alt_id' },
+      { text: 'Aktivitas Sebelumnya', value: 'activity_back_id' },
+      { text: 'Actions', value: 'action', sortable: false },
+    ],
+    activities: [],
+    activity_cons: [],
+    roles: [],
+    options_select: [
+      {
+        text: 'Ya',
+        value: 1,
       },
+      {
+        text: 'Tidak',
+        value: 0,
+      },
+    ],
+    editedIndex: -1,
+    editedItem: {
+      activity_id: 0,
+      activity_next_id: null,
+      activity_alternate_id: null,
+      activity_back_id: null,
     },
-
-    watch: {
-      dialog (val) {
-        val || this.close()
-      }
+    defaultItem: {
     },
+  }),
 
-    created () {
-      this.initialize();
-      this.getAllActivities();
+  computed: {
+    formTitle() {
+      return this.editedIndex === -1 ? 'New Item' : 'Edit Item';
     },
+  },
 
-    methods: {
+  watch: {
+    dialog(val) {
+      val || this.close();
+    },
+  },
 
-      convertToActivity(item) {
-        const activities = this.activities;
-        for (let index = 0; index < activities.length; index++) {
-          const element = activities[index];
-          if (element.activity_id === item) {
-            return element.activity_name;
-          }
-        }
-      },
+  created() {
+    this.initialize();
+    this.getAllActivities();
+  },
 
-      initialize () {
-        return axios.get('activity-step/all')
-          .then(result => this.activity_cons = result.data);
-      },
+  methods: {
 
-      getAllActivities() {
-        return axios.get('activities')
-          .then((result) => this.activities = result.data)
-          .then(() => this.activities.push({
-            activity_name: 'NULL', 
-            activity_id: null,
-          }));
-      },
-      
-      editItem (item) {
-        this.editedIndex = this.activity_cons.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.dialog = true
-      },
-
-      deleteItem (item) {
-        const index = this.activity_cons.indexOf(item);
-        if(confirm('Are you sure you want to delete this item?')) {
-          return axios.delete('activity-step/' + item.activity_connections_id)
-            .then(() => this.activity_cons.splice(index, 1));
-        }
-      },
-
-      close () {
-        this.dialog = false
-        setTimeout(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        }, 300)
-      },
-
-      save () {
-        if (this.editedIndex > -1) {
-          axios.put('activity-step/', this.editedItem)
-            .then((result) => {
-              if (result.data.success) {
-                Object.assign(this.activity_cons[this.editedIndex], this.editedItem);
-                this.close();
-              }
-            });
-        } else {
-          return axios.post('activity-step', this.editedItem)
-            .then((res) => {
-              this.$router.go();
-            }); 
+    convertToActivity(item) {
+      const activities = this.activities;
+      for (let index = 0; index < activities.length; index++) {
+        const element = activities[index];
+        if (element.activity_id === item) {
+          return element.activity_name;
         }
       }
     },
-  }
+
+    initialize() {
+      return axios.get('activity-step/all')
+        .then(result => this.activity_cons = result.data);
+    },
+
+    getAllActivities() {
+      return axios.get('activities')
+        .then(result => this.activities = result.data)
+        .then(() => this.activities.push({
+          activity_name: 'NULL',
+          activity_id: null,
+        }));
+    },
+
+    editItem(item) {
+      this.editedIndex = this.activity_cons.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialog = true;
+    },
+
+    deleteItem(item) {
+      const index = this.activity_cons.indexOf(item);
+      if (confirm('Are you sure you want to delete this item?')) {
+        return axios.delete(`activity-step/${item.activity_connections_id}`)
+          .then(() => this.activity_cons.splice(index, 1));
+      }
+    },
+
+    close() {
+      this.dialog = false;
+      setTimeout(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      }, 300);
+    },
+
+    save() {
+      if (this.editedIndex > -1) {
+        axios.put('activity-step/', this.editedItem)
+          .then((result) => {
+            if (result.data.success) {
+              Object.assign(this.activity_cons[this.editedIndex], this.editedItem);
+              this.close();
+            }
+          });
+      } else {
+        return axios.post('activity-step', this.editedItem)
+          .then((res) => {
+            this.$router.go();
+          });
+      }
+    },
+  },
+};
 </script>

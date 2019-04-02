@@ -43,44 +43,44 @@
 </template>
 <script>
 
-  import axios from '@/services/service.api.js';
+import axios from '@/services/service.api.js';
 
-  export default {
-    data() {
-      return {
-        dialog: false,
-        form_data: {
-          role_name: '',
-        },
-        search: '',
-        headers: [
-          {
-            text: 'Role ID',
-            value: 'role_id'
-          },
-          {
-            text: 'Role Name',
-            value: 'role_name'
-          },
-        ],
-        roles: [],
-        user_roles:[]
-      }
-    }, 
-    methods: {
-      // handle if user is not authenticated
-      async initialize() {
-        return axios.get('roles')
-          .then(result => this.roles = result.data);
+export default {
+  data() {
+    return {
+      dialog: false,
+      form_data: {
+        role_name: '',
       },
-      async createRole() {
-        return axios.post('roles/add', this.form_data)
-          .then(() => this.$router.go()).catch((error) => console.log(error));
-      }
-    }, 
-    created() {
-      this.initialize();
-    }
-  }
+      search: '',
+      headers: [
+        {
+          text: 'Role ID',
+          value: 'role_id',
+        },
+        {
+          text: 'Role Name',
+          value: 'role_name',
+        },
+      ],
+      roles: [],
+      user_roles: [],
+    };
+  },
+  methods: {
+    // handle if user is not authenticated
+    async initialize() {
+      return axios.get('roles')
+        .then(result => this.roles = result.data);
+    },
+    async createRole() {
+      return axios.post('roles/add', this.form_data)
+        .then(() => this.$router.go()).catch(error => console.log(error));
+    },
+  },
+  created() {
+    this.initialize();
+  },
+};
 
 </script>

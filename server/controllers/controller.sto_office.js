@@ -18,8 +18,8 @@ module.exports = {
   async createNewOffice(req, res) {
     try {
       const result = await pool.query(`INSERT INTO sto_office
-        (sto_office_id, sto_office_name)
-        VALUES ('${req.body.sto_office_id}', '${req.body.sto_office_name}')`);
+        (sto_office_name)
+        VALUES ('${req.body.sto_office_name}')`);
       res.json(result);
     } catch (error) {
       console.log(error);

@@ -74,18 +74,18 @@ export default {
           path: '/orders',
         },
         {
-          action: 'assessment', 
-          title: 'Mitra Review', 
-          path: '/mitra-review'
+          action: 'assessment',
+          title: 'Mitra Review',
+          path: '/mitra-review',
         },
         {
-          action: 'person', 
-          title: 'My Account', 
+          action: 'person',
+          title: 'My Account',
           path: '/my-account',
         },
         {
-          action: 'feedback', 
-          title: 'About Page', 
+          action: 'feedback',
+          title: 'About Page',
           path: '/about',
         },
       ],
@@ -93,12 +93,12 @@ export default {
   },
   methods: {
     logout() {
-      if(confirm('Logging out, are you sure?')) {
-      this.$store.dispatch('logout')
-        .then(this.$router.go('/login'));
+      if (confirm('Logging out, are you sure?')) {
+        this.$store.dispatch('logout')
+          .then(this.$router.go('/login'));
       }
-    }
-  }
+    },
+  },
 };
 
 </script>

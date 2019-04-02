@@ -24,37 +24,37 @@
 </template>
 
 <script>
-  import axios from "@/services/service.api.js";
-  export default {
-    data() {
-      return {
-        insert_id: 6,
-        dialog: false,
-        files: '',
+import axios from '@/services/service.api.js';
+
+export default {
+  data() {
+    return {
+      insert_id: 6,
+      dialog: false,
+      files: '',
+    };
+  },
+  methods: {
+    async uploadFiles() {
+      if ((true)) {
+        const formData = new FormData();
+        for (let index = 0; index < this.files.length; index++) {
+          const file = this.files[index];
+          formData.append(`files[${index}]`, file);
+        }
+        axios.post(`uploads/${this.insert_id}`,
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          }).then(() => console.log('success'))
+          .catch(error => console.log(error));
       }
     },
-    methods: {
-      async uploadFiles() {
-        if ((true)) {
-          let formData = new FormData();
-          for (let index = 0; index < this.files.length; index++) {
-            const file = this.files[index];
-            formData.append(`files[${index}]`, file);
-          }
-          axios.post('uploads/' + this.insert_id, 
-            formData,
-            {
-              headers : {
-                'Content-Type': 'multipart/form-data'
-              }
-            }
-          ).then(() => console.log('success'))
-          .catch((error) => console.log(error));
-        }
-      },
-      async handleFileUploads() {
-        this.files = this.$refs.files.files;
-      }
-    }
-  }
-  </script>
+    async handleFileUploads() {
+      this.files = this.$refs.files.files;
+    },
+  },
+};
+</script>
