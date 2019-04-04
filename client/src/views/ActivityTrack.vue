@@ -19,7 +19,7 @@
                     <v-text-field label="Order ID" v-model="form_data.order_id" disabled required></v-text-field>
                   </v-flex>
                   <v-flex xs12>
-                    <v-select :items="activities" v-model="form_data.activity_id" item-text="activity_name" 
+                    <v-select :items="activities" v-model="form_data.activity_id" item-text="activity_name"
                       item-value="activity_id" label="Activity ID" required></v-select>
                   </v-flex>
                 </v-layout>
@@ -57,81 +57,80 @@
 <script>
 import axios from '@/services/service.api.js';
 
-  export default {
-    data() {
-      return {
-        dialog: false,
-        form_data: {
-          activity_id: '', 
-          order_id: '',
-        },
-        form_index: -1,
-        search: '',
-        headers: [{
-            text: 'Activity Track ID',
-            value: 'activity_track_id'
-          },
-          {
-            text: 'Activity Name',
-            value: 'activity_name'
-          },
-          {
-            text: 'Order ID',
-            value: 'order_id'
-          },
-          {
-            text: 'action'
-          }
-        ],
-        activity_trackers: [],
-        activities:[]
-      }
-    }, 
-    methods: {
-      // handle if user is not authenticated
-      async initialize() {
-        return axios.get('activity-trackers')
-          .then(result => this.activity_trackers = result.data);
-      }, 
-      // handle if user is not authenticated
-      async getActivities() {
-        return axios.get('activities')
-          .then(result => this.activities = result.data);
-      }, 
-      async createActivTracker() {
-        if (this.form_index > -1) {
-          return axios.put('current-activity/' + this.form_data.order_id + '/' + this.form_data.activity_id)
-            .then((result) => {
-              if (result.data.success) {
-                this.dialog = false;
-                window.alert('data berhasil diganti');
-              }
-            }).catch((error) => console.log(error));
-        } else {
-          this.dialog = false;
-        }
-      }, 
-      editItem(item) {
-        this.form_index = this.activity_trackers.indexOf(item);
-        this.form_data = Object.assign({}, item);
-        this.dialog = true;
+export default {
+  data() {
+    return {
+      dialog: false,
+      form_data: {
+        activity_id: '',
+        order_id: '',
       },
-      closeDialog () {
-        this.dialog = false
-        setTimeout(() => {
-          this.form_data = Object.assign({}, {})
-          this.form_index = -1
-        }, 300)
+      form_index: -1,
+      search: '',
+      headers: [{
+        text: 'Activity Track ID',
+        value: 'activity_track_id',
       },
-    }, 
-    created() {
-      this.initialize();
-      this.getActivities();
-    }, 
-    computed: {
-      form_title() {
-        return this.form_index > -1 ? 'Edit Activity Track' : 'New Activity Track';
+      {
+        text: 'Activity Name',
+        value: 'activity_name',
+      },
+      {
+        text: 'Order ID',
+        value: 'order_id',
+      },
+      {
+        text: 'action',
+      },
+      ],
+      activity_trackers: [],
+      activities: [],
+    };
+  },
+  methods: {
+    // handle if user is not authenticated
+    async initialize() {
+      return axios.get('activity-trackers')
+        .then(result => this.activity_trackers = result.data);
+    },
+    // handle if user is not authenticated
+    async getActivities() {
+      return axios.get('activities')
+        .then(result => this.activities = result.data);
+    },
+    async createActivTracker() {
+      if (this.form_index > -1) {
+        return axios.put(`current-activity/${this.form_data.order_id}/${this.form_data.activity_id}`)
+          .then((result) => {
+            if (result.data.success) {
+              this.dialog = false;
+              window.alert('data berhasil diganti');
+            }
+          }).catch(error => console.log(error));
       }
-    }
-  }
+      this.dialog = false;
+    },
+    editItem(item) {
+      this.form_index = this.activity_trackers.indexOf(item);
+      this.form_data = Object.assign({}, item);
+      this.dialog = true;
+    },
+    closeDialog() {
+      this.dialog = false;
+      setTimeout(() => {
+        this.form_data = Object.assign({}, {});
+        this.form_index = -1;
+      }, 300);
+    },
+  },
+  created() {
+    this.initialize();
+    this.getActivities();
+  },
+  computed: {
+    form_title() {
+      return this.form_index > -1 ? 'Edit Activity Track' : 'New Activity Track';
+    },
+  },
+};
 </script>

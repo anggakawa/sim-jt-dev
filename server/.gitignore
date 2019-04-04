@@ -3,3 +3,4 @@ uploads
 dist
 credentials
 .env
+ecosystem.config.js

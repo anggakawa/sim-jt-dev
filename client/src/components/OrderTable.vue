@@ -111,7 +111,7 @@
                       <v-flex md6>
                         <!-- <v-text-field v-model="editedItem.service_name" prepend-icon="network_wifi"
                           label="Jenis Layanan"></v-text-field> -->
-                        <v-select :items="telkom_services" v-model="editedItem.service_name" 
+                        <v-select :items="telkom_services" v-model="editedItem.service_name"
                           label="Jenis Layanan" required></v-select>
                       </v-flex>
                       <v-flex md6>
@@ -139,7 +139,7 @@
                           auto-grow></v-textarea>
                       </v-flex>
                       <v-flex xs12 v-if="!checkEditedIndex">
-                        <v-text-field label="Keterangan" 
+                        <v-text-field label="Keterangan"
                          hint="1 for Ongoing, 2 for Closed, 3 for Canceled, 4 for Finishing" type="number" v-model="editedItem.open_status" persistent-hint></v-text-field>
                       </v-flex>
                     </v-layout>
@@ -208,238 +208,230 @@
 </template>
 
 <script>
-  import axios from '@/services/service.api.js';
-  import moment from 'moment';
+import axios from '@/services/service.api.js';
+import moment from 'moment';
 
-  export default {
-    data: () => ({
-      dialog: false,
-      order_origin: [],
-      order_open: [],
-      order_closed: [],
-      order_canceled: [],
-      order_finishing: [],
-      pagination: {
-        sortBy: 'order_id'
-      },
-      calendar_menu: false,
-      headers: [{
-          text: 'Tanggal',
-          value: 'date',
-        },
-        {
-          text: 'Nomor Order',
-          align: 'left',
-          sortable: false,
-          value: 'order_id',
-        },
-        {
-          text: 'Status',
-          value: 'open_status'
-        },
-        {
-          text: 'Nama Pelanggan',
-          value: 'customer_name',
-        },
-        {
-          text: 'Jenis Layanan',
-          value: 'service_name',
-        },
-        {
-          text: 'Aktivitas', 
-          value: 'activity_name'
-        },
-        {
-          text: 'Loker', 
-          value: 'role_name'
-        },
-        {
-          text: 'STO',
-          value: 'sto_office',
-        },
-        // {
-        //   text: 'Links',
-        //   value: 'links',
-        //   sortable: false,
-        // },
-      ],
-      orders: [],
-      offices: [],
-      editedIndex: -1,
-      editedItem: {
-        date: '',
-        order_id: '',
-        customer_name: '',
-        service_name: '',
-        sto_office_id: '',
-        customer_address: '',
-        customer_coordinat_latitude: '',
-        customer_coordinat_longitude: '',
-        pic_contact: '',
-        pic_name: '',
-        information: '',
-        open_status: '',
-      },
-      defaultItem: {
+export default {
+  data: () => ({
+    dialog: false,
+    order_origin: [],
+    order_open: [],
+    order_closed: [],
+    order_canceled: [],
+    order_finishing: [],
+    pagination: {
+      sortBy: 'order_id',
+    },
+    calendar_menu: false,
+    headers: [{
+      text: 'Tanggal',
+      value: 'date',
+    },
+    {
+      text: 'Nomor Order',
+      align: 'left',
+      sortable: false,
+      value: 'order_id',
+    },
+    {
+      text: 'Status',
+      value: 'open_status',
+    },
+    {
+      text: 'Nama Pelanggan',
+      value: 'customer_name',
+    },
+    {
+      text: 'Jenis Layanan',
+      value: 'service_name',
+    },
+    {
+      text: 'Aktivitas',
+      value: 'activity_name',
+    },
+    {
+      text: 'Loker',
+      value: 'role_name',
+    },
+    {
+      text: 'STO',
+      value: 'sto_office',
+    },
+      // {
+      //   text: 'Links',
+      //   value: 'links',
+      //   sortable: false,
+      // },
+    ],
+    orders: [],
+    offices: [],
+    editedIndex: -1,
+    editedItem: {
+      date: '',
+      order_id: '',
+      customer_name: '',
+      service_name: '',
+      sto_office_id: '',
+      customer_address: '',
+      customer_coordinat_latitude: '',
+      customer_coordinat_longitude: '',
+      pic_contact: '',
+      pic_name: '',
+      information: '',
+      open_status: '',
+    },
+    defaultItem: {
 
-      },
-      telkom_services : [
-        'VPN IP', 'ASTINET', 'METRO', 'IP PBX', 'OTHERS'
-      ]
-    }),
+    },
+    telkom_services: [
+      'VPN IP', 'ASTINET', 'METRO', 'IP PBX', 'OTHERS',
+    ],
+  }),
 
-    computed: {
-      formTitle() {
-        return this.editedIndex === -1 ? 'New Item' : 'Edit Item';
-      },
-      
-      checkEditedIndex() {
-        return this.editedIndex === -1;
-      },
-
-      countOrderOpen() {
-        return this.order_open.length;
-      },
-      
-      countOrderClosed() {
-        return this.order_closed.length;
-      }, 
-
-      countAllOrder() {
-        return this.order_origin.length;
-      },
-
-      countCanceledOrder() {
-        return this.order_canceled.length;
-      },
-
-      countFinishingOrder() {
-        return this.order_finishing.length;
-      }
+  computed: {
+    formTitle() {
+      return this.editedIndex === -1 ? 'New Item' : 'Edit Item';
     },
 
-    watch: {
-      dialog(val) {
-        val || this.close();
-      },
+    checkEditedIndex() {
+      return this.editedIndex === -1;
     },
 
-    created() {
-      this.initialize();
+    countOrderOpen() {
+      return this.order_open.length;
     },
 
-    methods: {
-      async initialize() {
-        await Promise.all([
-          axios.get('orders')
+    countOrderClosed() {
+      return this.order_closed.length;
+    },
+
+    countAllOrder() {
+      return this.order_origin.length;
+    },
+
+    countCanceledOrder() {
+      return this.order_canceled.length;
+    },
+
+    countFinishingOrder() {
+      return this.order_finishing.length;
+    },
+  },
+
+  watch: {
+    dialog(val) {
+      val || this.close();
+    },
+  },
+
+  created() {
+    this.initialize();
+  },
+
+  methods: {
+    async initialize() {
+      await Promise.all([
+        axios.get('orders')
           .then((result) => {
-            this.orders = result.data
-            this.order_origin = result.data
-            this.order_open = result.data.filter((value) => {
-              return value.open_status === 1
-            });
-            this.order_closed = result.data.filter((value) => {
-              return value.open_status === 2
-            });
-            this.order_canceled = result.data.filter((value) => {
-              return value.open_status === 3
-            });
-            this.order_finishing = result.data.filter((value) => {
-              return value.open_status === 4
-            });
+            this.orders = result.data;
+            this.order_origin = result.data;
+            this.order_open = result.data.filter(value => value.open_status === 1);
+            this.order_closed = result.data.filter(value => value.open_status === 2);
+            this.order_canceled = result.data.filter(value => value.open_status === 3);
+            this.order_finishing = result.data.filter(value => value.open_status === 4);
           }),
-          axios.get('offices')
-          .then((result) => this.offices = result.data)
-        ]);
-      },
-
-      editItem(item) {
-        this.editedIndex = this.orders.indexOf(item);
-        this.editedItem = Object.assign({}, item);
-        this.dialog = true;
-      },
-
-      deleteItem(item) {
-        const index = this.orders.indexOf(item);
-        if (confirm('Are you sure you want to delete this item?')) {
-          axios.delete('order/' + item.order_id)
-            .then(() => this.$router.go());
-        }
-      },
-
-      close() {
-        this.dialog = false;
-        setTimeout(() => {
-          this.editedItem = Object.assign({}, this.defaultItem);
-          this.editedIndex = -1;
-        }, 300);
-      },
-
-      save() {
-        if (this.editedIndex > -1) {
-          axios.put('order/edit', this.editedItem).then((result) => {
-            if (result.data.success) {
-              window.alert('Data berhasil diubah');
-              Object.assign(this.orders[this.editedIndex], this.editedItem);
-            }
-          });
-        } else {
-          axios.post('orders/add', this.editedItem)
-            .then(() => this.$router.go());
-        }
-        this.close();
-      },
-
-      checkIfAdmin() {
-        return this.$store.getters.roleStatus === '1';
-      },
-
-      checkStatus(props) {
-        if (props === 1) {
-          return 'ONGOING';
-        }else if (props === 2) {
-          return 'CLOSED';
-        } else if (props === 3) {
-          return 'CANCELED';
-        } else {
-          return 'FINISHING';
-        }
-      },
-
-      changeSort(column) {
-        if (this.pagination.sortBy === column) {
-          this.pagination.descending = !this.pagination.descending
-        } else {
-          this.pagination.sortBy = column
-          this.pagination.descending = false
-        }
-      },
-
-      changeOrder(checker) {
-        if (checker === 0) {
-          this.orders = this.order_origin;
-        }
-        else if (checker === 1) {
-          this.orders = this.order_open;
-        } else if (checker === 2) {
-          this.orders = this.order_closed;
-        } else if (checker === 3) {
-          this.orders = this.order_canceled;
-        } else {
-          this.orders = this.order_finishing;
-        }
-      }, 
-
-      linkto(props) {
-        this.$router.push({ name: 'order',
-          params: { order_id: props }});
-      }, 
-
-      changeDate(props) {
-        return moment(props).format('DD-MMMM-YYYY');
-      }
-
+        axios.get('offices')
+          .then(result => this.offices = result.data),
+      ]);
     },
-  };
+
+    editItem(item) {
+      this.editedIndex = this.orders.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialog = true;
+    },
+
+    deleteItem(item) {
+      const index = this.orders.indexOf(item);
+      if (confirm('Are you sure you want to delete this item?')) {
+        axios.delete(`order/${item.order_id}`)
+          .then(() => this.$router.go());
+      }
+    },
+
+    close() {
+      this.dialog = false;
+      setTimeout(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      }, 300);
+    },
+
+    save() {
+      if (this.editedIndex > -1) {
+        axios.put('order/edit', this.editedItem).then((result) => {
+          if (result.data.success) {
+            window.alert('Data berhasil diubah');
+            Object.assign(this.orders[this.editedIndex], this.editedItem);
+          }
+        });
+      } else {
+        axios.post('orders/add', this.editedItem)
+          .then(() => this.$router.go());
+      }
+      this.close();
+    },
+
+    checkIfAdmin() {
+      return this.$store.getters.roleStatus === '1';
+    },
+
+    checkStatus(props) {
+      if (props === 1) {
+        return 'ONGOING';
+      } if (props === 2) {
+        return 'CLOSED';
+      } if (props === 3) {
+        return 'CANCELED';
+      }
+      return 'FINISHING';
+    },
+
+    changeSort(column) {
+      if (this.pagination.sortBy === column) {
+        this.pagination.descending = !this.pagination.descending;
+      } else {
+        this.pagination.sortBy = column;
+        this.pagination.descending = false;
+      }
+    },
+
+    changeOrder(checker) {
+      if (checker === 0) {
+        this.orders = this.order_origin;
+      } else if (checker === 1) {
+        this.orders = this.order_open;
+      } else if (checker === 2) {
+        this.orders = this.order_closed;
+      } else if (checker === 3) {
+        this.orders = this.order_canceled;
+      } else {
+        this.orders = this.order_finishing;
+      }
+    },
+
+    linkto(props) {
+      this.$router.push({
+        name: 'order',
+        params: { order_id: props },
+      });
+    },
+
+    changeDate(props) {
+      return moment(props).format('DD-MMMM-YYYY');
+    },
+
+  },
+};
 
 </script>

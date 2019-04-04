@@ -60,86 +60,85 @@
 </template>
 <script>
 
-  import axios from '@/services/service.api.js';
+import axios from '@/services/service.api.js';
 
-  export default {
-    data() {
-      return {
-        dialog: false,
-        form_data: {
-          username: '', 
-          password: '', 
-          role_id: 0,
-          user_description: '',
-        },
-        form_index: -1,
-        search: '',
-        headers: [{
-            text: 'Username',
-            value: 'username'
-          },
-          {
-            text: 'Role',
-            value: 'role_name'
-          },
-          {
-            text: 'User Description',
-            value: 'user_description'
-          },
-          {
-            text: 'action'
-          }
-        ],
-        users: [],
-        user_roles:[]
-      }
-    }, 
-    methods: {
-      // handle if user is not authenticated
-      async initialize() {
-        return axios.get('users')
-          .then(result => this.users = result.data);
-      }, 
-      // handle if user is not authenticated
-      async getRoles() {
-        return axios.get('roles')
-          .then(result => this.user_roles = result.data);
-      }, 
-      async createUser() {
-        if (this.form_index > -1) {
-          return axios.put('users/edit', this.form_data)
-            .then((result) => {
-              if (result.data.success) {
-                this.$router.go();
-              }
-            }).catch((error) => console.log(error));
-        } else {
-          return axios.post('user/add', this.form_data)
-            .then(() => this.$router.go()).catch((error) => console.log(error));
-        }
-      }, 
-      editItem(item) {
-        this.form_index = this.users.indexOf(item);
-        this.form_data = Object.assign({}, item);
-        this.dialog = true;
+export default {
+  data() {
+    return {
+      dialog: false,
+      form_data: {
+        username: '',
+        password: '',
+        role_id: 0,
+        user_description: '',
       },
-      closeDialog () {
-        this.dialog = false
-        setTimeout(() => {
-          this.form_data = Object.assign({}, {})
-          this.form_index = -1
-        }, 300)
+      form_index: -1,
+      search: '',
+      headers: [{
+        text: 'Username',
+        value: 'username',
       },
-    }, 
-    created() {
-      this.initialize();
-      this.getRoles();
-    }, 
-    computed: {
-      form_title() {
-        return this.form_index > -1 ? 'Edit User' : 'New User';
+      {
+        text: 'Role',
+        value: 'role_name',
+      },
+      {
+        text: 'User Description',
+        value: 'user_description',
+      },
+      {
+        text: 'action',
+      },
+      ],
+      users: [],
+      user_roles: [],
+    };
+  },
+  methods: {
+    // handle if user is not authenticated
+    async initialize() {
+      return axios.get('users')
+        .then(result => this.users = result.data);
+    },
+    // handle if user is not authenticated
+    async getRoles() {
+      return axios.get('roles')
+        .then(result => this.user_roles = result.data);
+    },
+    async createUser() {
+      if (this.form_index > -1) {
+        return axios.put('users/edit', this.form_data)
+          .then((result) => {
+            if (result.data.success) {
+              this.$router.go();
+            }
+          }).catch(error => console.log(error));
       }
-    }
-  }
+      return axios.post('user/add', this.form_data)
+        .then(() => this.$router.go()).catch(error => console.log(error));
+    },
+    editItem(item) {
+      this.form_index = this.users.indexOf(item);
+      this.form_data = Object.assign({}, item);
+      this.dialog = true;
+    },
+    closeDialog() {
+      this.dialog = false;
+      setTimeout(() => {
+        this.form_data = Object.assign({}, {});
+        this.form_index = -1;
+      }, 300);
+    },
+  },
+  created() {
+    this.initialize();
+    this.getRoles();
+  },
+  computed: {
+    form_title() {
+      return this.form_index > -1 ? 'Edit User' : 'New User';
+    },
+  },
+};
 
 </script>

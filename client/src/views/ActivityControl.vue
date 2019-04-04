@@ -12,12 +12,12 @@ import ActivityConn from '../components/ActivityConn.vue';
 export default {
   data() {
     return {
-      
-    }
+
+    };
   },
   components: {
     ActivityList,
     ActivityConn,
-  }  
-}
+  },
+};
 </script>

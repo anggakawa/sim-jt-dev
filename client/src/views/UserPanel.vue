@@ -25,31 +25,31 @@ export default {
       password: '',
       password_conf: '',
       passwordRules: [
-        v => !!v || 'password is required'
+        v => !!v || 'password is required',
       ],
       user_description: '',
-    }
-  }, 
+    };
+  },
   computed: {
     checkPassword() {
       return this.password === this.password_conf && this.password.length > 1;
-    }
-  }, 
+    },
+  },
   methods: {
     save() {
       if (this.$refs.form.validate()) {
         return axios.put('users/edit', {
-          password: this.password_conf, 
-          user_description: this.user_description
+          password: this.password_conf,
+          user_description: this.user_description,
         }).then((result) => {
           if (result.data.success) {
-            window.alert('data berhasil diganti')
+            window.alert('data berhasil diganti');
           }
-        }).catch(error => {
+        }).catch((error) => {
           window.alert('error');
-        })
+        });
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>

@@ -14,7 +14,7 @@
               <td class="text-xs-center">{{ props.item.order_id }}</td>
               <td>{{ props.item.activity_name }}</td>
               <td>
-                <router-link :to="{ name: 'order', 
+                <router-link :to="{ name: 'order',
               params: { order_id: props.item.order_id } }">
                   Lihat
                 </router-link>
@@ -36,39 +36,39 @@
 </template>
 
 <script>
-  import axios from '@/services/service.api.js';
+import axios from '@/services/service.api.js';
 
-  export default {
-    data() {
-      return {
-        search: '',
-        headers: [{
-            text: 'Order ID',
-            align: 'center',
-            sortable: false,
-            value: 'order_id'
-          },
-          {
-            text: 'Aktivitas',
-            value: 'activity_name'
-          },
-          {
-            text: 'Aksi'
-          }
-        ],
-        tasks: []
-      }
+export default {
+  data() {
+    return {
+      search: '',
+      headers: [{
+        text: 'Order ID',
+        align: 'center',
+        sortable: false,
+        value: 'order_id',
+      },
+      {
+        text: 'Aktivitas',
+        value: 'activity_name',
+      },
+      {
+        text: 'Aksi',
+      },
+      ],
+      tasks: [],
+    };
+  },
+  methods: {
+    getTasks() {
+      axios.get(`/tasks/${this.$store.getters.roleStatus}`)
+        .then(result => this.tasks = result.data);
     },
-    methods: {
-      getTasks() {
-        axios.get('/tasks/' + this.$store.getters.roleStatus)
-          .then((result) => this.tasks = result.data);
-      }
-    },
-    created() {
-      this.getTasks();
-    }
-  }
+  },
+  created() {
+    this.getTasks();
+  },
+};
 
 </script>
 

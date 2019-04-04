@@ -104,134 +104,134 @@
 </template>
 
 <script>
-  import axios from '@/services/service.api.js';
+import axios from '@/services/service.api.js';
 
-  export default {
-    data: () => ({
-      dialog: false,
-      headers: [
-        {
-          text: 'Activity ID', 
-          value: 'activity_id',
-        },
-        {
-          text: 'Nama Aktivitas',
-          value: 'activity_name',
-        },
-        { text: 'Deskripsi Aktivitas', value: 'activity_description' },
-        { text: 'Role', value: 'role_name' },
-        { text: 'Require Status', value: 'require_status' },
-        { text: 'Require Information', value: 'require_information' },
-        { text: 'Require Attachment', value: 'require_attachment'},
-        { text: 'Can Close', value: 'can_close' },
-        { text: 'Can Choose Vendor', value: 'can_choose_vendor' },
-        { text: 'Can Cancel', value: 'can_cancel' },
-        { text: 'Can Finish', value: 'can_finish' },
-        { text: 'Max Duration', value: 'max_duration' },
-        { text: 'Actions', value: 'action', sortable: false }
-      ],
-      activities: [],
-      roles: [],
-      options_select: [
-        {
-          text: 'Ya', 
-          value: 1,
-        },
-        {
-          text: 'Tidak', 
-          value: 0,
-        },
-      ],
-      editedIndex: -1,
-      editedItem: {
-        activity_id: 0,
-        activity_name: '',
-        activity_description: '',
-        role_id: 0,
-        require_status: '',
-        require_information: '', 
-        require_attachment: '',
-        can_close: '',
-        can_choose_vendor: '',
-        can_cancel: '',
-        max_duration: 0,
-        can_finish: '',
+export default {
+  data: () => ({
+    dialog: false,
+    headers: [
+      {
+        text: 'Activity ID',
+        value: 'activity_id',
       },
-      defaultItem: {
-      }
-    }),
+      {
+        text: 'Nama Aktivitas',
+        value: 'activity_name',
+      },
+      { text: 'Deskripsi Aktivitas', value: 'activity_description' },
+      { text: 'Role', value: 'role_name' },
+      { text: 'Require Status', value: 'require_status' },
+      { text: 'Require Information', value: 'require_information' },
+      { text: 'Require Attachment', value: 'require_attachment' },
+      { text: 'Can Close', value: 'can_close' },
+      { text: 'Can Choose Vendor', value: 'can_choose_vendor' },
+      { text: 'Can Cancel', value: 'can_cancel' },
+      { text: 'Can Finish', value: 'can_finish' },
+      { text: 'Max Duration', value: 'max_duration' },
+      { text: 'Actions', value: 'action', sortable: false },
+    ],
+    activities: [],
+    roles: [],
+    options_select: [
+      {
+        text: 'Ya',
+        value: 1,
+      },
+      {
+        text: 'Tidak',
+        value: 0,
+      },
+    ],
+    editedIndex: -1,
+    editedItem: {
+      activity_id: 0,
+      activity_name: '',
+      activity_description: '',
+      role_id: 0,
+      require_status: '',
+      require_information: '',
+      require_attachment: '',
+      can_close: '',
+      can_choose_vendor: '',
+      can_cancel: '',
+      max_duration: 0,
+      can_finish: '',
+    },
+    defaultItem: {
+    },
+  }),
 
-    computed: {
-      formTitle () {
-        return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
-      },
+  computed: {
+    formTitle() {
+      return this.editedIndex === -1 ? 'New Item' : 'Edit Item';
+    },
+  },
+
+  watch: {
+    dialog(val) {
+      val || this.close();
+    },
+  },
+
+  created() {
+    this.initialize();
+    this.getRoles();
+  },
+
+  methods: {
+
+    YesOrNo(item) {
+      return item === 1 ? 'Ya' : 'Tidak';
     },
 
-    watch: {
-      dialog (val) {
-        val || this.close()
+    initialize() {
+      return axios.get('activities')
+        .then(result => this.activities = result.data);
+    },
+
+    getRoles() {
+      return axios.get('roles')
+        .then(result => this.roles = result.data);
+    },
+
+    editItem(item) {
+      this.editedIndex = this.activities.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialog = true;
+    },
+
+    deleteItem(item) {
+      const index = this.activities.indexOf(item);
+      if (confirm('Are you sure you want to delete this item?')) {
+        return axios.delete(`activity/${item.activity_id}`)
+          .then(() => this.activities.splice(index, 1));
       }
     },
 
-    created () {
-      this.initialize();
-      this.getRoles();
+    close() {
+      this.dialog = false;
+      setTimeout(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      }, 300);
     },
 
-    methods: {
-
-      YesOrNo(item) {
-        return item === 1 ? 'Ya' : 'Tidak';
-      },
-
-      initialize () {
-        return axios.get('activities')
-          .then(result => this.activities = result.data);
-      },
-      
-      getRoles () {
-        return axios.get('roles')
-          .then((result) => this.roles = result.data);
-      },
-
-      editItem (item) {
-        this.editedIndex = this.activities.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.dialog = true
-      },
-
-      deleteItem (item) {
-        const index = this.activities.indexOf(item);
-        if(confirm('Are you sure you want to delete this item?')) {
-          return axios.delete('activity/' + item.activity_id)
-            .then(() => this.activities.splice(index, 1));
-        }
-      },
-
-      close () {
-        this.dialog = false
-        setTimeout(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        }, 300)
-      },
-
-      save () {
-        if (this.editedIndex > -1) {
-          return axios.put('activity/', this.editedItem).then((result) => {
-            if (result.data.success) {
-              Object.assign(this.activities[this.editedIndex], this.editedItem);
-              this.close();
-            }
-          }).catch(error => console.log(error));
-        } else {
-          return axios.post('activity/add', this.editedItem)
-            // .then(() => this.activities.push(this.editedItem))
-            // .then(() => this.close())
-            .then(() => this.$router.go());
-        }
-        this.close();
+    save() {
+      if (this.editedIndex > -1) {
+        return axios.put('activity/', this.editedItem).then((result) => {
+          if (result.data.success) {
+            Object.assign(this.activities[this.editedIndex], this.editedItem);
+            this.close();
+          }
+        }).catch(error => console.log(error));
       }
-    }
-  }
+      return axios.post('activity/add', this.editedItem)
+      // .then(() => this.activities.push(this.editedItem))
+      // .then(() => this.close())
+        .then(() => this.$router.go());
+
+      this.close();
+    },
+  },
+};
 </script>
