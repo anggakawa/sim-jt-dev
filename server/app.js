@@ -28,10 +28,22 @@ const port = 3000;
 //     // cert: fs.readFileSync('./credentials/server.cert')
 //   }, app);
 
+// add new whitelist
+const whitelist = ['http://localhost', 'http://10.140.15.100:3000', 'http://localhost:8080']
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
+}
+
 app.use(morgan('combined'));
 app.use(bodyParser.urlencoded( {extended: false} ));
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(helmet());
 app.use(compression());
 
