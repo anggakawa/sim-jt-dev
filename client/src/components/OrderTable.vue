@@ -182,6 +182,7 @@
               <td class="text-xs-left">{{ props.item.service_name }}</td>
               <td class="text-xs-left">{{ props.item.activity_name }}</td>
               <td class="text-xs-left">{{ props.item.role_name }}</td>
+              <td class="text-xs-left">{{ props.item.user_description }}</td>
               <td class="text-xs-left">{{ props.item.sto_office_name }}</td>
               <!-- <td>
                 <router-link :to="{ name: 'order',
@@ -252,6 +253,10 @@ export default {
     {
       text: 'Loker',
       value: 'role_name',
+    },
+    {
+      text: 'Nama Mitra',
+      value: 'user_description'
     },
     {
       text: 'STO',
@@ -333,6 +338,7 @@ export default {
       await Promise.all([
         axios.get('orders')
           .then((result) => {
+            console.log(result.data);
             this.orders = result.data;
             this.order_origin = result.data;
             this.order_open = result.data.filter(value => value.open_status === 1);

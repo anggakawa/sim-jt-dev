@@ -14,9 +14,12 @@ module.exports = {
         res.json(result);
       } else {
         const result = await pool.query(`SELECT * FROM orders INNER JOIN sto_office ON orders.sto_office_id = sto_office.sto_office_id
+          LEFT JOIN order_vendor_history ON order_vendor_history.order_id = orders.order_id
+          LEFT JOIN users ON users.user_id = order_vendor_history.vendor_id
           INNER JOIN activity_track ON orders.order_id = activity_track.order_id
           INNER JOIN activity ON activity_track.activity_id = activity.activity_id
-          INNER JOIN roles ON roles.role_id = activity.role_id`);
+          INNER JOIN roles ON roles.role_id = activity.role_id
+          WHERE order_vendor_history.replaced IS NOT true OR order_vendor_history.replaced IS NULL`);
         res.json(result);
       }
     } catch (error) {
