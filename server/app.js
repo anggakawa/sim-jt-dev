@@ -29,7 +29,7 @@ const port = 3000;
 //   }, app);
 
 // add new whitelist
-const whitelist = ['http://localhost', 'http://10.140.15.100:3000', 'http://localhost:8080']
+const whitelist = ['http://localhost', 'http://10.140.15.100:8080', 'http://localhost:8080']
 const corsOptions = {
   origin: function (origin, callback) {
     if (whitelist.indexOf(origin) !== -1) {
@@ -43,11 +43,12 @@ const corsOptions = {
 app.use(morgan('combined'));
 app.use(bodyParser.urlencoded( {extended: false} ));
 app.use(bodyParser.json());
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
+app.use(cors());
 app.use(helmet());
 app.use(compression());
 
-app.use('/', serveStatic(path.join(__dirname, '/dist')));
+// app.use('/', serveStatic(path.join(__dirname, '/dist')));
 
 const router = express.Router();
 
