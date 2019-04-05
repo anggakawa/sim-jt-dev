@@ -338,7 +338,7 @@ export default {
       Promise.all([
         axios.get('orders')
           .then((result) => {
-            console.log(result.data);
+            // console.log(result.data);
             this.orders = result.data;
             this.order_origin = result.data;
             this.order_open = result.data.filter(value => value.open_status === 1);

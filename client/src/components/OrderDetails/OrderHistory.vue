@@ -99,7 +99,7 @@ export default {
         url: 'download/' + props,
         responseType: 'blob'
         }).then(result => {
-          console.log(result);
+          // console.log(result);
           const url = window.URL.createObjectURL(new Blob([result.data], { type: result.data.type}));
           const link = document.createElement('a');
           link.href = url;
