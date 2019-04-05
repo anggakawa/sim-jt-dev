@@ -10,6 +10,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "chart.js": "^2.7.3",
+    "file-saver": "^2.0.1",
     "jwt-decode": "^2.2.0",
     "material-design-icons-iconfont": "^3.0.3",
     "moment": "^2.24.0",

@@ -15,8 +15,10 @@
               <td class="text-xs-left">{{ props.item.information }}</td>
               <td class="text-xs-left">{{ props.item.attachment_name }}</td>
               <td class="text-xs-left">
-                <a v-show="props.item.order_attachment_id > 0"
-                  :href="downloadFile(props.item.order_attachment_id)">Download File</a>
+                <!-- <a v-show="props.item.order_attachment_id > 0"
+                  :href="downloadFile(props.item.order_attachment_id)">Download File</a> -->
+                <v-btn class="download-btn" color="info" v-show="props.item.order_attachment_id > 0"
+                  @click="downloadFile(props.item.order_attachment_id, props.item.attachment_name)">Download File</v-btn>
               </td>
             </template>
           </v-data-table>
@@ -91,23 +93,24 @@ export default {
           this.order_logs = result.data;
         });
     },
-    downloadFile(props) {
-      // return axios({
-      //   method: 'get',
-      //   url: 'http://localhost:3000/api/download/' + props,
-      //   responseType: 'blob'
-      //   }).then(result => {
-      //     console.log(result.data);
-      //     const url = window.URL.createObjectURL(new Blob([result.data], { type: result.data.type}));
-      //     const link = document.createElement('a');
-      //     link.href = url;
-      //     link.target = '_blank';
-      //     document.body.appendChild(link);
-      //     link.click();
-      //   });
+    downloadFile(props, name) {
+      return axios({
+        method: 'get',
+        url: 'download/' + props,
+        responseType: 'blob'
+        }).then(result => {
+          console.log(result);
+          const url = window.URL.createObjectURL(new Blob([result.data], { type: result.data.type}));
+          const link = document.createElement('a');
+          link.href = url;
+          link.setAttribute('download', name);
+          document.body.appendChild(link);
+          link.click();
+        });
 
       // untuk download
-      return `http://localhost:3000/api/download/${props}`;
+      // return `http://localhost:3000/api/download/${props}`;
+      // return axios.get(`download/${props}`);
     },
     changeDate(props) {
       return moment(props).format('DD MMMM YYYY, HH:mm:ss');
@@ -118,3 +121,11 @@ export default {
   },
 };
 </script>
+
+<style>
+.download-btn {
+  max-width: 80px;
+  font-size: 10px;
+}
+</style>
+
