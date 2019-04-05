@@ -1,18 +1,31 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Api from './services/service.api';
-import Home from './views/Home.vue';
-import LoginForm from './views/LoginForm.vue';
-import OrderDescription from './views/OrderDescription.vue';
-import OrderSummary from './views/OrderSummary.vue';
-import UserControl from './views/UserControl.vue';
-import ActivityControl from './views/ActivityControl.vue';
-import UserPanel from './views/UserPanel.vue';
-import ActivityTrack from './views/ActivityTrack.vue';
-import ActivityOpt from './views/ActivityOpt.vue';
-import MitraMonitor from './views/MitraMonitor.vue';
-import STOoffice from './views/STOoffice.vue';
+// import Home from './views/Home.vue';
+// import LoginForm from './views/LoginForm.vue';
+// import OrderDescription from './views/OrderDescription.vue';
+// import OrderSummary from './views/OrderSummary.vue';
+// import UserControl from './views/UserControl.vue';
+// import ActivityControl from './views/ActivityControl.vue';
+// import UserPanel from './views/UserPanel.vue';
+// import ActivityTrack from './views/ActivityTrack.vue';
+// import ActivityOpt from './views/ActivityOpt.vue';
+// import MitraMonitor from './views/MitraMonitor.vue';
+// import STOoffice from './views/STOoffice.vue';
 import store from './store';
+
+// for lazy loading
+const Home = () => import('./views/Home.vue');
+const LoginForm = () => import('./views/LoginForm.vue');
+const OrderDescription = () => import('./views/OrderDescription.vue');
+const OrderSummary = () => import('./views/OrderSummary.vue');
+const UserControl = () => import('./views/UserControl.vue');
+const ActivityControl = () => import('./views/ActivityControl.vue');
+const UserPanel = () => import('./views/UserPanel.vue');
+const ActivityTrack = () => import('./views/ActivityTrack.vue');
+const ActivityOpt = () => import('./views/ActivityOpt.vue');
+const MitraMonitor = () => import('./views/MitraMonitor.vue');
+const STOoffice = () => import('./views/STOoffice.vue');
 
 Vue.use(Router);
 const router = new Router({
@@ -168,6 +181,8 @@ router.beforeEach((to, from, next) => {
       }
       next();
     }
+  } else {
+    next();
   }
 });
 

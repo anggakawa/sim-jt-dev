@@ -334,8 +334,8 @@ export default {
   },
 
   methods: {
-    async initialize() {
-      await Promise.all([
+    initialize() {
+      Promise.all([
         axios.get('orders')
           .then((result) => {
             console.log(result.data);

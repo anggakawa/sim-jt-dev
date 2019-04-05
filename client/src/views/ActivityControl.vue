@@ -6,8 +6,8 @@
 </template>
 
 <script>
-import ActivityList from '../components/ActivityList.vue';
-import ActivityConn from '../components/ActivityConn.vue';
+const ActivityList = () => import('../components/ActivityList.vue');
+const ActivityConn = () => import('../components/ActivityConn.vue');
 
 export default {
   data() {

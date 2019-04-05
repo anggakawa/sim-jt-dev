@@ -19,9 +19,9 @@
 
 <script>
 import axios from '@/services/service.api.js';
-import chart from '@/components/chart.js';
-import MitraOrderTable from '@/components/MitraOrderTable.vue';
-import MitraStats from '@/components/MitraStats.vue';
+const chart = () => import('@/components/chart.js');
+const MitraOrderTable = () => import('@/components/MitraOrderTable.vue');
+const MitraStats = () => import('@/components/MitraStats.vue');
 import moment from 'moment';
 
 export default {

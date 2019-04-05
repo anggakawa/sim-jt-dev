@@ -6,8 +6,8 @@
 </template>
 
 <script>
-import UserPanel from '../components/UserPanel.vue';
-import RolePanel from '../components/RolePanel.vue';
+const UserPanel = () => import('../components/UserPanel.vue');
+const RolePanel = () => import('../components/RolePanel.vue');
 
 export default {
   components: {

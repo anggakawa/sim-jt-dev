@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import OrderDetail from '../components/OrderDetail.vue';
+const OrderDetail = () => import('../components/OrderDetail.vue');
 
 export default {
   components: {
