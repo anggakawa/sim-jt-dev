@@ -57,6 +57,7 @@ module.exports = (router) => {
   router.post('/uploads/:orderLogsId', attachmentController.uploadFiles);
   router.get('/download/:attachmentId', attachmentController.downloadFile);
 
+  router.get('/tasks-count/:roleId', TaskController.TaskCounter);
   router.get('/tasks/:roleId', TaskController.getTask);
 
   // role route
@@ -75,13 +76,13 @@ module.exports = (router) => {
 
   // get data sto 
   router.get('/offices', STOOfficeController.getAllOffice);
-  router.post('/offices/add', STOOfficeController.createNewOffice);
-  router.put('/updateOffice/:sto_office_id', STOOfficeController.updateOffice);
-  router.delete('/deleteOffice/:sto_office_id', STOOfficeController.deleteOffice);
+  router.post('/offices/add', checkIfAdmin, STOOfficeController.createNewOffice);
+  router.put('/updateOffice/:sto_office_id', checkIfAdmin, STOOfficeController.updateOffice);
+  router.delete('/deleteOffice/:sto_office_id', checkIfAdmin, STOOfficeController.deleteOffice);
 
   // activity routes
   router.get('/activities', ActivitiyController.getAllActivity);
-  router.put('/activity', ActivitiyController.updateActivity);
+  router.put('/activity', checkIfAdmin, ActivitiyController.updateActivity);
   router.post('/activity/add', checkIfAdmin, ActivitiyController.createNewActivity);
   router.get('/activity/:activityId', ActivitiyController.getActivityById);
   router.delete('/activity/:activityId', checkIfAdmin, ActivitiyController.deleteActivity);
@@ -95,17 +96,17 @@ module.exports = (router) => {
 
   // options per activity routes
   router.get('/activity-options/all', ActivOptController.getAllActivityOptions);
-  router.put('/activity-options/edit', ActivOptController.updateActivityOpt);
+  router.put('/activity-options/edit', checkIfAdmin, ActivOptController.updateActivityOpt);
   router.get('/activity-options/:activityId', ActivOptController.getActivityOptionsById);
   router.post('/activity-options', ActivOptController.createActivityOption);
-  router.delete('/activity-options/:activityOptId', ActivOptController.deleteActivity);
+  router.delete('/activity-options/:activityOptId', checkIfAdmin, ActivOptController.deleteActivity);
 
   router.get('/orders', OrderController.getAllOrder);
-  router.put('/order/edit', OrderController.updateOrder);
+  router.put('/order/edit', checkIfAdmin, OrderController.updateOrder);
   router.put('/order/:orderId/:status', OrderController.closeOrder);
   router.get('/order/:orderId', OrderController.getOrderById);
   router.post('/orders/add', OrderController.createNewOrder);
-  router.delete('/order/:orderId', OrderController.deleteOrder);
+  router.delete('/order/:orderId', checkIfAdmin, OrderController.deleteOrder);
 
   router.get('/order-history/all', OrderHistory.getAllOrderHistory);
   router.get('/order-history/latest-date/:orderId', OrderHistory.getOrderLogDate);

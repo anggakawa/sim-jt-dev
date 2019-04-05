@@ -161,10 +161,14 @@ export default {
 
     deleteItem(item) {
       const index = this.activity_opts.indexOf(item);
-      if (confirm('Are you sure you want to delete this item?')) {
-        return axios.delete(`activity-options/${item.activity_options_id}`)
+      this.$swal("Are you sure?", {
+        buttons: true
+      }).then((confirm) => {
+        if (confirm) {
+          return axios.delete(`activity-options/${item.activity_options_id}`)
           .then(() => this.activity_opts.splice(index, 1));
-      }
+        }
+      });
     },
 
     getActivities() {

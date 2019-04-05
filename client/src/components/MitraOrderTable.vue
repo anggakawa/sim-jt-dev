@@ -73,6 +73,7 @@ export default {
         },
         {
           text: 'Lihat',
+          sortable: false,
         },
       ],
       vendor_history: [],

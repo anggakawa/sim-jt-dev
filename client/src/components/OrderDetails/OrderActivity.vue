@@ -399,14 +399,19 @@ import axios from '@/services/service.api.js';
         .catch(error => console.log(error));
     },
     async getAndUpdateStep() {
-      if (confirm('apakah anda yakin? anda tidak akan bisa mengubah kembali kegiatan ini')) {
-        const result = await axios.get(`activity-step/${this.current_activity
-          .activity_id}/${this.selected_option}`);
-        return axios.put(`current-activity/${this.$route.params.order_id
-        }/${result.data[0].next_step}`)
+      this.$swal("Apakah anda yakin? anda tidak akan bisa mengubah kembali kegiatan ini", {
+        buttons: true,
+        icon: 'info'
+      }).then((confirm) => {
+        if (confirm) {
+          const result = axios.get(`activity-step/${this.current_activity.activity_id}/${this.selected_option}`);
+          result.then((res) => {
+            return axios.put(`current-activity/${this.$route.params.order_id}/${res.data[0].next_step}`)
+          })
           .then(() => this.$router.go())
           .catch(error => console.log(error));
-      }
+        }
+      });
     },
     closeOrder(props) {
       axios.put(`order/${this.$route.params.order_id}/${props}`)
@@ -464,7 +469,6 @@ import axios from '@/services/service.api.js';
     getDeadlineDate() {
       const time = this.current_activity.max_duration || 88;
       this.deadline = moment(this.latestDate).add(time, 'hours').utc().format();
-      console.log(moment(this.deadline).format('LLLL'));
     },
     getDifferences() {
       const current_date = moment();

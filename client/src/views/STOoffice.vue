@@ -150,10 +150,14 @@ export default {
 
     deleteItem(item) {
       const index = this.office_opts.indexOf(item);
-      if (confirm('Are you sure you want to delete this item?')) {
-        return axios.delete(`deleteOffice/${item.sto_office_id}`)
+      this.$swal("Are you sure?", {
+        buttons: true
+      }).then((confirm) => {
+        if (confirm) {
+          return axios.delete(`deleteOffice/${item.sto_office_id}`)
           .then(() => this.office_opts.splice(index, 1));
-      }
+        }
+      });
     },
 
     getActivities() {

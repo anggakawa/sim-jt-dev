@@ -15,7 +15,7 @@
               <td>{{ props.item.activity_name }}</td>
               <td>
                 <router-link :to="{ name: 'order',
-              params: { order_id: props.item.order_id } }">
+                  params: { order_id: props.item.order_id } }">
                   Lihat
                 </router-link>
               </td>
@@ -45,7 +45,6 @@ export default {
       headers: [{
         text: 'Order ID',
         align: 'center',
-        sortable: false,
         value: 'order_id',
       },
       {

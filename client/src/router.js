@@ -116,7 +116,7 @@ const router = new Router({
       name: 'mitra-review',
       component: MitraMonitor,
       meta: {
-        requiresAuth: true,
+        onlyTelkom: true,
       },
     },
     {
@@ -134,6 +134,7 @@ const router = new Router({
   ],
 });
 
+// eslint-disable-next-line consistent-return
 router.beforeEach((to, from, next) => {
   if (to.matched.some(address => address.meta.requiresAuth)) {
     if (!store.getters.isAuthenticated) {
@@ -166,18 +167,27 @@ router.beforeEach((to, from, next) => {
       });
     } else {
       if (store.getters.roleStatus === '3') {
-        (async function checkAuthorized() {
+        return (async function checkAuthorized() {
           const result = await Api.get(`order-vendor/check/${to.params.order_id}`);
           if (result.data.length > 0) {
             if (result.data[0].replaced === 0) {
               next();
             }
           } else {
-            next({
-              path: '/',
-            });
+            next(false);
           }
         }());
+      }
+      next();
+    }
+  } else if (to.matched.some(address => address.meta.onlyTelkom)) {
+    if (!store.getters.isAuthenticated) {
+      next({
+        path: '/login',
+      });
+    } else {
+      if (store.getters.roleStatus === '3') {
+        return next(false);
       }
       next();
     }

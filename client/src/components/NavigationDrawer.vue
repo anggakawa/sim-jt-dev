@@ -52,6 +52,7 @@
 
 <script>
 import AdminNav from './AdminNavigation.vue';
+import Api from '@/services/service.api.js';
 
 export default {
   components: {
@@ -62,10 +63,11 @@ export default {
       username: localStorage.getItem('username') || '',
       drawer: false,
       clipped: false,
+      notifications: 0,
       items: [
         {
           action: 'home',
-          title: 'Home',
+          title: `Home`,
           path: '/',
         },
         {
@@ -93,12 +95,24 @@ export default {
   },
   methods: {
     logout() {
-      if (confirm('Logging out, are you sure?')) {
-        this.$store.dispatch('logout')
-          .then(this.$router.go('/login'));
-      }
+      this.$swal("Logging out, are you sure?", {
+        buttons: true
+      }).then((logout) => {
+        if (logout) {
+          this.$store.dispatch('logout')
+            .then(this.$router.go('/login'));
+        }
+      });
     },
+    getTaskCount() {
+      // Api.get(/tasks-count/ + this.$store.getters.roleStatus).then((result) => {
+        
+      // });
+    }
   },
+  created() {
+    // this.getTaskCount();
+  }
 };
 
 </script>

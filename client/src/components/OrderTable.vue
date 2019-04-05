@@ -82,6 +82,9 @@
             <v-toolbar-title>Orders</v-toolbar-title>
             <v-divider class="mx-2" inset vertical></v-divider>
             <v-spacer></v-spacer>
+            <v-text-field v-model="search" append-icon="search" label="Search" single-line
+              hide-details></v-text-field>
+            <v-spacer></v-spacer>
             <v-dialog v-model="dialog" max-width="500px">
               <v-btn slot="activator" color="red darken-3" dark class="mb-2" v-if="this.$store.getters.roleStatus === '1' || this.$store.getters.roleStatus === '4'">New
                 Item</v-btn>
@@ -154,18 +157,28 @@
               </v-card>
             </v-dialog>
           </v-toolbar>
-          <v-data-table :headers="headers" :items="orders" class="elevation-1" :pagination.sync="pagination"
+          <v-data-table :search="search" :headers="headers" :items="orders" class="elevation-1" :pagination.sync="pagination"
             :rows-per-page-items="[25,50,100]">
-            <template slot="headers" slot-scope="props">
+            <template slot="headers" slot-scope="props" class="table-headers">
+              <th v-show="checkIfAdmin()">Aksi</th>
               <th v-for="header in props.headers" :key="header.text" :class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
                 @click="changeSort(header.value)" class="text-xs-left">
                 <v-icon small>arrow_upward</v-icon>
                 {{ header.text }}
               </th>
-              <th v-if="checkIfAdmin()">Aksi</th>
             </template>
             <template slot="items" slot-scope="props">
               <tr style="cursor: pointer" @click="linkto(props.item.order_id)">
+              <td v-show="checkIfAdmin()" class="justify-center">
+                <v-chip>
+                  <v-icon small class="mr-2" @click.stop="editItem(props.item)">
+                    edit
+                  </v-icon>
+                  <v-icon small @click.stop="deleteItem(props.item)">
+                    delete
+                  </v-icon>
+                </v-chip>
+              </td>
               <td>{{ changeDate(props.item.date) }}</td>
               <td class="text-xs-left">{{ props.item.order_id }}</td>
               <td class="text-xs-left">
@@ -188,14 +201,6 @@
                 <router-link :to="{ name: 'order',
               params: { order_id: props.item.order_id }}">Lihat</router-link>
               </td> -->
-              <td v-if="checkIfAdmin()" class="justify-center">
-                <v-icon small class="mr-2" @click.stop="editItem(props.item)">
-                  edit
-                </v-icon>
-                <v-icon small @click.stop="deleteItem(props.item)">
-                  delete
-                </v-icon>
-              </td>
               </tr>
             </template>
             <template slot="no-data">
@@ -214,6 +219,7 @@ import moment from 'moment';
 
 export default {
   data: () => ({
+    search: '',
     dialog: false,
     order_origin: [],
     order_open: [],
@@ -359,10 +365,15 @@ export default {
 
     deleteItem(item) {
       const index = this.orders.indexOf(item);
-      if (confirm('Are you sure you want to delete this item?')) {
-        axios.delete(`order/${item.order_id}`)
-          .then(() => this.$router.go());
-      }
+      this.$swal("Are you sure?", {
+        buttons: true
+      }).then((confirm) => {
+        if (confirm) {
+          axios.delete(`order/${item.order_id}`)
+            .then(() => this.$router.go());
+        }
+      });
+
     },
 
     close() {
@@ -441,3 +452,6 @@ export default {
 };
 
 </script>
+
+<style>
+</style>

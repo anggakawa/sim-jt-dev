@@ -54,7 +54,9 @@ export default {
           this.alert = true;
           console.log(res.data.result);
         }
-      }).catch(err => console.log(err));
+      }).catch((err) => {
+        this.$swal('Error', 'Tidak dapat melakukan koneksi ke server', 'error');
+      });
     },
   },
 };

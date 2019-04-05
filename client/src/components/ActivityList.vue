@@ -68,6 +68,23 @@
       class="elevation-1"
     >
       <template slot="items" slot-scope="props">
+        <td class="justify-center">
+          <v-chip>
+            <v-icon
+              small
+              class="mr-2"
+              @click="editItem(props.item)"
+            >
+              edit
+            </v-icon>
+            <v-icon
+              small
+              @click="deleteItem(props.item)"
+            >
+              delete
+            </v-icon>
+          </v-chip>
+        </td>
         <td>{{ props.item.activity_id }}</td>
         <td>{{ props.item.activity_name }}</td>
         <td>{{ props.item.activity_description }}</td>
@@ -80,21 +97,6 @@
         <td>{{ YesOrNo(props.item.can_cancel) }}</td>
         <td>{{ YesOrNo(props.item.can_finish) }}</td>
         <td>{{ props.item.max_duration }}</td>
-        <td class="justify-center">
-          <v-icon
-            small
-            class="mr-2"
-            @click="editItem(props.item)"
-          >
-            edit
-          </v-icon>
-          <v-icon
-            small
-            @click="deleteItem(props.item)"
-          >
-            delete
-          </v-icon>
-        </td>
       </template>
       <template slot="no-data">
         <v-btn color="primary" @click="initialize">Reset</v-btn>
@@ -110,6 +112,7 @@ export default {
   data: () => ({
     dialog: false,
     headers: [
+      { text: 'Actions', value: 'action', sortable: false },
       {
         text: 'Activity ID',
         value: 'activity_id',
@@ -128,7 +131,6 @@ export default {
       { text: 'Can Cancel', value: 'can_cancel' },
       { text: 'Can Finish', value: 'can_finish' },
       { text: 'Max Duration', value: 'max_duration' },
-      { text: 'Actions', value: 'action', sortable: false },
     ],
     activities: [],
     roles: [],
@@ -202,10 +204,14 @@ export default {
 
     deleteItem(item) {
       const index = this.activities.indexOf(item);
-      if (confirm('Are you sure you want to delete this item?')) {
-        return axios.delete(`activity/${item.activity_id}`)
-          .then(() => this.activities.splice(index, 1));
-      }
+      this.$swal("Are you sure?", {
+        buttons: true
+      }).then((confirm) => {
+        if (confirm) {
+          return axios.delete(`activity/${item.activity_id}`)
+            .then(() => this.activities.splice(index, 1));
+        }
+      });
     },
 
     close() {

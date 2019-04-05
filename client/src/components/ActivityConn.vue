@@ -47,25 +47,27 @@
       class="elevation-1"
     >
       <template slot="items" slot-scope="props">
+        <td class="justify-center action-button">
+          <v-chip>
+            <v-icon
+              small
+              class="mr-2"
+              @click="editItem(props.item)"
+            >
+              edit
+            </v-icon>
+            <v-icon
+              small
+              @click="deleteItem(props.item)"
+            >
+              delete
+            </v-icon>
+          </v-chip>
+        </td>
         <td>{{ props.item.activity_name }}</td>
         <td>{{ convertToActivity(props.item.activity_next_id) }}</td>
         <td>{{ convertToActivity(props.item.activity_alternate_id) }}</td>
         <td>{{ convertToActivity(props.item.activity_back_id) }}</td>
-        <td class="justify-center">
-          <v-icon
-            small
-            class="mr-2"
-            @click="editItem(props.item)"
-          >
-            edit
-          </v-icon>
-          <v-icon
-            small
-            @click="deleteItem(props.item)"
-          >
-            delete
-          </v-icon>
-        </td>
       </template>
       <template slot="no-data">
         <span>there's no data :(</span>
@@ -81,6 +83,7 @@ export default {
   data: () => ({
     dialog: false,
     headers: [
+      { text: 'Actions', value: 'action', sortable: false },
       {
         text: 'Nama Aktivitas',
         value: 'activity_name',
@@ -88,7 +91,6 @@ export default {
       { text: 'Aktivitas Selanjutnya', value: 'activity_next_id' },
       { text: 'Aktivitas Alternative', value: 'activity_alt_id' },
       { text: 'Aktivitas Sebelumnya', value: 'activity_back_id' },
-      { text: 'Actions', value: 'action', sortable: false },
     ],
     activities: [],
     activity_cons: [],
@@ -165,10 +167,14 @@ export default {
 
     deleteItem(item) {
       const index = this.activity_cons.indexOf(item);
-      if (confirm('Are you sure you want to delete this item?')) {
-        return axios.delete(`activity-step/${item.activity_connections_id}`)
-          .then(() => this.activity_cons.splice(index, 1));
-      }
+      this.$swal("Are you sure?", {
+        buttons: true
+      }).then((confirm) => {
+        if (confirm) {
+          return axios.delete(`activity-step/${item.activity_connections_id}`)
+            .then(() => this.activity_cons.splice(index, 1));
+        }
+      });
     },
 
     close() {
@@ -198,3 +204,9 @@ export default {
   },
 };
 </script>
+
+<style>
+  .action-button {
+    
+  }
+</style>
