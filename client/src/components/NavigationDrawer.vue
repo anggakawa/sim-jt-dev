@@ -14,6 +14,16 @@
         </v-list>
       </v-toolbar>
       <v-list>
+        <v-list-tile :to="{path: '/'}" >
+          <v-list-tile-action>
+            <v-icon>home</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>
+              <div class="notifications">Home<span v-show="notifications > 0" class="badge">{{notifications}}</span></div>
+            </v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
         <v-list-tile v-for="item in items" :key="item.title" :to="{path: item.path}">
           <v-list-tile-action>
             <v-icon>{{ item.action }}</v-icon>
@@ -53,6 +63,7 @@
 <script>
 import AdminNav from './AdminNavigation.vue';
 import Api from '@/services/service.api.js';
+import { setInterval } from 'timers';
 
 export default {
   components: {
@@ -65,11 +76,11 @@ export default {
       clipped: false,
       notifications: 0,
       items: [
-        {
-          action: 'home',
-          title: `Home`,
-          path: '/',
-        },
+        // {
+        //   action: 'home',
+        //   title: `Home`,
+        //   path: '/',
+        // },
         {
           action: 'dashboard',
           title: 'Dashboard',
@@ -105,14 +116,32 @@ export default {
       });
     },
     getTaskCount() {
-      // Api.get(/tasks-count/ + this.$store.getters.roleStatus).then((result) => {
-        
-      // });
+      Api.get(/tasks-count/ + this.$store.getters.roleStatus).then((result) => {
+        this.notifications = result.data[0].task_count;
+      });
     }
   },
   created() {
-    // this.getTaskCount();
+    setInterval(() => this.getTaskCount(), 1000 * 60 * 5);
   }
 };
 
 </script>
+
+<style>
+  .notifications {
+    display: inline-block;
+  }
+
+  .notifications .badge {
+    position: relative;
+    border-radius: 50%;
+    /* width: 7px; */
+    /* height: 7px; */
+    /* top: -3px; */
+    right: -10px;
+    padding: 1px 5px;
+    background-color: red;
+    color: white;
+  }
+</style>
