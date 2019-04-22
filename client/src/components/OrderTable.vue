@@ -454,4 +454,11 @@ export default {
 </script>
 
 <style>
+  table.v-table tbody tr td {
+    font-size: 12px;
+    /* margin: 0px; */
+  }
+  table.v-table thead tr th{
+    font-size: 10px;
+  }
 </style>

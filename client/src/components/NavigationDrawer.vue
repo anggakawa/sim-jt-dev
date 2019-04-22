@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-navigation-drawer :clipped="clipped" v-model="drawer" enable-resize-watcher app>
+    <v-navigation-drawer :clipped="clipped" v-model="drawer" temporary enable-resize-watcher app>
       <v-toolbar class="red darken-3">
         <v-list class="pa-0">
           <v-list-tile avatar>
