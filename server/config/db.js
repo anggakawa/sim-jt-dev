@@ -9,6 +9,7 @@ const option = {
   user: process.env.DB_USER, 
   password: process.env.DB_PASS, 
   database: process.env.DB_NAME,
+  socketPath: '/opt/lampp/var/mysql/mysql.sock',
 };
 
 const pool = mysqsl.createPool(option);

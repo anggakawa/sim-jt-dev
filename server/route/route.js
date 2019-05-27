@@ -54,18 +54,18 @@ module.exports = (router) => {
     }
   });
 
-  router.post('/uploads/:orderLogsId', attachmentController.uploadFiles);
-  router.get('/download/:attachmentId', attachmentController.downloadFile);
+  router.post('/uploads/:orderLogsId', attachmentController.uploadFiles); // for uploading file
+  router.get('/download/:attachmentId', attachmentController.downloadFile); // for downloading files
 
-  router.get('/tasks-count/:roleId', TaskController.TaskCounter);
-  router.get('/tasks/:roleId', TaskController.getTask);
+  router.get('/tasks-count/:roleId', TaskController.TaskCounter); // count how many task a user has
+  router.get('/tasks/:roleId', TaskController.getTask); // get task per roles
 
   // role route
   router.get('/roles', RoleController.selectAllRoles);
   router.post('/roles/add', RoleController.createNewRole);
   router.delete('/roles/:roleId', RoleController.deleteRole);
 
-  router.get('/vendors', UserController.getVendors);
+  router.get('/vendors', UserController.getVendors); // get user that is a vendor (mitra)
 
   // user routes
   router.get('/users', UserController.getAllUsers);
@@ -90,7 +90,7 @@ module.exports = (router) => {
   // activity relations routes
   router.put('/activity-step/', ActivConnController.updateActivityConn);
   router.get('/activity-step/all', ActivConnController.getAllConnection);
-  router.get('/activity-step/:activityId/:optionValue', ActivConnController.getNextStep);
+  router.get('/activity-step/:activityId/:optionValue', ActivConnController.getNextStep); // get next step
   router.post('/activity-step', checkIfAdmin, ActivConnController.createConnection);
   router.delete('/activity-step/:activityConnId', checkIfAdmin, ActivConnController.deleteConnection);
 
@@ -122,7 +122,7 @@ module.exports = (router) => {
 
   router.get('/activity-trackers', ActivityTracker.getAllActivityTracks);
   router.get('/current-activity/:orderId', ActivityTracker.getCurrentActivity);
-  router.put('/current-activity/:orderId/:activityId', ActivityTracker.updateActivity);
+  router.put('/current-activity/:orderId/:activityId', ActivityTracker.updateActivity); //update activity
 
   router.get('/mitra-history/all', MitraController.getMitraOrderList);
   router.get('/mitra-history/timelines', MitraController.getMitraTimeline);
