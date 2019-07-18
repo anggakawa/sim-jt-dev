@@ -13,6 +13,11 @@
             <template slot="items" slot-scope="props">
               <td class="text-xs-center">{{ props.item.order_id }}</td>
               <td>{{ props.item.activity_name }}</td>
+              <td>{{ props.item.customer_name }}</td>
+              <td>{{ props.item.service_name }}</td>
+              <td>
+                {{props.item.pic_contact}} ({{props.item.pic_name}})
+              </td>
               <td>
                 <router-link :to="{ name: 'order',
                   params: { order_id: props.item.order_id } }">
@@ -52,6 +57,17 @@ export default {
         value: 'activity_name',
       },
       {
+        text: 'Nama Pelanggan',
+        value: 'customer_name',
+      },
+      {
+        text: 'Layanan',
+        value: 'service_name',
+      },
+      {
+        text: 'PIC',
+      },
+      {
         text: 'Aksi',
       },
       ],
@@ -61,7 +77,9 @@ export default {
   methods: {
     getTasks() {
       axios.get(`/tasks/${this.$store.getters.roleStatus}`)
-        .then(result => this.tasks = result.data);
+        .then(result => {
+          this.tasks = result.data;
+        });
     },
   },
   created() {
